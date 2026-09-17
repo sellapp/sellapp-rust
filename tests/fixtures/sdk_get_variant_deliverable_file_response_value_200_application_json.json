@@ -1,0 +1,13 @@
+{
+  "data": {
+    "id": 0,
+    "filename": "test_filename",
+    "extension": "test_extension",
+    "mime_type": "test_mime_type",
+    "size": 0,
+    "watermark": false,
+    "limit_to_purchase_ip": false,
+    "variant_id": 0,
+    "product_id": 0
+  }
+}

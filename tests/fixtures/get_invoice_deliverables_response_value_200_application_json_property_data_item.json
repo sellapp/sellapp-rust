@@ -1,0 +1,18 @@
+{
+  "invoice_id": 0,
+  "product_variant_id": 0,
+  "deliverable": {
+    "types": [
+      "DOWNLOADABLE"
+    ],
+    "data": {}
+  },
+  "quantity": 0,
+  "additional_information": [
+    {
+      "key": "test_key",
+      "label": "test_label",
+      "value": {}
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "data": [
+    {
+      "id": 0,
+      "title": "test_title",
+      "slug": "test_slug",
+      "hidden": false,
+      "order": 0,
+      "created_at": "2023-01-01T00:00:00.000Z",
+      "updated_at": "2023-01-01T00:00:00.000Z",
+      "store_id": 0,
+      "groups_linked": 0,
+      "products_linked": 0,
+      "groups": [
+        {
+          "id": 0,
+          "title": "test_title",
+          "group_products": 0
+        }
+      ],
+      "products": [
+        {
+          "id": "test_id",
+          "title": "test_title",
+          "description": "test_description"
+        }
+      ]
+    }
+  ],
+  "links": {
+    "first": "https://sell.app/api/v1/blacklists?page=1",
+    "last": "https://sell.app/api/v1/blacklists?page=4",
+    "prev": "test_prev",
+    "next": "https://sell.app/api/v1/blacklists?page=2"
+  },
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 4,
+    "links": [
+      {
+        "url": "test_url",
+        "label": "test_label",
+        "active": false
+      }
+    ],
+    "path": "https://sell.app/api/v1/blacklists",
+    "per_page": 15,
+    "to": 15,
+    "total": 57
+  }
+}

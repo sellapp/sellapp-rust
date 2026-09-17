@@ -1,0 +1,29 @@
+{
+  "data": {
+    "id": 0,
+    "store_id": 0,
+    "title": "test_title",
+    "slug": "test_slug",
+    "visibility": "PUBLIC",
+    "type": "credits",
+    "is_draft": false,
+    "is_discoverable": false,
+    "default_variant": {
+      "id": 0,
+      "price_cents": 0,
+      "currency": "test_currency",
+      "minimum_purchase_quantity": 1,
+      "quantity_increment": 1,
+      "payment_methods": [
+        "test_payment_methods"
+      ],
+      "rate_tiers": [
+        {
+          "min_quantity": 100,
+          "max_quantity": 999,
+          "unit_price": "0.5000"
+        }
+      ]
+    }
+  }
+}

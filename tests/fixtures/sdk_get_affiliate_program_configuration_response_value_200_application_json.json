@@ -1,0 +1,38 @@
+{
+  "data": {
+    "id": 0,
+    "enabled": false,
+    "settings": {
+      "auto_approve_affiliates": false,
+      "minimum_payout": "25",
+      "commission": {
+        "type": "percentage",
+        "amount": "20"
+      },
+      "referrer_type": "first_referrer",
+      "tracking_length": 1,
+      "subscription_commission": false,
+      "enabled_specific_products": false,
+      "payout_methods": [
+        "PAYPAL"
+      ],
+      "enable_hub": false
+    },
+    "products": [
+      {
+        "id": 0,
+        "product_id": 0,
+        "product_title": "test_product_title",
+        "variant_title": "test_variant_title",
+        "enabled": true,
+        "commission": {
+          "type": "percentage",
+          "percentage": "test_percentage",
+          "amount_usd_cents": 1
+        }
+      }
+    ],
+    "created_at": "2023-01-01T00:00:00.000Z",
+    "updated_at": "2023-01-01T00:00:00.000Z"
+  }
+}

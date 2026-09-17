@@ -1,0 +1,13 @@
+{
+  "platform": "discord",
+  "healthy_count": 0,
+  "issue_count": 0,
+  "retried_count": 0,
+  "skipped_count": 0,
+  "skipped_products": [
+    "test_skipped_products"
+  ],
+  "unchanged_products": [
+    "test_unchanged_products"
+  ]
+}

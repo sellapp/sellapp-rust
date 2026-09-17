@@ -1,0 +1,5 @@
+{
+  "type": "text",
+  "required": false,
+  "label": "test_label"
+}

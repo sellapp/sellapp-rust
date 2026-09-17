@@ -1,0 +1,27 @@
+{
+  "data": [
+    {
+      "id": "STRIPE",
+      "name": "Stripe",
+      "description": "test_description",
+      "category": "processor",
+      "connection_type": "oauth",
+      "status": "disconnected",
+      "enabled": false,
+      "health_status": "disconnected",
+      "configuration_supported": false,
+      "required_input": [
+        {
+          "name": "key_secret",
+          "type": "string",
+          "required": false,
+          "secret": false
+        }
+      ],
+      "connect_url": "test_connect_url",
+      "configuration_url": "test_configuration_url",
+      "status_url": "test_status_url",
+      "actionable_error": "test_actionable_error"
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+# Generated manual validation for sellapp/sellapp-rust; ordinary source delivery is validated locally.
+name: SDK CI
+'on':
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency:
+  group: sdk-ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  native:
+    name: rust native build, tests, audit and package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - name: Initialize evidence
+        run: |-
+          mkdir -p "$RUNNER_TEMP/sdk-ci-logs"
+          printf "Native validation started\n" > "$RUNNER_TEMP/sdk-ci-logs/lifecycle.log"
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version-file: .node-version
+      - name: Validate runtime lane
+        shell: bash
+        env:
+          SDK_LANGUAGE: rust
+        run: |
+          case "$SDK_LANGUAGE" in
+            node|python|php|go|dotnet|kotlin|ruby|rust|elixir|cli|source|generation) ;;
+            *) echo "Unsupported SDK runtime: $SDK_LANGUAGE" >&2; exit 1 ;;
+          esac
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772
+        with:
+          toolchain: 1.98.0
+          components: rustfmt, clippy
+      - name: Bound Rust build footprint
+        shell: bash
+        run: |
+          echo 'CARGO_BUILD_JOBS=2' >> "$GITHUB_ENV"
+          echo 'CARGO_INCREMENTAL=0' >> "$GITHUB_ENV"
+          echo 'CARGO_PROFILE_DEV_DEBUG=0' >> "$GITHUB_ENV"
+          echo 'CARGO_PROFILE_TEST_DEBUG=0' >> "$GITHUB_ENV"
+          echo 'CARGO_PROFILE_RELEASE_DEBUG=0' >> "$GITHUB_ENV"
+          df -h "$RUNNER_TEMP"
+      - name: Cache native downloads
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.nuget/packages
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.cache/sellapp-gradle
+            ~/.cache/pip
+            ~/.cache/composer
+            ~/.hex
+          key: >-
+            native-${{ runner.os }}-${{ runner.arch }}-rust-${{ hashFiles('.node-version',
+            '.github/actions/setup-sdk-runtime/action.yml', '.github/workflows/ci.yml', 'package-lock.json',
+            'emitter/*/src/**/*.ts', '**/go.sum', '**/Cargo.lock', '**/Cargo.toml', '**/pyproject.toml',
+            '**/Gemfile', '**/composer.json', '**/*.csproj', '**/build.gradle.kts', '**/mix.exs') }}
+          restore-keys: |
+            native-${{ runner.os }}-${{ runner.arch }}-rust-
+      - name: Cache Rust audit binary
+        id: rust-audit-cache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cargo/bin/cargo-audit
+          key: cargo-audit-${{ runner.os }}-rust1.98.0-v0.22.2
+      - name: Install Rust vulnerability scanner
+        shell: bash
+        run: |
+          if ! cargo-audit --version 2>/dev/null | grep -Fx 'cargo-audit 0.22.2'; then
+            cargo install cargo-audit --version 0.22.2 --locked --force
+          fi
+          cargo-audit --version
+      - name: Prepare Rust compiler cache
+        uses: ./.github/actions/prepare-rust-cache
+        with:
+          source-directory: .
+      - name: Validate the standalone SDK
+        run: node .github/scripts/native-ci.mjs
+      - name: Prune crate-owned Rust cache output
+        if: always()
+        run: node .github/scripts/prune-rust-cache.mjs .
+      - name: Retain native validation evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: native-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sdk-ci-logs
+          if-no-files-found: error
+          retention-days: 30

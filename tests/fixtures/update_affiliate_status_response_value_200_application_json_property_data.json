@@ -1,0 +1,13 @@
+{
+  "id": 0,
+  "email": "test@example.com",
+  "status": "pending",
+  "profile": {},
+  "balances": {
+    "available_usd_cents": 0,
+    "pending_usd_cents": 0,
+    "paid_usd_cents": 0
+  },
+  "referrals_count": 0,
+  "payouts_count": 0
+}

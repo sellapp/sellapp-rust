@@ -1,0 +1,6 @@
+{
+  "id": 0,
+  "provider": "test_provider",
+  "status": "test_status",
+  "cancel_at_period_end": false
+}

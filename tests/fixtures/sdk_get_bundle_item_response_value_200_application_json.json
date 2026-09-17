@@ -1,0 +1,58 @@
+{
+  "data": {
+    "id": 0,
+    "product_id": 0,
+    "title": "test_title",
+    "description": "test_description",
+    "deliverable": {
+      "data": {
+        "removeDuplicate": false,
+        "parsingMode": "test_parsingMode"
+      },
+      "types": [
+        "test_types"
+      ]
+    },
+    "pricing": {
+      "humble": false,
+      "frequency": {
+        "value": 0,
+        "interval": "test_interval"
+      },
+      "type": "test_type",
+      "price": {
+        "price": "test_price",
+        "currency": "test_currency"
+      }
+    },
+    "minimum_purchase_quantity": 0,
+    "maximum_purchase_quantity": 0,
+    "bulk_discount": [
+      {
+        "discount_percentage": 0,
+        "minimum_purchase_amount": 0
+      }
+    ],
+    "payment_methods": [
+      "test_payment_methods"
+    ],
+    "other_settings": {
+      "quantity_increments": 0,
+      "discord_data_required": false
+    },
+    "order": 0,
+    "created_at": "2023-01-01T00:00:00.000Z",
+    "updated_at": "2023-01-01T00:00:00.000Z",
+    "deleted_at": "2023-01-01T00:00:00.000Z",
+    "product": {
+      "additional_information": [
+        {
+          "required": false,
+          "key": "test_key",
+          "type": "test_type",
+          "label": "test_label"
+        }
+      ]
+    }
+  }
+}

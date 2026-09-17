@@ -1,0 +1,18 @@
+{
+  "data": {
+    "id": 0,
+    "name": "test_name",
+    "is_active": false,
+    "trigger_type": "PURCHASE_COUNT",
+    "trigger_threshold": 1,
+    "fire_once_per_customer": false,
+    "outputs": [
+      {
+        "id": 0,
+        "type": "WALLET_CREDIT",
+        "sort_order": 0,
+        "payload": {}
+      }
+    ]
+  }
+}

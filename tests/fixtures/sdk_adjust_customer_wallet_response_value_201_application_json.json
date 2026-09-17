@@ -1,0 +1,9 @@
+{
+  "data": {
+    "id": 0,
+    "wallet_id": 0,
+    "type": "TOP_UP",
+    "amount_cents": 0,
+    "balance_after_cents": 0
+  }
+}

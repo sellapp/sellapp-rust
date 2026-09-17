@@ -1,0 +1,12 @@
+{
+  "data": [
+    {
+      "id": "00000000-0000-0000-0000-000000000000",
+      "type": "email",
+      "webhook_configured": false,
+      "allowed_notifications": [
+        "test_allowed_notifications"
+      ]
+    }
+  ]
+}

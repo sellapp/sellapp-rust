@@ -1,0 +1,11 @@
+{
+  "coupon": {
+    "id": 0,
+    "code": "test_code"
+  },
+  "modifiers": [
+    {
+      "type": "test_type"
+    }
+  ]
+}

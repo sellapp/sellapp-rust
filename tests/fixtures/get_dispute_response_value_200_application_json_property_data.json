@@ -1,0 +1,11 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "source": {
+    "type": "order",
+    "id": 0
+  },
+  "provider": "test_provider",
+  "amount": 0,
+  "currency": "test_currency",
+  "status": "open"
+}

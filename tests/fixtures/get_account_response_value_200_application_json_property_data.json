@@ -1,0 +1,6 @@
+{
+  "id": "test_id",
+  "username": "test_username",
+  "email": "test@example.com",
+  "credential_type": "sanctum"
+}

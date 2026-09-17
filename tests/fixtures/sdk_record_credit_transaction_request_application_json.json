@@ -1,0 +1,7 @@
+{
+  "customer_id": 0,
+  "product_id": 0,
+  "kind": "grant",
+  "amount_units": 0,
+  "idempotency_key": "test_idempotency_key"
+}

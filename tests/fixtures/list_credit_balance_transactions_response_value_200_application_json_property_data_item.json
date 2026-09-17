@@ -1,0 +1,10 @@
+{
+  "id": 0,
+  "store_id": 0,
+  "customer_id": 0,
+  "product_id": 0,
+  "kind": "grant",
+  "amount_units": 0,
+  "balance_after_units": 0,
+  "idempotency_key": "test_idempotency_key"
+}

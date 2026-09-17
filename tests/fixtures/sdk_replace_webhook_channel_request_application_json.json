@@ -1,0 +1,7 @@
+{
+  "name": "test_name",
+  "url": "test_url",
+  "allowed_notifications": [
+    "booking.cancelled"
+  ]
+}

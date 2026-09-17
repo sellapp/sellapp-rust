@@ -1,0 +1,8 @@
+{
+  "phases": [
+    {
+      "discount_type": "percentage",
+      "discount_value": 1
+    }
+  ]
+}

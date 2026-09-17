@@ -1,0 +1,10 @@
+{
+  "resources": [
+    {
+      "code": "test_code",
+      "type": "PERCENTAGE",
+      "discount": 1,
+      "store_wide": false
+    }
+  ]
+}

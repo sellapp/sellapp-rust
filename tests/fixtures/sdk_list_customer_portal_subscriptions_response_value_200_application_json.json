@@ -1,0 +1,18 @@
+{
+  "data": [
+    {
+      "id": 0,
+      "status": "test_status",
+      "provider_subscription_id": "test_provider_subscription_id",
+      "provider_customer_id": "test_provider_customer_id",
+      "customer": {
+        "id": 0,
+        "email": "test@example.com",
+        "external_id": "test_external_id",
+        "name": "test_name",
+        "locale": "en",
+        "metadata": {}
+      }
+    }
+  ]
+}

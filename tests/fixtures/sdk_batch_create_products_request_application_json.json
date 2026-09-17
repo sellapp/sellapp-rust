@@ -1,0 +1,9 @@
+{
+  "resources": [
+    {
+      "title": "test_title",
+      "description": "test_description",
+      "visibility": "PUBLIC"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "id": "test_id",
+  "slug": "test_slug",
+  "name": "test_name",
+  "visibility": "PUBLIC",
+  "storefront_url": "test_storefront_url",
+  "dashboard_url": "test_dashboard_url"
+}

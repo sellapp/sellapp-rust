@@ -1,0 +1,8 @@
+{
+  "id": 0,
+  "email": "test@example.com",
+  "external_id": "test_external_id",
+  "name": "test_name",
+  "locale": "en",
+  "metadata": {}
+}

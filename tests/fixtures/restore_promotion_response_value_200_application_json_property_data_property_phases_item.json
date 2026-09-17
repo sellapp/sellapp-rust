@@ -1,0 +1,7 @@
+{
+  "id": 0,
+  "promotion_id": 0,
+  "sort_order": 1,
+  "discount_type": "percentage",
+  "discount_value": "test_discount_value"
+}

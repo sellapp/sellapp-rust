@@ -1,0 +1,25 @@
+{
+  "enabled": false,
+  "settings": {
+    "auto_approve_affiliates": false,
+    "minimum_payout": "25",
+    "commission": {
+      "type": "percentage",
+      "amount": "20"
+    },
+    "referrer_type": "first_referrer",
+    "tracking_length": 1,
+    "subscription_commission": false,
+    "enabled_specific_products": false,
+    "payout_methods": [
+      "PAYPAL"
+    ],
+    "enable_hub": false
+  },
+  "products": [
+    {
+      "id": 0,
+      "enabled": false
+    }
+  ]
+}

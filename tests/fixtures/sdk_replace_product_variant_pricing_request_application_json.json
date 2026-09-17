@@ -1,0 +1,13 @@
+{
+  "pricing": {
+    "type": "SINGLE_PAYMENT",
+    "price": {
+      "price": 0,
+      "currency": "AUD"
+    },
+    "humble": false
+  },
+  "payment_methods": [
+    "AUTHNET"
+  ]
+}

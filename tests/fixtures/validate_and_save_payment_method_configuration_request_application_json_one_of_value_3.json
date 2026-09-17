@@ -1,0 +1,11 @@
+{
+  "merchant_id": "test_merchant_id",
+  "key_id": "test_key_id",
+  "key_secret": "test_key_secret",
+  "webhook_secret": "test_webhook_secret",
+  "primary_currency": "test_primary_currency",
+  "international_payments_enabled": false,
+  "supported_currencies": [
+    "test_supported_currencies"
+  ]
+}

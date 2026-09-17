@@ -1,0 +1,36 @@
+{
+  "data": [
+    {
+      "id": 0,
+      "store_id": 0,
+      "customer_id": 0,
+      "product_id": 0,
+      "kind": "grant",
+      "amount_units": 0,
+      "balance_after_units": 0,
+      "idempotency_key": "test_idempotency_key"
+    }
+  ],
+  "links": {
+    "first": "https://sell.app/api/v1/blacklists?page=1",
+    "last": "https://sell.app/api/v1/blacklists?page=4",
+    "prev": "test_prev",
+    "next": "https://sell.app/api/v1/blacklists?page=2"
+  },
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 4,
+    "links": [
+      {
+        "url": "test_url",
+        "label": "test_label",
+        "active": false
+      }
+    ],
+    "path": "https://sell.app/api/v1/blacklists",
+    "per_page": 15,
+    "to": 15,
+    "total": 57
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "test_name",
+  "is_active": false,
+  "trigger_type": "PURCHASE_COUNT",
+  "trigger_threshold": 1,
+  "outputs": [
+    {
+      "type": "WALLET_CREDIT"
+    }
+  ]
+}

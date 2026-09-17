@@ -1,0 +1,9 @@
+{
+  "data": {
+    "removeDuplicate": false,
+    "parsingMode": "test_parsingMode"
+  },
+  "types": [
+    "test_types"
+  ]
+}

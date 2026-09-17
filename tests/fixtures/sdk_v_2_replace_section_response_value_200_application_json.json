@@ -1,0 +1,28 @@
+{
+  "data": {
+    "id": 0,
+    "title": "test_title",
+    "slug": "test_slug",
+    "hidden": false,
+    "order": 0,
+    "created_at": "2023-01-01T00:00:00.000Z",
+    "updated_at": "2023-01-01T00:00:00.000Z",
+    "store_id": 0,
+    "groups_linked": 0,
+    "products_linked": 0,
+    "groups": [
+      {
+        "id": 0,
+        "title": "test_title",
+        "group_products": 0
+      }
+    ],
+    "products": [
+      {
+        "id": "test_id",
+        "title": "test_title",
+        "description": "test_description"
+      }
+    ]
+  }
+}

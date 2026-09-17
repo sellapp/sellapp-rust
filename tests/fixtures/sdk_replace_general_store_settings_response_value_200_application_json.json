@@ -1,0 +1,17 @@
+{
+  "data": {
+    "id": 0,
+    "name": "test_name",
+    "slug": "test_slug",
+    "visibility": "PUBLIC",
+    "timezone": "test_timezone",
+    "currency": "tes",
+    "status": {
+      "accessible": false,
+      "verified": false,
+      "locked": false
+    },
+    "analytics": {},
+    "marketing": {}
+  }
+}

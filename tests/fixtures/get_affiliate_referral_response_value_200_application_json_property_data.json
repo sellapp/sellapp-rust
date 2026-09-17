@@ -1,0 +1,14 @@
+{
+  "id": 0,
+  "affiliate_id": 0,
+  "order_id": 0,
+  "invoice_v2_id": 0,
+  "product_variant_id": 0,
+  "amount_usd_cents": 0,
+  "commission": {
+    "type": "percentage",
+    "percentage": "test_percentage",
+    "amount_usd_cents": 0
+  },
+  "status": "created"
+}

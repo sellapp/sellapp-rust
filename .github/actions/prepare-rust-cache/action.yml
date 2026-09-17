@@ -1,0 +1,42 @@
+name: Prepare Rust validation cache
+description: Resolve the SDK dependency lock and restore external compiler output
+inputs:
+  source-directory:
+    description: Generated or standalone Rust SDK source to validate
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Resolve Rust validation fingerprint
+      id: fingerprint
+      shell: bash
+      env:
+        SDK_SOURCE: ${{ inputs.source-directory }}
+      run: |
+        source_root="$(realpath "$SDK_SOURCE")"
+        test -f "$source_root/Cargo.toml"
+        lock_root="$RUNNER_TEMP/sellapp-rust-lock-source"
+        rm -rf "$lock_root"
+        mkdir -p "$lock_root"
+        tar -C "$source_root" --exclude=.git --exclude=target -cf - . | tar -C "$lock_root" -xf -
+        if [ ! -f "$lock_root/Cargo.lock" ]; then
+          cargo generate-lockfile --manifest-path "$lock_root/Cargo.toml"
+        fi
+        cargo fetch --locked --manifest-path "$lock_root/Cargo.toml"
+        lock_sha="$(sha256sum "$lock_root/Cargo.lock" | cut -d' ' -f1)"
+        source_sha="$(cd "$source_root" && find . -type f ! -path './.git/*' ! -path './target/*' ! -name Cargo.lock -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -d' ' -f1)"
+        flags_sha="$(env | LC_ALL=C sort | grep -E '^(CARGO_(PROFILE_|BUILD_|INCREMENTAL)|RUSTFLAGS=|CARGO_ENCODED_RUSTFLAGS=|RUSTDOCFLAGS=|RUSTC_WRAPPER=|CC=|CXX=)' | sha256sum | cut -d' ' -f1)"
+        rustc_release="$(rustc -vV | sed -n 's/^release: //p')"
+        rustc_host="$(rustc -vV | sed -n 's/^host: //p')"
+        test "$rustc_release" = '1.98.0'
+        test "$rustc_host" = 'x86_64-unknown-linux-gnu'
+        printf 'lock=%s\nsource=%s\nrustc=%s\nhost=%s\nflags=%s\n' "$lock_sha" "$source_sha" "$rustc_release" "$rustc_host" "$flags_sha" >> "$GITHUB_OUTPUT"
+        echo "SELLAPP_RUST_LOCK_FILE=$lock_root/Cargo.lock" >> "$GITHUB_ENV"
+        echo "CARGO_TARGET_DIR=$RUNNER_TEMP/sellapp-rust-target" >> "$GITHUB_ENV"
+    - name: Restore Rust compiler output
+      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+      with:
+        path: ${{ runner.temp }}/sellapp-rust-target
+        key: rust-target-${{ runner.os }}-${{ runner.arch }}-${{ steps.fingerprint.outputs.rustc }}-${{ steps.fingerprint.outputs.host }}-${{ steps.fingerprint.outputs.flags }}-${{ steps.fingerprint.outputs.lock }}-${{ steps.fingerprint.outputs.source }}
+        restore-keys: |
+          rust-target-${{ runner.os }}-${{ runner.arch }}-${{ steps.fingerprint.outputs.rustc }}-${{ steps.fingerprint.outputs.host }}-${{ steps.fingerprint.outputs.flags }}-${{ steps.fingerprint.outputs.lock }}-

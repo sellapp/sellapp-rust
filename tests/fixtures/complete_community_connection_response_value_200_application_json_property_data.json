@@ -1,0 +1,18 @@
+{
+  "platform": "whatsapp",
+  "connected": true,
+  "server": {
+    "id": "test_id",
+    "name": "test_name",
+    "type": "test_type",
+    "health_status": "test_health_status",
+    "health_checked_at": "2023-01-01T00:00:00.000Z",
+    "roles": [
+      {
+        "id": "test_id",
+        "name": "test_name",
+        "color": "test_color"
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "data": {
+    "id": 0,
+    "name": "test_name",
+    "type": "PERCENTAGE",
+    "discount": "test_discount",
+    "store_wide": false,
+    "redemption_mode": "customer_locked",
+    "is_active": false
+  }
+}

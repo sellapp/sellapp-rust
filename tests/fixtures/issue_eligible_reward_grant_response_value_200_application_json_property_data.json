@@ -1,0 +1,15 @@
+{
+  "id": 0,
+  "reward_rule_id": 0,
+  "customer_id": 0,
+  "trigger_type": "PURCHASE_COUNT",
+  "trigger_value": 0,
+  "trigger_threshold": 0,
+  "outputs": [
+    {
+      "id": 0,
+      "type": "WALLET_CREDIT",
+      "payload": {}
+    }
+  ]
+}

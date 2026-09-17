@@ -1,0 +1,9 @@
+{
+  "data": {
+    "id": "test_id",
+    "type": "instructions",
+    "name": "test_name",
+    "enabled": false,
+    "sort_order": 0
+  }
+}

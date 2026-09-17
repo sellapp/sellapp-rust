@@ -1,0 +1,10 @@
+{
+  "data": {
+    "charge_id": 0,
+    "amount_cents": 1,
+    "currency": "USD",
+    "checkout_url": "test_checkout_url",
+    "payment_method": "AUTHNET",
+    "custom_payment_method_id": "00000000000000000000000000"
+  }
+}

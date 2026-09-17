@@ -1,0 +1,90 @@
+{
+  "data": [
+    {
+      "id": 0,
+      "order": {
+        "id": 0,
+        "status": "PENDING",
+        "payment_method": "AUTHNET",
+        "customer_id": 0
+      },
+      "status": "PENDING",
+      "product": {
+        "id": 0,
+        "title": "test_title"
+      },
+      "variant": {
+        "id": 0,
+        "title": "test_title"
+      },
+      "quantity": 1,
+      "currency": "tes",
+      "amounts": {
+        "unit_price": "test_unit_price",
+        "subtotal_cents": 0,
+        "total_cents": 0,
+        "revenue_cents": 0,
+        "fee_cents": 0
+      },
+      "discounts": {
+        "coupon": {
+          "id": 0,
+          "code": "test_code"
+        },
+        "modifiers": [
+          {
+            "type": "test_type"
+          }
+        ]
+      },
+      "tax": {},
+      "promotion": {
+        "phase_id": 0,
+        "promotion_id": 0,
+        "name": "test_name"
+      },
+      "referral": {
+        "id": 0,
+        "status": "test_status",
+        "amount_usd_cents": 0
+      },
+      "subscription": {
+        "id": 0,
+        "provider": "test_provider",
+        "status": "test_status",
+        "cancel_at_period_end": false
+      },
+      "fulfillment": {
+        "deliveries_count": 0,
+        "delivered_quantity": 0,
+        "types": [
+          "DOWNLOADABLE"
+        ]
+      },
+      "created_at": "2023-01-01T00:00:00.000Z",
+      "updated_at": "2023-01-01T00:00:00.000Z"
+    }
+  ],
+  "links": {
+    "first": "https://sell.app/api/v1/blacklists?page=1",
+    "last": "https://sell.app/api/v1/blacklists?page=4",
+    "prev": "test_prev",
+    "next": "https://sell.app/api/v1/blacklists?page=2"
+  },
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 4,
+    "links": [
+      {
+        "url": "test_url",
+        "label": "test_label",
+        "active": false
+      }
+    ],
+    "path": "https://sell.app/api/v1/blacklists",
+    "per_page": 15,
+    "to": 15,
+    "total": 57
+  }
+}

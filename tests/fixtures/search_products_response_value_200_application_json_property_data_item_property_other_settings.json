@@ -1,0 +1,12 @@
+{
+  "faq": [
+    {
+      "question": "test_question",
+      "answer": "test_answer"
+    }
+  ],
+  "video_url": "test_video_url",
+  "redirect_url": "test_redirect_url",
+  "product_title": "test_product_title",
+  "product_description": "test_product_description"
+}

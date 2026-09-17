@@ -1,0 +1,373 @@
+[
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createCharge",
+    "mountTarget": "Charges",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::charges::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"email\\\":\\\"sofia.rivera@example.com\\\",\\\"return_url\\\":\\\"https://example.com/launch-complete\\\",\\\"currency\\\":\\\"USD\\\",\\\"total\\\":10000,\\\"payment_method\\\":\\\"PAYPAL\\\",\\\"reference\\\":\\\"One more thing launch\\\"}\")?);\n    let result = client.charges().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "default",
+    "summary": "default",
+    "mediaType": "application/json",
+    "request": {
+      "email": "sofia.rivera@example.com",
+      "return_url": "https://example.com/launch-complete",
+      "currency": "USD",
+      "total": 10000,
+      "payment_method": "PAYPAL",
+      "reference": "One more thing launch"
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createCharge",
+    "mountTarget": "Charges",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::charges::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"email\\\":\\\"maya.chen@example.com\\\",\\\"return_url\\\":\\\"https://example.com/payment-return\\\",\\\"currency\\\":\\\"USD\\\",\\\"total\\\":1999,\\\"payment_method\\\":\\\"CUSTOM_PAYMENT_METHOD\\\",\\\"custom_payment_method_id\\\":\\\"01J00000000000000000000001\\\"}\")?);\n    let result = client.charges().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "customPreselected",
+    "summary": "Preselect an enabled custom method in this store",
+    "mediaType": "application/json",
+    "request": {
+      "email": "maya.chen@example.com",
+      "return_url": "https://example.com/payment-return",
+      "currency": "USD",
+      "total": 1999,
+      "payment_method": "CUSTOM_PAYMENT_METHOD",
+      "custom_payment_method_id": "01J00000000000000000000001"
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createCharge",
+    "mountTarget": "Charges",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::charges::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"email\\\":\\\"maya.chen@example.com\\\",\\\"return_url\\\":\\\"https://example.com/payment-return\\\",\\\"currency\\\":\\\"USD\\\",\\\"total\\\":1999,\\\"payment_methods\\\":[\\\"CUSTOM_PAYMENT_METHOD\\\"],\\\"custom_payment_method_ids\\\":[\\\"01J00000000000000000000001\\\"]}\")?);\n    let result = client.charges().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "customChoices",
+    "summary": "Offer a specific custom method for customer selection",
+    "mediaType": "application/json",
+    "request": {
+      "email": "maya.chen@example.com",
+      "return_url": "https://example.com/payment-return",
+      "currency": "USD",
+      "total": 1999,
+      "payment_methods": [
+        "CUSTOM_PAYMENT_METHOD"
+      ],
+      "custom_payment_method_ids": [
+        "01J00000000000000000000001"
+      ]
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createGroup",
+    "mountTarget": "Groups",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::groups::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"title\\\":\\\"Design kit\\\",\\\"unlisted\\\":true}\")?);\n    let result = client.groups().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "minimal",
+    "summary": "Minimal valid request",
+    "mediaType": "application/json",
+    "request": {
+      "title": "Design kit",
+      "unlisted": true
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createGroup",
+    "mountTarget": "Groups",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::groups::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"title\\\":\\\"Design kit\\\",\\\"unlisted\\\":true,\\\"order\\\":1}\")?);\n    let result = client.groups().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "realistic",
+    "summary": "With optional fields",
+    "mediaType": "application/json",
+    "request": {
+      "title": "Design kit",
+      "unlisted": true,
+      "order": 1
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "validateLicenseKey",
+    "mountTarget": "Licenses",
+    "methodName": "validate",
+    "content": "use sellapp::Client;\nuse sellapp::resources::licenses::ValidateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ValidateParams::new(serde_json::from_str(\"{\\\"license_key\\\":\\\"01965f1d-f038-7116-b57f-9e7ecb4e7b8f\\\"}\")?);\n    let result = client.licenses().validate(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "minimal",
+    "summary": "Minimal valid request",
+    "mediaType": "application/json",
+    "request": {
+      "license_key": "01965f1d-f038-7116-b57f-9e7ecb4e7b8f"
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "validateLicenseKey",
+    "mountTarget": "Licenses",
+    "methodName": "validate",
+    "content": "use sellapp::Client;\nuse sellapp::resources::licenses::ValidateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ValidateParams::new(serde_json::from_str(\"{\\\"license_key\\\":\\\"01965f1d-f038-7116-b57f-9e7ecb4e7b8f\\\",\\\"instance_id\\\":\\\"9ebd3be0-de72-4da7-805e-bc99d1ac1186\\\"}\")?);\n    let result = client.licenses().validate(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "realistic",
+    "summary": "With optional fields",
+    "mediaType": "application/json",
+    "request": {
+      "license_key": "01965f1d-f038-7116-b57f-9e7ecb4e7b8f",
+      "instance_id": "9ebd3be0-de72-4da7-805e-bc99d1ac1186"
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createProduct",
+    "mountTarget": "Products",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::products::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"title\\\":\\\"Design kit\\\",\\\"description\\\":\\\"Templates for your next project.\\\",\\\"visibility\\\":\\\"HIDDEN\\\"}\")?);\n    let result = client.products().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "minimal",
+    "summary": "Minimal hidden product",
+    "mediaType": "application/json",
+    "request": {
+      "title": "Design kit",
+      "description": "Templates for your next project.",
+      "visibility": "HIDDEN"
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createProduct",
+    "mountTarget": "Products",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::products::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"title\\\":\\\"Design kit\\\",\\\"description\\\":\\\"Templates for your next project.\\\",\\\"visibility\\\":\\\"HIDDEN\\\",\\\"slug\\\":\\\"design-kit-launch\\\"}\")?);\n    let result = client.products().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "realistic",
+    "summary": "Product with a custom URL slug",
+    "mediaType": "application/json",
+    "request": {
+      "title": "Design kit",
+      "description": "Templates for your next project.",
+      "visibility": "HIDDEN",
+      "slug": "design-kit-launch"
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createProduct",
+    "mountTarget": "Products",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::products::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"title\\\":\\\"Design kit\\\",\\\"description\\\":\\\"Reusable templates for your next launch\\\",\\\"visibility\\\":\\\"PUBLIC\\\",\\\"variants\\\":[{\\\"title\\\":\\\"Standard\\\",\\\"description\\\":\\\"The complete design kit\\\",\\\"pricing\\\":{\\\"price\\\":{\\\"price\\\":1999,\\\"currency\\\":\\\"USD\\\"},\\\"humble\\\":false},\\\"deliverable\\\":{\\\"types\\\":[\\\"MANUAL\\\"],\\\"data\\\":{\\\"comment\\\":\\\"Your kit will be delivered shortly.\\\"}},\\\"minimum_purchase_quantity\\\":1,\\\"maximum_purchase_quantity\\\":10,\\\"payment_methods\\\":[\\\"PAYPAL\\\"]}]}\")?);\n    let result = client.products().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "withVariants",
+    "summary": "Create a product and its first variant",
+    "mediaType": "application/json",
+    "request": {
+      "title": "Design kit",
+      "description": "Reusable templates for your next launch",
+      "visibility": "PUBLIC",
+      "variants": [
+        {
+          "title": "Standard",
+          "description": "The complete design kit",
+          "pricing": {
+            "price": {
+              "price": 1999,
+              "currency": "USD"
+            },
+            "humble": false
+          },
+          "deliverable": {
+            "types": [
+              "MANUAL"
+            ],
+            "data": {
+              "comment": "Your kit will be delivered shortly."
+            }
+          },
+          "minimum_purchase_quantity": 1,
+          "maximum_purchase_quantity": 10,
+          "payment_methods": [
+            "PAYPAL"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createProduct",
+    "mountTarget": "Products",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::products::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"title\\\":\\\"Launch bundle\\\",\\\"description\\\":\\\"Two design kits in one purchase\\\",\\\"visibility\\\":\\\"PUBLIC\\\",\\\"type\\\":\\\"bundle\\\",\\\"variants\\\":[{\\\"title\\\":\\\"Standard\\\",\\\"description\\\":\\\"The complete design kit\\\",\\\"pricing\\\":{\\\"price\\\":{\\\"price\\\":1999,\\\"currency\\\":\\\"USD\\\"},\\\"humble\\\":false},\\\"deliverable\\\":{\\\"types\\\":[\\\"BUNDLE\\\"],\\\"data\\\":{}},\\\"minimum_purchase_quantity\\\":1,\\\"maximum_purchase_quantity\\\":10,\\\"payment_methods\\\":[\\\"PAYPAL\\\"]}],\\\"bundle_items\\\":[{\\\"product_variant_id\\\":4321,\\\"quantity\\\":2}]}\")?);\n    let result = client.products().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "completeBundle",
+    "summary": "Create a complete bundle",
+    "mediaType": "application/json",
+    "request": {
+      "title": "Launch bundle",
+      "description": "Two design kits in one purchase",
+      "visibility": "PUBLIC",
+      "type": "bundle",
+      "variants": [
+        {
+          "title": "Standard",
+          "description": "The complete design kit",
+          "pricing": {
+            "price": {
+              "price": 1999,
+              "currency": "USD"
+            },
+            "humble": false
+          },
+          "deliverable": {
+            "types": [
+              "BUNDLE"
+            ],
+            "data": {}
+          },
+          "minimum_purchase_quantity": 1,
+          "maximum_purchase_quantity": 10,
+          "payment_methods": [
+            "PAYPAL"
+          ]
+        }
+      ],
+      "bundle_items": [
+        {
+          "product_variant_id": 4321,
+          "quantity": 2
+        }
+      ]
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "cancelSubscriptionImmediately",
+    "mountTarget": "Subscriptions",
+    "methodName": "cancel_immediately",
+    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions::CancelImmediatelyParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CancelImmediatelyParams::new(serde_json::from_str(\"{\\\"reason\\\":\\\"Customer request\\\"}\")?);\n    let result = client.subscriptions().cancel_immediately(\"55\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "minimal",
+    "summary": "Cancel without requesting a refund",
+    "mediaType": "application/json",
+    "request": {
+      "reason": "Customer request"
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "cancelSubscriptionImmediately",
+    "mountTarget": "Subscriptions",
+    "methodName": "cancel_immediately",
+    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions::CancelImmediatelyParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CancelImmediatelyParams::new(serde_json::from_str(\"{\\\"reason\\\":\\\"Customer request\\\",\\\"refund_last_payment\\\":true,\\\"pro_rated_refund\\\":true}\")?);\n    let result = client.subscriptions().cancel_immediately(\"55\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "with_refund",
+    "summary": "Requests a real prorated refund; cancellation success does not prove refund success",
+    "mediaType": "application/json",
+    "request": {
+      "reason": "Customer request",
+      "refund_last_payment": true,
+      "pro_rated_refund": true
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createAddOnDraft",
+    "mountTarget": "AddOns",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::add_ons::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"title\\\":\\\"Customer support\\\",\\\"description\\\":\\\"Priority support for launches scheduled suspiciously close to Friday.\\\",\\\"visibility\\\":\\\"PUBLIC\\\",\\\"parent_product_ids\\\":[120,121]}\")?);\n    let result = client.add_ons().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "draft",
+    "summary": "Create a draft add-on",
+    "mediaType": "application/json",
+    "request": {
+      "title": "Customer support",
+      "description": "Priority support for launches scheduled suspiciously close to Friday.",
+      "visibility": "PUBLIC",
+      "parent_product_ids": [
+        120,
+        121
+      ]
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createAddOnDraft",
+    "mountTarget": "AddOns",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::add_ons::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"title\\\":\\\"Priority support\\\",\\\"description\\\":\\\"Personal help with your design kit\\\",\\\"visibility\\\":\\\"PUBLIC\\\",\\\"is_draft\\\":false,\\\"parent_product_ids\\\":[120],\\\"variant\\\":{\\\"title\\\":\\\"Standard\\\",\\\"description\\\":\\\"The complete design kit\\\",\\\"pricing\\\":{\\\"price\\\":{\\\"price\\\":1999,\\\"currency\\\":\\\"USD\\\"},\\\"humble\\\":false},\\\"deliverable\\\":{\\\"types\\\":[\\\"MANUAL\\\"],\\\"data\\\":{\\\"comment\\\":\\\"Your kit will be delivered shortly.\\\"}},\\\"minimum_purchase_quantity\\\":1,\\\"maximum_purchase_quantity\\\":10,\\\"payment_methods\\\":[\\\"PAYPAL\\\"]}}\")?);\n    let result = client.add_ons().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "published",
+    "summary": "Create and publish an add-on with a variant",
+    "mediaType": "application/json",
+    "request": {
+      "title": "Priority support",
+      "description": "Personal help with your design kit",
+      "visibility": "PUBLIC",
+      "is_draft": false,
+      "parent_product_ids": [
+        120
+      ],
+      "variant": {
+        "title": "Standard",
+        "description": "The complete design kit",
+        "pricing": {
+          "price": {
+            "price": 1999,
+            "currency": "USD"
+          },
+          "humble": false
+        },
+        "deliverable": {
+          "types": [
+            "MANUAL"
+          ],
+          "data": {
+            "comment": "Your kit will be delivered shortly."
+          }
+        },
+        "minimum_purchase_quantity": 1,
+        "maximum_purchase_quantity": 10,
+        "payment_methods": [
+          "PAYPAL"
+        ]
+      }
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "exchangeOAuthToken",
+    "mountTarget": "Oauth",
+    "methodName": "exchange_oauth_token",
+    "content": "use sellapp::Client;\nuse sellapp::resources::oauth::ExchangeOAuthTokenParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ExchangeOAuthTokenParams::new(serde_json::from_str(\"{\\\"client_id\\\":\\\"01992a65-e064-71ba-b38f-902b7966a6be\\\",\\\"grant_type\\\":\\\"authorization_code\\\",\\\"code\\\":\\\"AUTHORIZATION_CODE\\\",\\\"redirect_uri\\\":\\\"http://127.0.0.1:49152/callback\\\",\\\"code_verifier\\\":\\\"dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk\\\"}\")?);\n    let result = client.oauth().exchange_oauth_token(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "authorizationCode",
+    "summary": "authorizationCode",
+    "mediaType": "application/x-www-form-urlencoded",
+    "request": {
+      "client_id": "01992a65-e064-71ba-b38f-902b7966a6be",
+      "grant_type": "authorization_code",
+      "code": "AUTHORIZATION_CODE",
+      "redirect_uri": "http://127.0.0.1:49152/callback",
+      "code_verifier": "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"
+    }
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "exchangeOAuthToken",
+    "mountTarget": "Oauth",
+    "methodName": "exchange_oauth_token",
+    "content": "use sellapp::Client;\nuse sellapp::resources::oauth::ExchangeOAuthTokenParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ExchangeOAuthTokenParams::new(serde_json::from_str(\"{\\\"client_id\\\":\\\"01992a65-e064-71ba-b38f-902b7966a6be\\\",\\\"grant_type\\\":\\\"refresh_token\\\",\\\"refresh_token\\\":\\\"REFRESH_TOKEN\\\"}\")?);\n    let result = client.oauth().exchange_oauth_token(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n",
+    "exampleId": "refresh",
+    "summary": "refresh",
+    "mediaType": "application/x-www-form-urlencoded",
+    "request": {
+      "client_id": "01992a65-e064-71ba-b38f-902b7966a6be",
+      "grant_type": "refresh_token",
+      "refresh_token": "REFRESH_TOKEN"
+    }
+  }
+]

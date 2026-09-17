@@ -1,0 +1,8 @@
+{
+  "data": {
+    "id": 0,
+    "domain": "test_domain",
+    "status": "pending",
+    "cname_target": "test_cname_target"
+  }
+}

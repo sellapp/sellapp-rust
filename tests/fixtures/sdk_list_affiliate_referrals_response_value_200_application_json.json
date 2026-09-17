@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "id": 0,
+      "affiliate_id": 0,
+      "order_id": 0,
+      "invoice_v2_id": 0,
+      "product_variant_id": 0,
+      "amount_usd_cents": 0,
+      "commission": {
+        "type": "percentage",
+        "percentage": "test_percentage",
+        "amount_usd_cents": 0
+      },
+      "status": "created"
+    }
+  ],
+  "links": {
+    "first": "https://sell.app/api/v1/blacklists?page=1",
+    "last": "https://sell.app/api/v1/blacklists?page=4",
+    "prev": "test_prev",
+    "next": "https://sell.app/api/v1/blacklists?page=2"
+  },
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 4,
+    "links": [
+      {
+        "url": "test_url",
+        "label": "test_label",
+        "active": false
+      }
+    ],
+    "path": "https://sell.app/api/v1/blacklists",
+    "per_page": 15,
+    "to": 15,
+    "total": 57
+  }
+}

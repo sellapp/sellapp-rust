@@ -1,0 +1,11 @@
+{
+  "name": "test_name",
+  "is_active": false,
+  "source_listing_id": 0,
+  "items": [
+    {
+      "target_listing_id": 0,
+      "target_variant_id": 0
+    }
+  ]
+}
