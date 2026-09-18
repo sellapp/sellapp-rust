@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "language": "rust",
   "repository": "sellapp/sellapp-rust",
-  "sourceSha": "8d8876b1921e931e18baf6f31ed48f79c5282f73",
+  "sourceSha": "e4051383c6618a31c201c050d55d7bdacd157f0c",
   "specSha256": "02043ebfc36589e78743f00a0f4a2f3ac9ac14914b9cf2910f04fc34ad2d0924",
   "runId": "0",
   "runAttempt": "1",
-  "treeDigest": "c798031c2e38316695b864f346af7f14117a7e9db35833b5ab29f11f2ffa4ea8",
-  "contentDigest": "c3cf80f000d14eb85c7847f413923b7f2c5fa082df3ce9fb3c6a08443b0427fb",
+  "treeDigest": "e5b58231f5907e1f6bfc690fb3f905d0362c46889258a9f7f82ac2203dfca11c",
+  "contentDigest": "5e1b969cc8705602d9f65f37e42b589c26756b9037ad7c37b4ab0f6fc0fb206b",
   "files": [
     {
       "path": ".github/actions/prepare-rust-cache/action.yml",
@@ -47,7 +47,7 @@
     {
       "path": "Cargo.toml",
       "mode": "100644",
-      "sha256": "3e82fb3276426f988ed31c93ac440bdbff85876727237a3a32640b4410215071"
+      "sha256": "2faee6e3af725b34ef30203427725507be371bf1daf52e486154f8d8d5d59fba"
     },
     {
       "path": "LICENSE.txt",
@@ -62,7 +62,7 @@
     {
       "path": "README.md",
       "mode": "100644",
-      "sha256": "53fb2c26a02628c08e4a230c331e726bdafc05cc1313894221e3b6f88b35fb4b"
+      "sha256": "7b13208b81165144d626722dbef8390b7dc7ce20e55fca9940e10c15b02ab797"
     },
     {
       "path": "docs/methods.md",
@@ -502,12 +502,12 @@
     {
       "path": "generation-manifest.json",
       "mode": "100644",
-      "sha256": "e0bfb96624fb2a538bfc01591224f0dc406e5211d1d6d95dd228d8781bc383b3"
+      "sha256": "b20b21cf26ada750b2d65dcf72a028ac440780f00cd2a7e4bb8bdaf7ce8d3412"
     },
     {
       "path": "src/client.rs",
       "mode": "100644",
-      "sha256": "402863461e12743615a5ee0d927615aa12314ad3c16553fbe50061860ccf085b"
+      "sha256": "f500b0468d3bcf821cebcbb2104315a9c5194646f1333bc039496d938158093d"
     },
     {
       "path": "src/enums/add_highlight_media_response_value_201_application_json_property_data_type.rs",

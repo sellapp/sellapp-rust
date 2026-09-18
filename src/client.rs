@@ -432,7 +432,7 @@ impl Client {
             let mut req = self
                 .http
                 .request(method.clone(), url.clone())
-                .header("User-Agent", "SellApp Rust/0.1.0")
+                .header("User-Agent", "SellApp Rust/0.1.1")
                 .timeout(timeout);
             let mut query_pairs = Vec::new();
             form_pairs(&query_value, None, &mut query_pairs);
