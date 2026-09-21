@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "language": "rust",
   "repository": "sellapp/sellapp-rust",
-  "sourceSha": "e4051383c6618a31c201c050d55d7bdacd157f0c",
+  "sourceSha": "617c71170f5c326d2d707c0f3e01caf9a948d2fc",
   "specSha256": "02043ebfc36589e78743f00a0f4a2f3ac9ac14914b9cf2910f04fc34ad2d0924",
   "runId": "0",
   "runAttempt": "1",
-  "treeDigest": "e5b58231f5907e1f6bfc690fb3f905d0362c46889258a9f7f82ac2203dfca11c",
-  "contentDigest": "5e1b969cc8705602d9f65f37e42b589c26756b9037ad7c37b4ab0f6fc0fb206b",
+  "treeDigest": "dd098ca21828878f58ec1af19fb9ea035d96cdc326458493449eee7e0565c062",
+  "contentDigest": "1961625f566c4b2e473043ba08c229849fcac4dbedb053e3dfea4ef3e8255d90",
   "files": [
     {
       "path": ".github/actions/prepare-rust-cache/action.yml",
@@ -27,12 +27,22 @@
     {
       "path": ".github/scripts/validate-rust-operation-snippets.mjs",
       "mode": "100644",
-      "sha256": "27f180e5114309cff02a169a28ffbb09be848f0f6d1a921eef42520117a20888"
+      "sha256": "b57d297fcaacc5e2847f055701b8af3d48ba56668166f49808e816298f6415dd"
+    },
+    {
+      "path": ".github/scripts/verify-rust-publication.py",
+      "mode": "100644",
+      "sha256": "1691d070c2c70adf9fe111cadf3e11606de03e916be1bb881afb1af550610a8f"
     },
     {
       "path": ".github/workflows/ci.yml",
       "mode": "100644",
       "sha256": "a817bc11ffd7042fec42137ffda3d91f2f780266d7c7d4b452d272f20738eb03"
+    },
+    {
+      "path": ".github/workflows/publish.yml",
+      "mode": "100644",
+      "sha256": "ae86d355261f3c0daeb9be8fc501b40d2aa980c806066faa5bba0083e62e8d63"
     },
     {
       "path": ".node-version",
@@ -47,7 +57,7 @@
     {
       "path": "Cargo.toml",
       "mode": "100644",
-      "sha256": "2faee6e3af725b34ef30203427725507be371bf1daf52e486154f8d8d5d59fba"
+      "sha256": "fcac85765396bd224797a701d320bfc8c1ca2b052ec64c1f3c314e034c4c21e1"
     },
     {
       "path": "LICENSE.txt",
@@ -62,7 +72,7 @@
     {
       "path": "README.md",
       "mode": "100644",
-      "sha256": "7b13208b81165144d626722dbef8390b7dc7ce20e55fca9940e10c15b02ab797"
+      "sha256": "12ba46b0b526f3af45bc7a6a5b409cbf3751a73ceaadc5bb1f0e39b491806d07"
     },
     {
       "path": "docs/methods.md",
@@ -502,7 +512,7 @@
     {
       "path": "generation-manifest.json",
       "mode": "100644",
-      "sha256": "b20b21cf26ada750b2d65dcf72a028ac440780f00cd2a7e4bb8bdaf7ce8d3412"
+      "sha256": "2c72bf2db953d6852ca4fdbc5628fb9c311eeaa4f52a31b3726491c29a00c119"
     },
     {
       "path": "src/client.rs",

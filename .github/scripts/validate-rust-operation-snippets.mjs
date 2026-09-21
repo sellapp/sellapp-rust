@@ -18,7 +18,7 @@ name = "sellapp-documentation-check"
 version = "0.0.0"
 edition = "2024"
 [dependencies]
-sellapp = { path = ${JSON.stringify(directory)} }
+sellapp = { package = "sellapp-sdk", path = ${JSON.stringify(directory)} }
 serde_json = "1"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 `,
