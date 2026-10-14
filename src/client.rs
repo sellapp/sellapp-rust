@@ -432,7 +432,7 @@ impl Client {
             let mut req = self
                 .http
                 .request(method.clone(), url.clone())
-                .header("User-Agent", "SellApp Rust/0.2.0")
+                .header("User-Agent", "SellApp Rust/0.2.1")
                 .timeout(timeout);
             let mut query_pairs = Vec::new();
             form_pairs(&query_value, None, &mut query_pairs);
@@ -2393,7 +2393,7 @@ fn contract_for(method: &Method, path: &str) -> Contract {
             api_key_uses_store: true,
             access_token_store: true,
             never_retry: false,
-            declared_idempotency: true,
+            declared_idempotency: false,
             server: "",
             form: false,
             text: false,

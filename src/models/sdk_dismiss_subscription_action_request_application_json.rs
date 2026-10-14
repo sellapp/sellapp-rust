@@ -8,12 +8,13 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct SdkDismissSubscriptionActionRequestApplicationJson {
-    /// Optional idempotency key. You may also send this as the Idempotency-Key header.
+    /// Accepted for compatibility but ignored by this operation. Retrieve the action after an uncertain response; repeating a completed dismissal returns 422.
     #[serde(
         skip_serializing_if = "Option::is_none",
         default,
         deserialize_with = "crate::runtime_schema::present_nullable"
     )]
+    #[deprecated]
     pub idempotency_key: Option<Option<String>>,
     /// Why the action is being dismissed. The note is kept on the dismissed action as its error.
     pub note: String,

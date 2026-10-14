@@ -187,7 +187,7 @@ impl<'a> SubscriptionsActionsApi<'a> {
 
     /// Dismiss a subscription action
     ///
-    /// Dismiss a pending lifecycle action that the provider left unresolved, which frees the subscription for its next change. Only a pending action can be dismissed, and the required `note` is stored on the action as its `error` so the decision stays on the record. An action in any other state returns `422` with the refusal sentence under `errors.subscription`, while a missing or over-long `note` returns an ordinary field error. Requires the `invoice` Sanctum ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Dismiss a pending lifecycle action that the provider left unresolved, which frees the subscription for its next change. Only a pending action can be dismissed, and the required `note` is stored on the action as its `error` so the decision stays on the record. An action in any other state returns `422` with the refusal sentence under `errors.subscription`, while a missing or over-long `note` returns an ordinary field error. This operation does not replay completed dismissals: idempotency keys are ignored. After a lost response, retrieve the action before repeating the request; an already-dismissed action returns `422`. Requires the `invoice` Sanctum ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn dismiss(
         &self,
         product_subscription: &str,
@@ -227,7 +227,7 @@ impl<'a> SubscriptionsActionsApi<'a> {
         let path = format!("/v2/subscriptions/{product_subscription}/actions/{action}/dismiss");
         let method = http::Method::POST;
         let mut merged = options.cloned().unwrap_or_default();
-        merged.idempotency_supported = true;
+        merged.idempotency_supported = false;
         merged.operation_id = Some("dismissSubscriptionAction".to_string());
         let options = Some(&merged);
         self.client

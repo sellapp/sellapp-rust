@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "language": "rust",
   "repository": "sellapp/sellapp-rust",
-  "sourceSha": "2a8fd1a82c3091e60f332257fe4460785b0c6e9a",
-  "specSha256": "aea767326d7193deffe5004a5751f7e8f59e40b037636c8fc29b936699dfff2e",
+  "sourceSha": "5bfb944881c821f7c8b0af0e254d6f9bd16c0806",
+  "specSha256": "22a0f17c1c7099fa036382e9f037daa5b7e273d57605163d22042e03f964f1c8",
   "runId": "0",
   "runAttempt": "1",
-  "treeDigest": "b1c6fc1675fb9bb13bd234edbad5afbb3fd9c4254086f49f558c2564115c6efd",
-  "contentDigest": "704d2508f02cd6d74472698fa068db6593c97487e7aec3356746b217951c74f9",
+  "treeDigest": "4eebb4624e39edc0464b298897ed1c5a562679bbea51077dfcd07a25a36a9d23",
+  "contentDigest": "871337198ba6527ed99be73b25a19b9288d7a4a36562d9117b6967579e392c4f",
   "files": [
     {
       "path": ".github/actions/prepare-rust-cache/action.yml",
@@ -57,7 +57,7 @@
     {
       "path": "Cargo.toml",
       "mode": "100644",
-      "sha256": "ff0fc6ac4cbecf0b66793e7d37ea95026fd2de115353570827023d813ee861da"
+      "sha256": "f6513c91d3b040a5f0c3faca6994c957feb6654c3d2e6aa9ec85d1fcbc83e9cc"
     },
     {
       "path": "LICENSE.txt",
@@ -72,7 +72,7 @@
     {
       "path": "README.md",
       "mode": "100644",
-      "sha256": "a0e6fd2008455f52490b1f07d8988b820b7dfd9c7c4bef971fe451c2731e5e6f"
+      "sha256": "e7507aa62c84e2e690950b3440a2b9a921909f0187a9b30fdf7cfa6db22f87f7"
     },
     {
       "path": "docs/methods.md",
@@ -82,7 +82,7 @@
     {
       "path": "docs/migration.md",
       "mode": "100644",
-      "sha256": "d2152af699fb26ebea01160423ee170c0d2516d1100b8188a4e583956b20528d"
+      "sha256": "fc66a4951d15ce6a3455cd4aac9a310b3f8db00af0c07ef4567bdb83c3f54bea"
     },
     {
       "path": "docs/operation-examples.json",
@@ -517,12 +517,12 @@
     {
       "path": "generation-manifest.json",
       "mode": "100644",
-      "sha256": "3c803542a9e56f7de91a36e971e7378cd778158a83e8aad86fce22a1b1ad2c31"
+      "sha256": "b6d7bed1bddc454b4079d09136a22c87a283ab7679925d66e2154d895c78d568"
     },
     {
       "path": "src/client.rs",
       "mode": "100644",
-      "sha256": "fd9296b084b7178b294e7991b61dcc385874c93fa3e2174457b610ca3e3be006"
+      "sha256": "83960d8db6ab94ce813cd1a74749327d9c38dcdb6e67b28fd10f3fd623517d44"
     },
     {
       "path": "src/enums/add_highlight_media_response_value_201_application_json_property_data_type.rs",
@@ -11362,7 +11362,7 @@
     {
       "path": "src/models/sdk_dismiss_subscription_action_request_application_json.rs",
       "mode": "100644",
-      "sha256": "cb49b4bb6e5757ac494962305f23926783636f686a417f0f0e9f30e2b5ce1ccf"
+      "sha256": "544774ceb354273d4fae41dfc4dc41cd6a5b3f363a3c0ff1666979b5bb9be0e5"
     },
     {
       "path": "src/models/sdk_dismiss_subscription_action_response_value_200_application_json.rs",
@@ -17102,7 +17102,7 @@
     {
       "path": "src/resources/subscriptions_actions.rs",
       "mode": "100644",
-      "sha256": "96961f556118ba132de7d3628b8743531661d870e91478fb54d43e4344d4814e"
+      "sha256": "5a230d68b541bcc51310a66b983cc598343a5a20467f65fd740bf3cbbb6cfd1a"
     },
     {
       "path": "src/resources/tickets.rs",
