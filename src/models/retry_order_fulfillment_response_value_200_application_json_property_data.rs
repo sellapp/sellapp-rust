@@ -15,6 +15,7 @@ pub struct RetryOrderFulfillmentResponseValue200ApplicationJsonPropertyData {
     pub customer: RetryOrderFulfillmentResponseValue200ApplicationJsonPropertyDataPropertyCustomer,
     pub payment: RetryOrderFulfillmentResponseValue200ApplicationJsonPropertyDataPropertyPayment,
     pub totals: RetryOrderFulfillmentResponseValue200ApplicationJsonPropertyDataPropertyTotals,
+    /// The coupon this order was sold with, or null. A subscription's renewal and plan-change orders carry null, even while the subscription still bills a discounted price, so a coupon's `limit` counts a subscription once, at signup.
     pub coupon_id: Option<i64>,
     pub line_items:
         Vec<RetryOrderFulfillmentResponseValue200ApplicationJsonPropertyDataPropertyLineItemsItem>,

@@ -690,6 +690,24 @@ async fn customer_portal_list_customer_portal_subscriptions_server_error() {
 }
 
 #[tokio::test]
+async fn customer_portal_list_customer_portal_subscriptions_empty_page() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/customer-portal/subscriptions"))
+        .respond_with(ResponseTemplate::new(200).set_body_string("{\"data\":[],\"links\":{\"first\":\"https://sell.app/api/v1/blacklists?page=1\",\"last\":\"https://sell.app/api/v1/blacklists?page=4\",\"prev\":\"test_prev\",\"next\":\"https://sell.app/api/v1/blacklists?page=2\"},\"meta\":{\"current_page\":1,\"from\":1,\"last_page\":4,\"links\":[{\"url\":\"test_url\",\"label\":\"test_label\",\"active\":false}],\"path\":\"https://sell.app/api/v1/blacklists\",\"per_page\":15,\"to\":15,\"total\":57}}"))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let resp = client
+        .customer_portal()
+        .list_customer_portal_subscriptions()
+        .await
+        .expect("expected success");
+    assert!(resp.data.is_empty(), "expected empty data array");
+}
+
+#[tokio::test]
 async fn customer_portal_get_customer_portal_subscription_round_trip() {
     let server = MockServer::start().await;
     Mock::given(method("GET"))
@@ -1571,15 +1589,7 @@ async fn customer_portal_resume_customer_subscription_round_trip() {
     let client = common::test_client(&server).await;
     let _ = client
         .customer_portal()
-        .resume_customer_subscription(
-            "test_id",
-            sellapp::resources::customer_portal::ResumeCustomerSubscriptionParams::new(
-                serde_json::from_str(include_str!(
-                    "fixtures/sdk_resume_customer_subscription_request_application_json.json"
-                ))
-                .expect("parse fixture for SdkResumeCustomerSubscriptionRequestApplicationJson"),
-            ),
-        )
+        .resume_customer_subscription("test_id")
         .await
         .expect("valid generated response");
 }
@@ -1599,15 +1609,7 @@ async fn customer_portal_resume_customer_subscription_unauthorized() {
     let client = common::test_client(&server).await;
     let err = client
         .customer_portal()
-        .resume_customer_subscription(
-            "test_id",
-            sellapp::resources::customer_portal::ResumeCustomerSubscriptionParams::new(
-                serde_json::from_str(include_str!(
-                    "fixtures/sdk_resume_customer_subscription_request_application_json.json"
-                ))
-                .expect("parse fixture for SdkResumeCustomerSubscriptionRequestApplicationJson"),
-            ),
-        )
+        .resume_customer_subscription("test_id")
         .await
         .expect_err("expected error");
     let api = match &err {
@@ -1632,15 +1634,7 @@ async fn customer_portal_resume_customer_subscription_not_found() {
     let client = common::test_client(&server).await;
     let err = client
         .customer_portal()
-        .resume_customer_subscription(
-            "test_id",
-            sellapp::resources::customer_portal::ResumeCustomerSubscriptionParams::new(
-                serde_json::from_str(include_str!(
-                    "fixtures/sdk_resume_customer_subscription_request_application_json.json"
-                ))
-                .expect("parse fixture for SdkResumeCustomerSubscriptionRequestApplicationJson"),
-            ),
-        )
+        .resume_customer_subscription("test_id")
         .await
         .expect_err("expected error");
     let api = match &err {
@@ -1667,15 +1661,7 @@ async fn customer_portal_resume_customer_subscription_rate_limited() {
     let client = common::test_client(&server).await;
     let err = client
         .customer_portal()
-        .resume_customer_subscription(
-            "test_id",
-            sellapp::resources::customer_portal::ResumeCustomerSubscriptionParams::new(
-                serde_json::from_str(include_str!(
-                    "fixtures/sdk_resume_customer_subscription_request_application_json.json"
-                ))
-                .expect("parse fixture for SdkResumeCustomerSubscriptionRequestApplicationJson"),
-            ),
-        )
+        .resume_customer_subscription("test_id")
         .await
         .expect_err("expected error");
     let api = match &err {
@@ -1701,15 +1687,7 @@ async fn customer_portal_resume_customer_subscription_server_error() {
     let client = common::test_client(&server).await;
     let err = client
         .customer_portal()
-        .resume_customer_subscription(
-            "test_id",
-            sellapp::resources::customer_portal::ResumeCustomerSubscriptionParams::new(
-                serde_json::from_str(include_str!(
-                    "fixtures/sdk_resume_customer_subscription_request_application_json.json"
-                ))
-                .expect("parse fixture for SdkResumeCustomerSubscriptionRequestApplicationJson"),
-            ),
-        )
+        .resume_customer_subscription("test_id")
         .await
         .expect_err("expected error");
     let api = match &err {
@@ -1735,15 +1713,7 @@ async fn customer_portal_resume_customer_subscription_bad_request() {
     let client = common::test_client(&server).await;
     let err = client
         .customer_portal()
-        .resume_customer_subscription(
-            "test_id",
-            sellapp::resources::customer_portal::ResumeCustomerSubscriptionParams::new(
-                serde_json::from_str(include_str!(
-                    "fixtures/sdk_resume_customer_subscription_request_application_json.json"
-                ))
-                .expect("parse fixture for SdkResumeCustomerSubscriptionRequestApplicationJson"),
-            ),
-        )
+        .resume_customer_subscription("test_id")
         .await
         .expect_err("expected error");
     let api = match &err {
@@ -1769,15 +1739,7 @@ async fn customer_portal_resume_customer_subscription_unprocessable() {
     let client = common::test_client(&server).await;
     let err = client
         .customer_portal()
-        .resume_customer_subscription(
-            "test_id",
-            sellapp::resources::customer_portal::ResumeCustomerSubscriptionParams::new(
-                serde_json::from_str(include_str!(
-                    "fixtures/sdk_resume_customer_subscription_request_application_json.json"
-                ))
-                .expect("parse fixture for SdkResumeCustomerSubscriptionRequestApplicationJson"),
-            ),
-        )
+        .resume_customer_subscription("test_id")
         .await
         .expect_err("expected error");
     let api = match &err {

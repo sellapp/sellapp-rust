@@ -15,6 +15,13 @@ pub struct SdkUpdateSubscriptionPaymentMethodRequestApplicationJson {
         deserialize_with = "crate::runtime_schema::present_nullable"
     )]
     pub idempotency_key: Option<Option<String>>,
+    /// Where Stripe returns the customer once its hosted page finishes. Defaults to the store's customer portal page for this subscription. Razorpay subscriptions ignore it.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub return_url: Option<Option<String>>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

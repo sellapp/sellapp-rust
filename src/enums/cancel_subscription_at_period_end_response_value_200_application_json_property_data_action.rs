@@ -11,9 +11,11 @@ pub enum CancelSubscriptionAtPeriodEndResponseValue200ApplicationJsonPropertyDat
     Resume,
     CancelAtPeriodEnd,
     CancelImmediately,
+    KeepSubscription,
     UpdatePaymentMethod,
     ChangePlan,
     ShiftBillingDate,
+    SetAutoRenew,
     /// Wire value not recognized by this SDK version. The original
     /// string is preserved verbatim. SellApp may add new enum values
     /// server-side; matching on this variant lets callers handle
@@ -31,9 +33,11 @@ impl CancelSubscriptionAtPeriodEndResponseValue200ApplicationJsonPropertyDataAct
             Self::Resume => "resume",
             Self::CancelAtPeriodEnd => "cancel_at_period_end",
             Self::CancelImmediately => "cancel_immediately",
+            Self::KeepSubscription => "keep_subscription",
             Self::UpdatePaymentMethod => "update_payment_method",
             Self::ChangePlan => "change_plan",
             Self::ShiftBillingDate => "shift_billing_date",
+            Self::SetAutoRenew => "set_auto_renew",
             Self::Unknown(s) => s.as_str(),
         }
     }
@@ -67,9 +71,11 @@ impl FromStr for CancelSubscriptionAtPeriodEndResponseValue200ApplicationJsonPro
             "resume" => Self::Resume,
             "cancel_at_period_end" => Self::CancelAtPeriodEnd,
             "cancel_immediately" => Self::CancelImmediately,
+            "keep_subscription" => Self::KeepSubscription,
             "update_payment_method" => Self::UpdatePaymentMethod,
             "change_plan" => Self::ChangePlan,
             "shift_billing_date" => Self::ShiftBillingDate,
+            "set_auto_renew" => Self::SetAutoRenew,
             other => Self::Unknown(other.to_string()),
         })
     }

@@ -37,6 +37,96 @@ impl CancelParams {
     }
 }
 
+#[derive(Debug, Clone, Serialize)]
+pub struct ListSubscriptionsParams {
+    /// Number of items to return per page.
+    ///
+    /// Defaults to `15`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// Page number to return.
+    ///
+    /// Defaults to `1`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page: Option<i64>,
+    /// Set to false to return at most 100 matching items in one data array without pagination links or metadata.
+    ///
+    /// Defaults to `true`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pagination: Option<bool>,
+    /// Filter by one or more subscription statuses. Repeat the parameter to select several; a single `status=ACTIVE` works too. A status outside the list is rejected with a validation error.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "status[]")]
+    pub status: Option<Vec<SubscriptionsStatus>>,
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+impl Default for ListSubscriptionsParams {
+    #[allow(deprecated)]
+    fn default() -> Self {
+        Self {
+            limit: Some(15),
+            page: Some(1),
+            pagination: Some(true),
+            status: Default::default(),
+            x_store: Default::default(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct SearchSubscriptionsParams {
+    /// Number of items to return per page.
+    ///
+    /// Defaults to `15`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// Page number to return.
+    ///
+    /// Defaults to `1`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page: Option<i64>,
+    /// Set to false to return at most 100 matching items in one data array without pagination links or metadata.
+    ///
+    /// Defaults to `true`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pagination: Option<bool>,
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkSearchSubscriptionsRequestApplicationJson,
+}
+
+impl SearchSubscriptionsParams {
+    /// Construct a new `SearchSubscriptionsParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkSearchSubscriptionsRequestApplicationJson) -> Self {
+        Self {
+            limit: Some(15),
+            page: Some(1),
+            pagination: Some(true),
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct GetSubscriptionParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
 #[derive(Debug, Clone, Default, Serialize)]
 pub struct GetCapabilitiesParams {
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
@@ -86,6 +176,30 @@ impl CancelImmediatelyParams {
     /// Construct a new `CancelImmediatelyParams` with the required fields set.
     #[allow(deprecated)]
     pub fn new(body: SdkCancelSubscriptionImmediatelyRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct KeepParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkKeepSubscriptionRequestApplicationJson,
+}
+
+impl KeepParams {
+    /// Construct a new `KeepParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkKeepSubscriptionRequestApplicationJson) -> Self {
         Self {
             x_store: Default::default(),
             body,
@@ -261,50 +375,12 @@ impl ConfirmRenewalDateParams {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
-pub struct ListSubscriptionsParams {
-    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "X-STORE")]
-    pub x_store: Option<String>,
-}
-
-#[derive(Debug, Clone, Serialize)]
-pub struct SearchSubscriptionsParams {
-    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "X-STORE")]
-    pub x_store: Option<String>,
-    /// Request body sent with this call.
-    ///
-    /// Required.
-    #[serde(skip)]
-    pub body: SdkSearchSubscriptionsRequestApplicationJson,
-}
-
-impl SearchSubscriptionsParams {
-    /// Construct a new `SearchSubscriptionsParams` with the required fields set.
-    #[allow(deprecated)]
-    pub fn new(body: SdkSearchSubscriptionsRequestApplicationJson) -> Self {
-        Self {
-            x_store: Default::default(),
-            body,
-        }
-    }
-}
-
-#[derive(Debug, Clone, Default, Serialize)]
-pub struct GetSubscriptionParams {
-    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "X-STORE")]
-    pub x_store: Option<String>,
-}
-
 impl<'a> SubscriptionsApi<'a> {
     /// Cancel a subscription
     ///
-    /// Cancel an active subscription now or at period end. cancel_at_period_end is required. Refund flags are valid only when it is false; period-end cancellation does not refund the last payment. Refunds are off by default. refund_last_payment requests a real refund; pro_rated_refund requires refund_last_payment and defaults to false. Cancellation can succeed even if the requested refund fails. A 200 response or confirmed cancellation does not prove a refund, and the action response does not expose the provider refund result. Check the order and payment-provider refund records before retrying; do not replay cancellation as a refund-recovery step. Reuse an idempotency key only with identical action input and actor. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Cancel an active subscription now or at period end, or one with a payment still owed now: a past due one the store bills in house, or a past due or unpaid Stripe, PayPal, or Razorpay subscription. cancel_at_period_end is required. Refund flags are valid only when it is false; period-end cancellation does not refund the last payment. New integrations should use the cancel-at-period-end and cancel-immediately lifecycle actions instead. A provider refusal, or a state check such as a change already in progress or a subscription that is no longer active, returns `422` with the refusal sentence under `errors.subscription`. Requires the `invoice` Sanctum ability. Refunds are off by default. refund_last_payment requests a real refund; pro_rated_refund requires refund_last_payment and defaults to false. While a Stripe, PayPal, or Razorpay subscription is past due or unpaid, its current period was never paid for, so a pro-rated refund returns `422`; a full refund or no refund still works. Cancellation can succeed even if the requested refund fails. A 200 response or confirmed cancellation does not prove a refund, and the action response does not expose the provider refund result. Check the order and payment-provider refund records before retrying; do not replay cancellation as a refund-recovery step. Reuse an idempotency key only with identical action input and actor. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    #[deprecated]
+    #[allow(deprecated)]
     pub async fn cancel(
         &self,
         subscription: &str,
@@ -314,6 +390,8 @@ impl<'a> SubscriptionsApi<'a> {
     }
 
     /// Variant of [`Self::cancel`] that accepts per-request [`crate::RequestOptions`].
+    #[deprecated]
+    #[allow(deprecated)]
     pub async fn cancel_with_options(
         &self,
         subscription: &str,
@@ -326,6 +404,7 @@ impl<'a> SubscriptionsApi<'a> {
     }
 
     /// Returns the typed result together with status, headers, and request ID.
+    #[deprecated]
     pub async fn cancel_raw(
         &self,
         subscription: &str,
@@ -352,9 +431,149 @@ impl<'a> SubscriptionsApi<'a> {
             .await
     }
 
+    /// List subscriptions
+    ///
+    /// List the subscriptions belonging to the authenticated store, ordered by identifier ascending. Requires the `invoice` Sanctum ability. Use `status[]` to keep only the states you care about. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn list_subscriptions(
+        &self,
+        params: ListSubscriptionsParams,
+    ) -> Result<SdkListSubscriptionsResponseValue200ApplicationJson, Error> {
+        self.list_subscriptions_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::list_subscriptions`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn list_subscriptions_with_options(
+        &self,
+        params: ListSubscriptionsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkListSubscriptionsResponseValue200ApplicationJson, Error> {
+        self.list_subscriptions_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn list_subscriptions_raw(
+        &self,
+        params: ListSubscriptionsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkListSubscriptionsResponseValue200ApplicationJson>, Error>
+    {
+        let path = "/v2/subscriptions".to_string();
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("listSubscriptions".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/subscriptions",
+            )
+            .await
+    }
+
+    /// Search subscriptions
+    ///
+    /// Search the store's subscriptions, ordered by identifier ascending unless `sort` says otherwise. `search.value` matches the provider subscription ID, the provider customer ID, and the customer email. Filter on `id`, `customer_id` (the SellApp customer ID, as in `customer.id`), `provider`, `status`, or `product_variant_id`, and sort on `id`, `status`, `current_period_start`, `current_period_end`, `created_at`, or `updated_at`. Requires the `invoice` Sanctum ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn search_subscriptions(
+        &self,
+        params: SearchSubscriptionsParams,
+    ) -> Result<SdkSearchSubscriptionsResponseValue200ApplicationJson, Error> {
+        self.search_subscriptions_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::search_subscriptions`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn search_subscriptions_with_options(
+        &self,
+        params: SearchSubscriptionsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkSearchSubscriptionsResponseValue200ApplicationJson, Error> {
+        self.search_subscriptions_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn search_subscriptions_raw(
+        &self,
+        params: SearchSubscriptionsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkSearchSubscriptionsResponseValue200ApplicationJson>, Error>
+    {
+        let path = "/v2/subscriptions/search".to_string();
+        let method = http::Method::POST;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("searchSubscriptions".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "POST /v2/subscriptions/search",
+            )
+            .await
+    }
+
+    /// Retrieve a subscription
+    ///
+    /// Retrieve one subscription by its SellApp subscription record identifier. Requires the `invoice` Sanctum ability. Foreign-store identifiers return not found. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn get_subscription(
+        &self,
+        product_subscription: &str,
+        params: GetSubscriptionParams,
+    ) -> Result<SdkGetSubscriptionResponseValue200ApplicationJson, Error> {
+        self.get_subscription_with_options(product_subscription, params, None)
+            .await
+    }
+
+    /// Variant of [`Self::get_subscription`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn get_subscription_with_options(
+        &self,
+        product_subscription: &str,
+        params: GetSubscriptionParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkGetSubscriptionResponseValue200ApplicationJson, Error> {
+        self.get_subscription_raw(product_subscription, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn get_subscription_raw(
+        &self,
+        product_subscription: &str,
+        params: GetSubscriptionParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkGetSubscriptionResponseValue200ApplicationJson>, Error> {
+        let product_subscription = crate::client::path_segment(product_subscription);
+        let path = format!("/v2/subscriptions/{product_subscription}");
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("getSubscription".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/subscriptions/{productSubscription}",
+            )
+            .await
+    }
+
     /// View subscription capabilities
     ///
-    /// Return the lifecycle actions currently supported for a subscription. Capability status controls whether an actor can pause, resume, cancel, update the payment method, change plan, or shift the billing date. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Return the lifecycle actions currently supported for a subscription, each with the reason the customer and the seller are shown. A `customer_only` status names who owns the action rather than who may call the API: a store token carries a plan change and a payment method update on the customer's behalf, while a `customer_only` auto-renewal switch stays with the customer portal. `set_auto_renew` has no API route at all. While a Stripe, PayPal, or Razorpay subscription is past due or unpaid, every action except `cancel_immediately` and, on Razorpay, `update_payment_method`, is `unsupported`, and a subscription the store bills in house that is on hold for an unpaid renewal reports `resume` as `customer_only`, because only the customer can pay to resume it. Requires the `invoice` Sanctum ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn get_capabilities(
         &self,
         product_subscription: &str,
@@ -406,7 +625,7 @@ impl<'a> SubscriptionsApi<'a> {
 
     /// Cancel a subscription at period end
     ///
-    /// Schedule cancellation at the end of the current billing period without requesting a refund. Inspect capabilities first. The response records the cancellation action; retrieve the subscription to observe its current state. Reuse an idempotency key only with identical action input and actor. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Schedule cancellation at the end of the current billing period without requesting a refund. Inspect capabilities first. PayPal has no cancellation at period end, so on a PayPal subscription this cancels it with PayPal straight away and keeps the customer's access until the period ends; it can't be kept afterwards. The response records the cancellation action; retrieve the subscription to observe its current state. Reuse an idempotency key only with identical action input and actor. A provider refusal, or a state check such as a change already in progress or a subscription that is no longer active, returns `422` with the refusal sentence under `errors.subscription`. Requires the `invoice` Sanctum ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn cancel_at_period_end(
         &self,
         product_subscription: &str,
@@ -459,7 +678,7 @@ impl<'a> SubscriptionsApi<'a> {
 
     /// Cancel a subscription immediately
     ///
-    /// Request immediate subscription cancellation. Inspect capabilities for provider support. This ends future billing and can change customer access. Refunds are off by default. refund_last_payment requests a real refund; pro_rated_refund requires refund_last_payment and defaults to false. Cancellation can succeed even if the requested refund fails. A 200 response or confirmed cancellation does not prove a refund, and the action response does not expose the provider refund result. Check the order and payment-provider refund records before retrying; do not replay cancellation as a refund-recovery step. Reuse an idempotency key only with identical action input and actor. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Request immediate subscription cancellation. Inspect capabilities for provider support. This ends future billing and can change customer access. It is the one action left on a Stripe or PayPal subscription that is past due or unpaid, and one of two left on a Razorpay one alongside a payment method update. A provider refusal, or a state check such as a change already in progress or a subscription that is no longer active, returns `422` with the refusal sentence under `errors.subscription`. Requires the `invoice` Sanctum ability. Refunds are off by default. refund_last_payment requests a real refund; pro_rated_refund requires refund_last_payment and defaults to false. While a Stripe, PayPal, or Razorpay subscription is past due or unpaid, its current period was never paid for, so a pro-rated refund returns `422`; a full refund or no refund still works. Cancellation can succeed even if the requested refund fails. A 200 response or confirmed cancellation does not prove a refund, and the action response does not expose the provider refund result. Check the order and payment-provider refund records before retrying; do not replay cancellation as a refund-recovery step. Reuse an idempotency key only with identical action input and actor. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn cancel_immediately(
         &self,
         product_subscription: &str,
@@ -510,9 +729,59 @@ impl<'a> SubscriptionsApi<'a> {
             .await
     }
 
+    /// Keep a subscription
+    ///
+    /// Stop a scheduled cancellation so the subscription keeps renewing, which is the undo for cancelling at period end. The subscription has to still be active, still be scheduled to cancel, and its period must not have ended yet. Any of those, a provider that cannot undo its own schedule (a PayPal subscription or a Razorpay trial, both already cancelled with the provider), or a change already in progress returns `422` with the refusal sentence under `errors.subscription`. Requires the `invoice` Sanctum ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn keep(
+        &self,
+        product_subscription: &str,
+        params: KeepParams,
+    ) -> Result<SdkKeepSubscriptionResponseValue200ApplicationJson, Error> {
+        self.keep_with_options(product_subscription, params, None)
+            .await
+    }
+
+    /// Variant of [`Self::keep`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn keep_with_options(
+        &self,
+        product_subscription: &str,
+        params: KeepParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkKeepSubscriptionResponseValue200ApplicationJson, Error> {
+        self.keep_raw(product_subscription, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn keep_raw(
+        &self,
+        product_subscription: &str,
+        params: KeepParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkKeepSubscriptionResponseValue200ApplicationJson>, Error> {
+        let product_subscription = crate::client::path_segment(product_subscription);
+        let path = format!("/v2/subscriptions/{product_subscription}/actions/keep");
+        let method = http::Method::POST;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = true;
+        merged.operation_id = Some("keepSubscription".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "POST /v2/subscriptions/{productSubscription}/actions/keep",
+            )
+            .await
+    }
+
     /// Pause a subscription
     ///
-    /// Pause a subscription after checking capabilities. Automatic resume dates are supported only by the current Stripe flow; use a future resume_at when supplied. Other provider pauses may need an explicit resume action. Customer-originated pauses are also subject to store pause policies. Reuse an idempotency key only with identical input and actor, and retrieve the subscription after the action. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Pause a subscription after checking capabilities. Automatic resume dates are supported by Stripe and by subscriptions the store bills in house; use a future resume_at when supplied. Other provider pauses may need an explicit resume action. Customer-originated pauses are also subject to store pause policies. Reuse an idempotency key only with identical input and actor, and retrieve the subscription after the action. A provider refusal, or a state check such as a change already in progress or a subscription that is no longer active, returns `422` with the refusal sentence under `errors.subscription`. Requires the `invoice` Sanctum ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn pause(
         &self,
         product_subscription: &str,
@@ -563,7 +832,7 @@ impl<'a> SubscriptionsApi<'a> {
 
     /// Resume a subscription
     ///
-    /// Resume a paused subscription and restore related entitlements where possible. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Resume a paused subscription and restore related entitlements where possible. A subscription that is not paused, a subscription the store bills in house that is on hold for an unpaid renewal (only the customer can resume it, by paying that renewal from the customer portal), a provider refusal, or a change already in progress returns `422` with the refusal sentence under `errors.subscription`. Requires the `invoice` Sanctum ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn resume(
         &self,
         product_subscription: &str,
@@ -614,12 +883,12 @@ impl<'a> SubscriptionsApi<'a> {
 
     /// Update a subscription payment method
     ///
-    /// This action belongs to the customer. Seller API requests return a 422 validation error. Check subscription capabilities and use the customer flow; never expose a seller API key to work around this restriction. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Request a subscription payment method update. A payment method belongs to the customer, and a store token requests the update on their behalf. The customer still enters the new card themselves, so the action stays `pending` and `redirect_url` is where they finish it: Stripe's hosted page for a Stripe subscription, or a SellApp page for a Razorpay one. `return_url` chooses where Stripe sends the customer afterwards; Razorpay ignores it. PayPal subscriptions and subscriptions the store bills in house don't support the update. Read `update_payment_method` in the capabilities response before calling: an unsupported payment method, or a state check such as a change already in progress, a subscription that is no longer active, or a Stripe subscription with a payment still owed, returns `422` with the refusal sentence under `errors.subscription`. Requires the `invoice` Sanctum ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn update_payment_method(
         &self,
         product_subscription: &str,
         params: UpdatePaymentMethodParams,
-    ) -> Result<String, Error> {
+    ) -> Result<SdkUpdateSubscriptionPaymentMethodResponseValue200ApplicationJson, Error> {
         self.update_payment_method_with_options(product_subscription, params, None)
             .await
     }
@@ -630,7 +899,7 @@ impl<'a> SubscriptionsApi<'a> {
         product_subscription: &str,
         params: UpdatePaymentMethodParams,
         options: Option<&crate::RequestOptions>,
-    ) -> Result<String, Error> {
+    ) -> Result<SdkUpdateSubscriptionPaymentMethodResponseValue200ApplicationJson, Error> {
         self.update_payment_method_raw(product_subscription, params, options)
             .await
             .map(|response| response.data)
@@ -642,7 +911,10 @@ impl<'a> SubscriptionsApi<'a> {
         product_subscription: &str,
         params: UpdatePaymentMethodParams,
         options: Option<&crate::RequestOptions>,
-    ) -> Result<crate::RawResponse<String>, Error> {
+    ) -> Result<
+        crate::RawResponse<SdkUpdateSubscriptionPaymentMethodResponseValue200ApplicationJson>,
+        Error,
+    > {
         let product_subscription = crate::client::path_segment(product_subscription);
         let path =
             format!("/v2/subscriptions/{product_subscription}/actions/update-payment-method");
@@ -665,12 +937,12 @@ impl<'a> SubscriptionsApi<'a> {
 
     /// Preview a subscription plan change
     ///
-    /// This action belongs to the customer. Seller API requests return a 422 validation error. Check subscription capabilities and use the customer flow; never expose a seller API key to work around this restriction. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Preview a subscription plan change before confirming it. The preview stores the change it was taken for and returns a `preview_token` the confirmation must send back, alongside the provider's own pricing preview. On Stripe and in-house subscriptions, `preview_payload.payment_required` says whether confirming charges `amount_due` today or leaves any amount to the next invoice, and `preview_payload.renewal_date` says when the subscription renews next. A plan change belongs to the customer, and a store token previews it on their behalf; a provider refusal, or a state check such as a change already in progress or a subscription that is no longer active, returns `422` with the refusal sentence under `errors.subscription`. Requires the `invoice` Sanctum ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn preview_plan_change(
         &self,
         product_subscription: &str,
         params: PreviewPlanChangeParams,
-    ) -> Result<String, Error> {
+    ) -> Result<SdkPreviewSubscriptionPlanChangeResponseValue200ApplicationJson, Error> {
         self.preview_plan_change_with_options(product_subscription, params, None)
             .await
     }
@@ -681,7 +953,7 @@ impl<'a> SubscriptionsApi<'a> {
         product_subscription: &str,
         params: PreviewPlanChangeParams,
         options: Option<&crate::RequestOptions>,
-    ) -> Result<String, Error> {
+    ) -> Result<SdkPreviewSubscriptionPlanChangeResponseValue200ApplicationJson, Error> {
         self.preview_plan_change_raw(product_subscription, params, options)
             .await
             .map(|response| response.data)
@@ -693,7 +965,10 @@ impl<'a> SubscriptionsApi<'a> {
         product_subscription: &str,
         params: PreviewPlanChangeParams,
         options: Option<&crate::RequestOptions>,
-    ) -> Result<crate::RawResponse<String>, Error> {
+    ) -> Result<
+        crate::RawResponse<SdkPreviewSubscriptionPlanChangeResponseValue200ApplicationJson>,
+        Error,
+    > {
         let product_subscription = crate::client::path_segment(product_subscription);
         let path = format!("/v2/subscriptions/{product_subscription}/actions/change-plan/preview");
         let method = http::Method::POST;
@@ -715,12 +990,12 @@ impl<'a> SubscriptionsApi<'a> {
 
     /// Confirm a subscription plan change
     ///
-    /// This action belongs to the customer. Seller API requests return a 422 validation error. Check subscription capabilities and use the customer flow; never expose a seller API key to work around this restriction. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Confirm a previously previewed subscription plan change, sending back the `preview_token` for a preview of the same change. A plan change belongs to the customer, and a store token confirms it on their behalf; a provider refusal, or a state check such as a change already in progress or a subscription that is no longer active, returns `422` with the refusal sentence under `errors.subscription`. `approval_url` accompanies a `pending` action whenever the customer still has to approve the revision at the provider or pay the proration order `proration_order_id` names, and is left out entirely when the provider applied the change itself. Requires the `invoice` Sanctum ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn confirm_plan_change(
         &self,
         product_subscription: &str,
         params: ConfirmPlanChangeParams,
-    ) -> Result<String, Error> {
+    ) -> Result<SdkConfirmSubscriptionPlanChangeResponseValue200ApplicationJson, Error> {
         self.confirm_plan_change_with_options(product_subscription, params, None)
             .await
     }
@@ -731,7 +1006,7 @@ impl<'a> SubscriptionsApi<'a> {
         product_subscription: &str,
         params: ConfirmPlanChangeParams,
         options: Option<&crate::RequestOptions>,
-    ) -> Result<String, Error> {
+    ) -> Result<SdkConfirmSubscriptionPlanChangeResponseValue200ApplicationJson, Error> {
         self.confirm_plan_change_raw(product_subscription, params, options)
             .await
             .map(|response| response.data)
@@ -743,7 +1018,10 @@ impl<'a> SubscriptionsApi<'a> {
         product_subscription: &str,
         params: ConfirmPlanChangeParams,
         options: Option<&crate::RequestOptions>,
-    ) -> Result<crate::RawResponse<String>, Error> {
+    ) -> Result<
+        crate::RawResponse<SdkConfirmSubscriptionPlanChangeResponseValue200ApplicationJson>,
+        Error,
+    > {
         let product_subscription = crate::client::path_segment(product_subscription);
         let path = format!("/v2/subscriptions/{product_subscription}/actions/change-plan/confirm");
         let method = http::Method::POST;
@@ -765,7 +1043,7 @@ impl<'a> SubscriptionsApi<'a> {
 
     /// Preview a subscription renewal date change
     ///
-    /// Preview a new renewal date before confirmation when the subscription's billing-date policy requires a preview. The current Stripe and PayPal provider flows do not support renewal-date changes and return 422. Check shift_billing_date capabilities before sending a request. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Preview a new renewal date before confirmation when the subscription's billing-date policy requires one. No payment method supports renewal-date changes today: Stripe, PayPal, Razorpay, and subscriptions the store bills in house all report `shift_billing_date` as `unsupported`, so this returns `422` with the refusal sentence under `errors.subscription`. Read the capabilities response first. Requires the `invoice` Sanctum ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn preview_renewal_date(
         &self,
         product_subscription: &str,
@@ -819,7 +1097,7 @@ impl<'a> SubscriptionsApi<'a> {
 
     /// Confirm a subscription renewal date change
     ///
-    /// Confirm a subscription renewal date change. A preview token is required when the variant's billing-date policy requires previews. The current Stripe and PayPal provider flows do not support renewal-date changes and return 422. Check shift_billing_date capabilities before sending a request. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Confirm a subscription renewal date change, sending a `preview_token` when the variant's billing-date policy requires previews. No payment method supports renewal-date changes today: Stripe, PayPal, Razorpay, and subscriptions the store bills in house all report `shift_billing_date` as `unsupported`, so this returns `422` with the refusal sentence under `errors.subscription`. Read the capabilities response first. Requires the `invoice` Sanctum ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn confirm_renewal_date(
         &self,
         product_subscription: &str,
@@ -867,146 +1145,6 @@ impl<'a> SubscriptionsApi<'a> {
                 Some(&params.body),
                 options,
                 "POST /v2/subscriptions/{productSubscription}/actions/change-renewal-date/confirm",
-            )
-            .await
-    }
-
-    /// List subscriptions
-    ///
-    /// List page-based subscriptions with canonical customer and deprecated provider aliases. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
-    pub async fn list_subscriptions(
-        &self,
-        params: ListSubscriptionsParams,
-    ) -> Result<SdkListSubscriptionsResponseValue200ApplicationJson, Error> {
-        self.list_subscriptions_with_options(params, None).await
-    }
-
-    /// Variant of [`Self::list_subscriptions`] that accepts per-request [`crate::RequestOptions`].
-    pub async fn list_subscriptions_with_options(
-        &self,
-        params: ListSubscriptionsParams,
-        options: Option<&crate::RequestOptions>,
-    ) -> Result<SdkListSubscriptionsResponseValue200ApplicationJson, Error> {
-        self.list_subscriptions_raw(params, options)
-            .await
-            .map(|response| response.data)
-    }
-
-    /// Returns the typed result together with status, headers, and request ID.
-    pub async fn list_subscriptions_raw(
-        &self,
-        params: ListSubscriptionsParams,
-        options: Option<&crate::RequestOptions>,
-    ) -> Result<crate::RawResponse<SdkListSubscriptionsResponseValue200ApplicationJson>, Error>
-    {
-        let path = "/v2/subscriptions".to_string();
-        let method = http::Method::GET;
-        let mut merged = options.cloned().unwrap_or_default();
-        merged.idempotency_supported = false;
-        merged.operation_id = Some("listSubscriptions".to_string());
-        let options = Some(&merged);
-        self.client
-            .request_with_query_schema_opts_raw(
-                method,
-                &path,
-                &params,
-                options,
-                "GET /v2/subscriptions",
-            )
-            .await
-    }
-
-    /// Search subscriptions
-    ///
-    /// Search while preserving page-based pagination. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
-    pub async fn search_subscriptions(
-        &self,
-        params: SearchSubscriptionsParams,
-    ) -> Result<SdkSearchSubscriptionsResponseValue200ApplicationJson, Error> {
-        self.search_subscriptions_with_options(params, None).await
-    }
-
-    /// Variant of [`Self::search_subscriptions`] that accepts per-request [`crate::RequestOptions`].
-    pub async fn search_subscriptions_with_options(
-        &self,
-        params: SearchSubscriptionsParams,
-        options: Option<&crate::RequestOptions>,
-    ) -> Result<SdkSearchSubscriptionsResponseValue200ApplicationJson, Error> {
-        self.search_subscriptions_raw(params, options)
-            .await
-            .map(|response| response.data)
-    }
-
-    /// Returns the typed result together with status, headers, and request ID.
-    pub async fn search_subscriptions_raw(
-        &self,
-        params: SearchSubscriptionsParams,
-        options: Option<&crate::RequestOptions>,
-    ) -> Result<crate::RawResponse<SdkSearchSubscriptionsResponseValue200ApplicationJson>, Error>
-    {
-        let path = "/v2/subscriptions/search".to_string();
-        let method = http::Method::POST;
-        let mut merged = options.cloned().unwrap_or_default();
-        merged.idempotency_supported = false;
-        merged.operation_id = Some("searchSubscriptions".to_string());
-        let options = Some(&merged);
-        self.client
-            .request_with_body_schema_opts_raw(
-                method,
-                &path,
-                &params,
-                Some(&params.body),
-                options,
-                "POST /v2/subscriptions/search",
-            )
-            .await
-    }
-
-    /// Retrieve a subscription
-    ///
-    /// Retrieve by SellApp subscription record ID. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
-    pub async fn get_subscription(
-        &self,
-        product_subscription: &str,
-        params: GetSubscriptionParams,
-    ) -> Result<SdkGetSubscriptionResponseValue200ApplicationJson, Error> {
-        self.get_subscription_with_options(product_subscription, params, None)
-            .await
-    }
-
-    /// Variant of [`Self::get_subscription`] that accepts per-request [`crate::RequestOptions`].
-    pub async fn get_subscription_with_options(
-        &self,
-        product_subscription: &str,
-        params: GetSubscriptionParams,
-        options: Option<&crate::RequestOptions>,
-    ) -> Result<SdkGetSubscriptionResponseValue200ApplicationJson, Error> {
-        self.get_subscription_raw(product_subscription, params, options)
-            .await
-            .map(|response| response.data)
-    }
-
-    /// Returns the typed result together with status, headers, and request ID.
-    pub async fn get_subscription_raw(
-        &self,
-        product_subscription: &str,
-        params: GetSubscriptionParams,
-        options: Option<&crate::RequestOptions>,
-    ) -> Result<crate::RawResponse<SdkGetSubscriptionResponseValue200ApplicationJson>, Error> {
-        let product_subscription = crate::client::path_segment(product_subscription);
-        let path = format!("/v2/subscriptions/{product_subscription}");
-        let method = http::Method::GET;
-        let mut merged = options.cloned().unwrap_or_default();
-        merged.idempotency_supported = false;
-        merged.operation_id = Some("getSubscription".to_string());
-        let options = Some(&merged);
-        self.client
-            .request_with_query_schema_opts_raw(
-                method,
-                &path,
-                &params,
-                options,
-                "GET /v2/subscriptions/{productSubscription}",
             )
             .await
     }

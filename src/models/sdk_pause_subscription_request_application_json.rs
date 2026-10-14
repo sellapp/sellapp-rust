@@ -15,7 +15,7 @@ pub struct SdkPauseSubscriptionRequestApplicationJson {
         deserialize_with = "crate::runtime_schema::present_nullable"
     )]
     pub idempotency_key: Option<Option<String>>,
-    /// Use a future date-time at execution time. Automatic resume dates are supported only for Stripe; the shown date is illustrative.
+    /// Use a future date-time at execution time. Automatic resume dates are supported by Stripe and by subscriptions the store bills in house; the shown date is illustrative.
     #[serde(
         skip_serializing_if = "Option::is_none",
         default,

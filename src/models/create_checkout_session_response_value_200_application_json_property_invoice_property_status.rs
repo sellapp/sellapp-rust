@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct CreateCheckoutSessionResponseValue200ApplicationJsonPropertyInvoicePropertyStatus {
-    pub history: Vec<String>,
+    pub history: Vec<CreateCheckoutSessionResponseValue200ApplicationJsonPropertyInvoicePropertyStatusPropertyHistoryItem>,
     pub status: CreateCheckoutSessionResponseValue200ApplicationJsonPropertyInvoicePropertyStatusPropertyStatus,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]

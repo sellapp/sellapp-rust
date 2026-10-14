@@ -59,6 +59,173 @@ Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API r
 
 [Response access, transport controls, pagination, and typed errors](../usage.md)
 
+## list_subscriptions
+
+List subscriptions
+
+[API reference](https://sell.app/docs/api/subscriptions/read-subscriptions) · Effect: **read**
+
+```rust
+pub async fn list_subscriptions(
+        &self,
+        params: ListSubscriptionsParams,
+    ) -> Result<SdkListSubscriptionsResponseValue200ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| params | `ListSubscriptionsParams` | Yes |
+
+Returns: `SdkListSubscriptionsResponseValue200ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::subscriptions::ListSubscriptionsParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = ListSubscriptionsParams::default();
+    let result = client.subscriptions().list_subscriptions(params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 200, 400, 401, 403, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
+## search_subscriptions
+
+Search subscriptions
+
+[API reference](https://sell.app/docs/api/subscriptions/read-subscriptions) · Effect: **read**
+
+```rust
+pub async fn search_subscriptions(
+        &self,
+        params: SearchSubscriptionsParams,
+    ) -> Result<SdkSearchSubscriptionsResponseValue200ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| params | `SearchSubscriptionsParams` | Yes |
+
+Returns: `SdkSearchSubscriptionsResponseValue200ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::subscriptions::SearchSubscriptionsParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = SearchSubscriptionsParams::new(serde_json::from_str("{\"search\":{\"value\":\"maya.chen@example.com\"},\"filters\":[{\"field\":\"status\",\"operator\":\"=\",\"value\":\"ACTIVE\"}]}")?);
+    let result = client.subscriptions().search_subscriptions(params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 200, 400, 401, 403, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
+## get_subscription
+
+Retrieve a subscription
+
+[API reference](https://sell.app/docs/api/subscriptions/read-subscriptions) · Effect: **read**
+
+```rust
+pub async fn get_subscription(
+        &self,
+        product_subscription: &str,
+        params: GetSubscriptionParams,
+    ) -> Result<SdkGetSubscriptionResponseValue200ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| product_subscription | `&str` | Yes |
+| params | `GetSubscriptionParams` | Yes |
+
+Returns: `SdkGetSubscriptionResponseValue200ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::subscriptions::GetSubscriptionParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = GetSubscriptionParams::default();
+    let result = client.subscriptions().get_subscription("123", params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
 ## get_capabilities
 
 View subscription capabilities
@@ -230,6 +397,63 @@ Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API r
 
 [Response access, transport controls, pagination, and typed errors](../usage.md)
 
+## keep
+
+Keep a subscription
+
+[API reference](https://sell.app/docs/api/subscriptions/keep-a-subscription) · Effect: **consequential**
+
+```rust
+pub async fn keep(
+        &self,
+        product_subscription: &str,
+        params: KeepParams,
+    ) -> Result<SdkKeepSubscriptionResponseValue200ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| product_subscription | `&str` | Yes |
+| params | `KeepParams` | Yes |
+
+Returns: `SdkKeepSubscriptionResponseValue200ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::subscriptions::KeepParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = KeepParams::new(serde_json::from_str("{}")?);
+    let result = client.subscriptions().keep("55", params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
 ## pause
 
 Pause a subscription
@@ -355,7 +579,7 @@ pub async fn update_payment_method(
         &self,
         product_subscription: &str,
         params: UpdatePaymentMethodParams,
-    ) -> Result<String, Error>
+    ) -> Result<SdkUpdateSubscriptionPaymentMethodResponseValue200ApplicationJson, Error>
 ```
 
 | Argument | Native type | Required |
@@ -363,7 +587,7 @@ pub async fn update_payment_method(
 | product_subscription | `&str` | Yes |
 | params | `UpdatePaymentMethodParams` | Yes |
 
-Returns: `String`.
+Returns: `SdkUpdateSubscriptionPaymentMethodResponseValue200ApplicationJson`.
 
 ```rs
 use sellapp::Client;
@@ -372,8 +596,8 @@ use sellapp::resources::subscriptions::UpdatePaymentMethodParams;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
-    let mut params = UpdatePaymentMethodParams::new(serde_json::from_str("{}")?);
-    let result = client.subscriptions().update_payment_method("1", params).await?;
+    let mut params = UpdatePaymentMethodParams::new(serde_json::from_str("{\"return_url\":\"https://store.example.com/billing/updated\"}")?);
+    let result = client.subscriptions().update_payment_method("55", params).await?;
     println!("{result:?}");
     Ok(())
 }
@@ -397,7 +621,7 @@ Supported credential alternatives (each object is one alternative):
 ]
 ```
 
-Documented HTTP responses: 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
+Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
 
 [Response access, transport controls, pagination, and typed errors](../usage.md)
 
@@ -412,7 +636,7 @@ pub async fn preview_plan_change(
         &self,
         product_subscription: &str,
         params: PreviewPlanChangeParams,
-    ) -> Result<String, Error>
+    ) -> Result<SdkPreviewSubscriptionPlanChangeResponseValue200ApplicationJson, Error>
 ```
 
 | Argument | Native type | Required |
@@ -420,7 +644,7 @@ pub async fn preview_plan_change(
 | product_subscription | `&str` | Yes |
 | params | `PreviewPlanChangeParams` | Yes |
 
-Returns: `String`.
+Returns: `SdkPreviewSubscriptionPlanChangeResponseValue200ApplicationJson`.
 
 ```rs
 use sellapp::Client;
@@ -454,7 +678,7 @@ Supported credential alternatives (each object is one alternative):
 ]
 ```
 
-Documented HTTP responses: 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
+Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
 
 [Response access, transport controls, pagination, and typed errors](../usage.md)
 
@@ -469,7 +693,7 @@ pub async fn confirm_plan_change(
         &self,
         product_subscription: &str,
         params: ConfirmPlanChangeParams,
-    ) -> Result<String, Error>
+    ) -> Result<SdkConfirmSubscriptionPlanChangeResponseValue200ApplicationJson, Error>
 ```
 
 | Argument | Native type | Required |
@@ -477,7 +701,7 @@ pub async fn confirm_plan_change(
 | product_subscription | `&str` | Yes |
 | params | `ConfirmPlanChangeParams` | Yes |
 
-Returns: `String`.
+Returns: `SdkConfirmSubscriptionPlanChangeResponseValue200ApplicationJson`.
 
 ```rs
 use sellapp::Client;
@@ -487,7 +711,7 @@ use sellapp::resources::subscriptions::ConfirmPlanChangeParams;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
     let mut params = ConfirmPlanChangeParams::new(serde_json::from_str("{\"target_variant_id\":4321,\"preview_token\":\"subprev_9c4b2f\"}")?);
-    let result = client.subscriptions().confirm_plan_change("1", params).await?;
+    let result = client.subscriptions().confirm_plan_change("55", params).await?;
     println!("{result:?}");
     Ok(())
 }
@@ -511,7 +735,7 @@ Supported credential alternatives (each object is one alternative):
 ]
 ```
 
-Documented HTTP responses: 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
+Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
 
 [Response access, transport controls, pagination, and typed errors](../usage.md)
 
@@ -626,173 +850,6 @@ Supported credential alternatives (each object is one alternative):
 ```
 
 Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
-
-[Response access, transport controls, pagination, and typed errors](../usage.md)
-
-## list_subscriptions
-
-List subscriptions
-
-[API reference](https://sell.app/docs/api/subscriptions/read-subscriptions) · Effect: **read**
-
-```rust
-pub async fn list_subscriptions(
-        &self,
-        params: ListSubscriptionsParams,
-    ) -> Result<SdkListSubscriptionsResponseValue200ApplicationJson, Error>
-```
-
-| Argument | Native type | Required |
-| --- | --- | --- |
-| params | `ListSubscriptionsParams` | Yes |
-
-Returns: `SdkListSubscriptionsResponseValue200ApplicationJson`.
-
-```rs
-use sellapp::Client;
-use sellapp::resources::subscriptions::ListSubscriptionsParams;
-
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
-    let mut params = ListSubscriptionsParams::default();
-    let result = client.subscriptions().list_subscriptions(params).await?;
-    println!("{result:?}");
-    Ok(())
-}
-```
-
-### Authentication and errors
-
-Supported credential alternatives (each object is one alternative):
-
-```json
-[
-  {
-    "bearerAuth": []
-  },
-  {
-    "oauthAccessToken": [
-      "admin"
-    ],
-    "storeAuth": []
-  }
-]
-```
-
-Documented HTTP responses: 200, 400, 401, 403, 404, 409, 410, 422, 429, 500. See the API reference for field-level validation and consequences.
-
-[Response access, transport controls, pagination, and typed errors](../usage.md)
-
-## search_subscriptions
-
-Search subscriptions
-
-[API reference](https://sell.app/docs/api/subscriptions/read-subscriptions) · Effect: **read**
-
-```rust
-pub async fn search_subscriptions(
-        &self,
-        params: SearchSubscriptionsParams,
-    ) -> Result<SdkSearchSubscriptionsResponseValue200ApplicationJson, Error>
-```
-
-| Argument | Native type | Required |
-| --- | --- | --- |
-| params | `SearchSubscriptionsParams` | Yes |
-
-Returns: `SdkSearchSubscriptionsResponseValue200ApplicationJson`.
-
-```rs
-use sellapp::Client;
-use sellapp::resources::subscriptions::SearchSubscriptionsParams;
-
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
-    let mut params = SearchSubscriptionsParams::new(serde_json::from_str("{\"search\":\"maya.chen@example.com\",\"status\":\"active\"}")?);
-    let result = client.subscriptions().search_subscriptions(params).await?;
-    println!("{result:?}");
-    Ok(())
-}
-```
-
-### Authentication and errors
-
-Supported credential alternatives (each object is one alternative):
-
-```json
-[
-  {
-    "bearerAuth": []
-  },
-  {
-    "oauthAccessToken": [
-      "admin"
-    ],
-    "storeAuth": []
-  }
-]
-```
-
-Documented HTTP responses: 200, 400, 401, 403, 404, 409, 410, 422, 429, 500. See the API reference for field-level validation and consequences.
-
-[Response access, transport controls, pagination, and typed errors](../usage.md)
-
-## get_subscription
-
-Retrieve a subscription
-
-[API reference](https://sell.app/docs/api/subscriptions/read-subscriptions) · Effect: **read**
-
-```rust
-pub async fn get_subscription(
-        &self,
-        product_subscription: &str,
-        params: GetSubscriptionParams,
-    ) -> Result<SdkGetSubscriptionResponseValue200ApplicationJson, Error>
-```
-
-| Argument | Native type | Required |
-| --- | --- | --- |
-| product_subscription | `&str` | Yes |
-| params | `GetSubscriptionParams` | Yes |
-
-Returns: `SdkGetSubscriptionResponseValue200ApplicationJson`.
-
-```rs
-use sellapp::Client;
-use sellapp::resources::subscriptions::GetSubscriptionParams;
-
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
-    let mut params = GetSubscriptionParams::default();
-    let result = client.subscriptions().get_subscription("991", params).await?;
-    println!("{result:?}");
-    Ok(())
-}
-```
-
-### Authentication and errors
-
-Supported credential alternatives (each object is one alternative):
-
-```json
-[
-  {
-    "bearerAuth": []
-  },
-  {
-    "oauthAccessToken": [
-      "admin"
-    ],
-    "storeAuth": []
-  }
-]
-```
-
-Documented HTTP responses: 200, 400, 401, 403, 404, 409, 410, 422, 429, 500. See the API reference for field-level validation and consequences.
 
 [Response access, transport controls, pagination, and typed errors](../usage.md)
 

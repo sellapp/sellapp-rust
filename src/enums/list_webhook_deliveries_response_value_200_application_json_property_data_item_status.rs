@@ -9,8 +9,10 @@ use std::str::FromStr;
 pub enum ListWebhookDeliveriesResponseValue200ApplicationJsonPropertyDataItemStatus {
     Pending,
     Delivering,
+    Retrying,
     Succeeded,
     Failed,
+    Disabled,
     /// Wire value not recognized by this SDK version. The original
     /// string is preserved verbatim. SellApp may add new enum values
     /// server-side; matching on this variant lets callers handle
@@ -26,8 +28,10 @@ impl ListWebhookDeliveriesResponseValue200ApplicationJsonPropertyDataItemStatus 
         match self {
             Self::Pending => "pending",
             Self::Delivering => "delivering",
+            Self::Retrying => "retrying",
             Self::Succeeded => "succeeded",
             Self::Failed => "failed",
+            Self::Disabled => "disabled",
             Self::Unknown(s) => s.as_str(),
         }
     }
@@ -57,8 +61,10 @@ impl FromStr for ListWebhookDeliveriesResponseValue200ApplicationJsonPropertyDat
         Ok(match s {
             "pending" => Self::Pending,
             "delivering" => Self::Delivering,
+            "retrying" => Self::Retrying,
             "succeeded" => Self::Succeeded,
             "failed" => Self::Failed,
+            "disabled" => Self::Disabled,
             other => Self::Unknown(other.to_string()),
         })
     }

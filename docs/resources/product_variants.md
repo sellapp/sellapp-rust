@@ -323,7 +323,7 @@ use sellapp::resources::product_variants::DeleteParams;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
-    let mut params = DeleteParams::default();
+    let mut params = DeleteParams::new(serde_json::from_str("{}")?);
     let result = client.product_variants().delete("1", "2", params).await?;
     println!("{result:?}");
     Ok(())

@@ -82,23 +82,6 @@ impl PauseCustomerSubscriptionParams {
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct ResumeCustomerSubscriptionParams {
-    /// Request body sent with this call.
-    ///
-    /// Required.
-    #[serde(skip)]
-    pub body: SdkResumeCustomerSubscriptionRequestApplicationJson,
-}
-
-impl ResumeCustomerSubscriptionParams {
-    /// Construct a new `ResumeCustomerSubscriptionParams` with the required fields set.
-    #[allow(deprecated)]
-    pub fn new(body: SdkResumeCustomerSubscriptionRequestApplicationJson) -> Self {
-        Self { body }
-    }
-}
-
-#[derive(Debug, Clone, Serialize)]
 pub struct UpdateCustomerSubscriptionPaymentMethodParams {
     /// Request body sent with this call.
     ///
@@ -370,7 +353,7 @@ impl<'a> CustomerPortalApi<'a> {
 
     /// List customer subscriptions
     ///
-    /// List subscriptions belonging to the customer session.
+    /// List subscriptions belonging to the customer session, newest first, 15 per page. `trial_ends_at` is only set while a subscription is `TRIALING`.
     pub async fn list_customer_portal_subscriptions(
         &self,
     ) -> Result<SdkListCustomerPortalSubscriptionsResponseValue200ApplicationJson, Error> {
@@ -464,7 +447,7 @@ impl<'a> CustomerPortalApi<'a> {
 
     /// Retrieve subscription capabilities
     ///
-    /// Read immediately before displaying lifecycle controls.
+    /// Read immediately before displaying lifecycle controls. Each of the nine actions (`pause`, `resume`, `cancel_at_period_end`, `cancel_immediately`, `keep_subscription`, `update_payment_method`, `change_plan`, `shift_billing_date`, and `set_auto_renew`) reports a status and the reason to show the customer when it is not available. While a Stripe, PayPal, or Razorpay subscription has a payment still owed, every action except `cancel_immediately` and, on Razorpay, `update_payment_method`, is `unsupported`. `resume` is `unsupported` on a subscription on hold for an unpaid renewal, which the customer pays and resumes on the store's customer portal page. The example is abbreviated to three of the actions.
     pub async fn get_customer_portal_subscription_capabilities(
         &self,
         subscription: &str,
@@ -562,7 +545,7 @@ impl<'a> CustomerPortalApi<'a> {
 
     /// Cancel at period end
     ///
-    /// Cancel at period end. Read capabilities first; state conflicts return 409.
+    /// Schedule the subscription to end when the current period ends. The customer keeps access until then. Read capabilities first. A refusal returns 422 with the sentence to show the customer under `errors.subscription`.
     pub async fn cancel_customer_subscription_at_period_end(
         &self,
         product_subscription: &str,
@@ -616,7 +599,7 @@ impl<'a> CustomerPortalApi<'a> {
 
     /// Cancel immediately
     ///
-    /// Cancel immediately. Read capabilities first; state conflicts return 409.
+    /// End the subscription now. A customer session cannot request a refund. It is the one action left on a Stripe or PayPal subscription with a payment still owed, and one of two left on a Razorpay one alongside a payment method update. Read capabilities first. A refusal returns 422 with the sentence to show the customer under `errors.subscription`.
     pub async fn cancel_customer_subscription_immediately(
         &self,
         product_subscription: &str,
@@ -670,7 +653,7 @@ impl<'a> CustomerPortalApi<'a> {
 
     /// Pause a subscription
     ///
-    /// Pause a subscription. Read capabilities first; state conflicts return 409.
+    /// Pause billing, optionally until `resume_at`. Read capabilities first. A refusal returns 422 with the sentence to show the customer under `errors.subscription`.
     pub async fn pause_customer_subscription(
         &self,
         product_subscription: &str,
@@ -724,13 +707,12 @@ impl<'a> CustomerPortalApi<'a> {
 
     /// Resume a subscription
     ///
-    /// Resume a subscription. Read capabilities first; state conflicts return 409.
+    /// Resume a paused subscription. A subscription the store bills in house that is on hold for an unpaid renewal comes back only when the customer pays that renewal on the store's customer portal page, so it is refused. Read capabilities first. A refusal returns 422 with the sentence to show the customer under `errors.subscription`.
     pub async fn resume_customer_subscription(
         &self,
         product_subscription: &str,
-        params: ResumeCustomerSubscriptionParams,
     ) -> Result<SdkResumeCustomerSubscriptionResponseValue200ApplicationJson, Error> {
-        self.resume_customer_subscription_with_options(product_subscription, params, None)
+        self.resume_customer_subscription_with_options(product_subscription, None)
             .await
     }
 
@@ -738,10 +720,9 @@ impl<'a> CustomerPortalApi<'a> {
     pub async fn resume_customer_subscription_with_options(
         &self,
         product_subscription: &str,
-        params: ResumeCustomerSubscriptionParams,
         options: Option<&crate::RequestOptions>,
     ) -> Result<SdkResumeCustomerSubscriptionResponseValue200ApplicationJson, Error> {
-        self.resume_customer_subscription_raw(product_subscription, params, options)
+        self.resume_customer_subscription_raw(product_subscription, options)
             .await
             .map(|response| response.data)
     }
@@ -750,7 +731,6 @@ impl<'a> CustomerPortalApi<'a> {
     pub async fn resume_customer_subscription_raw(
         &self,
         product_subscription: &str,
-        params: ResumeCustomerSubscriptionParams,
         options: Option<&crate::RequestOptions>,
     ) -> Result<
         crate::RawResponse<SdkResumeCustomerSubscriptionResponseValue200ApplicationJson>,
@@ -765,11 +745,10 @@ impl<'a> CustomerPortalApi<'a> {
         merged.operation_id = Some("resumeCustomerSubscription".to_string());
         let options = Some(&merged);
         self.client
-            .request_with_body_schema_opts_raw(
+            .request_with_query_schema_opts_raw(
                 method,
                 &path,
-                &params,
-                Some(&params.body),
+                &(),
                 options,
                 "POST /v2/customer-portal/subscriptions/{productSubscription}/actions/resume",
             )
@@ -778,7 +757,7 @@ impl<'a> CustomerPortalApi<'a> {
 
     /// Update payment method
     ///
-    /// Update payment method. Read capabilities first; state conflicts return 409.
+    /// Start a payment method update. Send the customer to `redirect_url` to finish it with the provider. Read capabilities first. A refusal returns 422 with the sentence to show the customer under `errors.subscription`.
     pub async fn update_customer_subscription_payment_method(
         &self,
         product_subscription: &str,
@@ -834,7 +813,7 @@ impl<'a> CustomerPortalApi<'a> {
 
     /// Preview a plan change
     ///
-    /// Preview a plan change. Read capabilities first; state conflicts return 409.
+    /// Preview a plan change before confirming it. On Stripe and in-house subscriptions, `preview.payment_required` says whether confirming charges `amount_due` today or leaves any amount to the next invoice, and `preview.renewal_date` says when the subscription renews next. A plan change during a trial never charges today. Read capabilities first. A refusal returns 422 with the sentence to show the customer under `errors.subscription`.
     pub async fn preview_customer_subscription_plan_change(
         &self,
         product_subscription: &str,
@@ -878,7 +857,7 @@ impl<'a> CustomerPortalApi<'a> {
         );
         let method = http::Method::POST;
         let mut merged = options.cloned().unwrap_or_default();
-        merged.idempotency_supported = true;
+        merged.idempotency_supported = false;
         merged.operation_id = Some("previewCustomerSubscriptionPlanChange".to_string());
         let options = Some(&merged);
         self.client
@@ -888,7 +867,7 @@ impl<'a> CustomerPortalApi<'a> {
 
     /// Confirm a plan change
     ///
-    /// Confirm a plan change. Read capabilities first; state conflicts return 409.
+    /// Confirm a previewed plan change, sending back its `preview_token`. When the change still needs the customer to approve it with the provider or pay for it, the action is `pending` and `redirect_url` says where. Read capabilities first. A refusal returns 422 with the sentence to show the customer under `errors.subscription`.
     pub async fn confirm_customer_subscription_plan_change(
         &self,
         product_subscription: &str,
@@ -942,7 +921,7 @@ impl<'a> CustomerPortalApi<'a> {
 
     /// Preview a renewal-date change
     ///
-    /// Preview a renewal-date change. Read capabilities first; state conflicts return 409.
+    /// Preview moving the next renewal to `renewal_date`. `preview` is the provider's own preview, so its keys differ per provider. Read capabilities first. A refusal returns 422 with the sentence to show the customer under `errors.subscription`.
     pub async fn preview_customer_subscription_renewal_date_change(
         &self,
         product_subscription: &str,
@@ -992,7 +971,7 @@ impl<'a> CustomerPortalApi<'a> {
         );
         let method = http::Method::POST;
         let mut merged = options.cloned().unwrap_or_default();
-        merged.idempotency_supported = true;
+        merged.idempotency_supported = false;
         merged.operation_id = Some("previewCustomerSubscriptionRenewalDateChange".to_string());
         let options = Some(&merged);
         self.client
@@ -1002,7 +981,7 @@ impl<'a> CustomerPortalApi<'a> {
 
     /// Confirm a renewal-date change
     ///
-    /// Confirm a renewal-date change. Read capabilities first; state conflicts return 409.
+    /// Confirm a renewal-date change, sending the `preview_token` when the plan requires a preview. Read capabilities first. A refusal returns 422 with the sentence to show the customer under `errors.subscription`.
     pub async fn confirm_customer_subscription_renewal_date_change(
         &self,
         product_subscription: &str,

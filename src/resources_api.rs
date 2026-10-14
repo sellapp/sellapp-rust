@@ -62,6 +62,7 @@ use crate::resources::SectionsApi;
 use crate::resources::StoreCustomDomainsApi;
 use crate::resources::StoreNotificationChannelsApi;
 use crate::resources::StoreSettingsApi;
+use crate::resources::SubscriptionsActionsApi;
 use crate::resources::SubscriptionsApi;
 use crate::resources::TicketsApi;
 use crate::resources::TicketsMessagesApi;
@@ -387,6 +388,11 @@ impl Client {
     /// Access the `subscriptions` resource.
     pub fn subscriptions(&self) -> SubscriptionsApi<'_> {
         SubscriptionsApi { client: self }
+    }
+
+    /// Access the `subscriptions_actions` resource.
+    pub fn subscriptions_actions(&self) -> SubscriptionsActionsApi<'_> {
+        SubscriptionsActionsApi { client: self }
     }
 
     /// Access the `tickets` resource.

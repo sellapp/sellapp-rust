@@ -35,6 +35,25 @@ pub struct SdkReplacePromotionRequestApplicationJson {
         deserialize_with = "crate::runtime_schema::present_nullable"
     )]
     pub max_redemptions: Option<Option<i64>>,
+    /// What the promotion discounts: `one_time` for one-time purchases, or `subscriptions` for the first payments of a subscription plan. A new promotion defaults to `one_time`, and an update that leaves this out keeps the current kind. The promotion only discounts order lines of its kind.
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub applies_to: Option<SdkReplacePromotionRequestApplicationJsonAppliesTo>,
+    /// How many payments a `subscriptions` promotion discounts, counting the signup payment as the first, so `3` discounts the signup and the next two renewals. A `subscriptions` promotion needs one, and an update that leaves it out keeps the stored number. Missing on a `subscriptions` promotion, or outside 1 to 36, it returns `422` on `subscription_payments` with `The number of discounted payments must be between 1 and 36.` A `one_time` promotion always stores null here.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub subscription_payments: Option<Option<i64>>,
+    /// Send `false` with `products` to limit a `subscriptions` promotion to picked products and plans. Required whenever the request sends `products` or `product_variants`. A new promotion defaults to `true`, an update that leaves it out keeps the current scope, and switching a promotion to `one_time` makes it store-wide again. A `one_time` promotion with `false` returns `422` on `store_wide` with `A promotion for one-time purchases applies to the whole store.`
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub store_wide: Option<bool>,
+    /// Product IDs a narrowed subscription promotion reaches. Each one must sell a subscription, or the request returns `422` on `products` with `Pick only products that sell a subscription.` A narrowed promotion left with no products returns `422` with `Pick at least one subscription product for this promotion.` An update replaces the picks with this list, or keeps them when it is left out.
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub products: Option<Vec<i64>>,
+    /// Subscription plan IDs to limit the picked products to. Each one must be a subscription plan of a product in `products`, or the request returns `422` on `product_variants` with `Pick only subscription plans of the picked products.` A picked product with none of its plans listed takes every plan, including plans added later. An update that leaves this out keeps the listed plans of products that stay picked.
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub product_variants: Option<Vec<i64>>,
     /// The complete ordered phase set. Array order becomes phase position.
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub phases: Option<Vec<ReplacePromotionRequestApplicationJsonPropertyPhasesItem>>,

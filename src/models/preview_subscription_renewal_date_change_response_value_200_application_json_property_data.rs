@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct PreviewSubscriptionRenewalDateChangeResponseValue200ApplicationJsonPropertyData {
+    /// The token the matching confirmation must send back. Previews expire 30 minutes after they are created.
     #[serde(skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::runtime_schema::present_nullable")]
     pub preview_token: Option<Option<crate::SecretString>>,
     #[serde(skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::runtime_schema::present_nullable")]

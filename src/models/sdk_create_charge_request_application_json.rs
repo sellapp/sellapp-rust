@@ -61,6 +61,7 @@ pub struct SdkCreateChargeRequestApplicationJson {
     pub deliverable: Option<CreateChargeRequestApplicationJsonPropertyDeliverable>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub metadata: Option<CreateChargeRequestApplicationJsonPropertyMetadata>,
+    /// Optional coupon code. A charge takes a store-wide coupon for one-time purchases only: a coupon whose `applies_to` is `subscriptions` returns `422` with `Coupon code {code} only applies to subscriptions.`
     #[serde(
         skip_serializing_if = "Option::is_none",
         default,

@@ -1902,6 +1902,78 @@
     "sourceFile": "src/resources/subscriptions.rs"
   },
   {
+    "operationId": "listSubscriptions",
+    "resource": "subscriptions",
+    "method": "list_subscriptions",
+    "nativeSignature": "pub async fn list_subscriptions(\n        &self,\n        params: ListSubscriptionsParams,\n    ) -> Result<SdkListSubscriptionsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "list_subscriptions",
+        "params": [
+          {
+            "name": "params",
+            "type": "ListSubscriptionsParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkListSubscriptionsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/subscriptions.rs"
+  },
+  {
+    "operationId": "searchSubscriptions",
+    "resource": "subscriptions",
+    "method": "search_subscriptions",
+    "nativeSignature": "pub async fn search_subscriptions(\n        &self,\n        params: SearchSubscriptionsParams,\n    ) -> Result<SdkSearchSubscriptionsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "search_subscriptions",
+        "params": [
+          {
+            "name": "params",
+            "type": "SearchSubscriptionsParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkSearchSubscriptionsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/subscriptions.rs"
+  },
+  {
+    "operationId": "getSubscription",
+    "resource": "subscriptions",
+    "method": "get_subscription",
+    "nativeSignature": "pub async fn get_subscription(\n        &self,\n        product_subscription: &str,\n        params: GetSubscriptionParams,\n    ) -> Result<SdkGetSubscriptionResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get_subscription",
+        "params": [
+          {
+            "name": "product_subscription",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetSubscriptionParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetSubscriptionResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/subscriptions.rs"
+  },
+  {
     "operationId": "getSubscriptionCapabilities",
     "resource": "subscriptions",
     "method": "get_capabilities",
@@ -1986,6 +2058,34 @@
     "sourceFile": "src/resources/subscriptions.rs"
   },
   {
+    "operationId": "keepSubscription",
+    "resource": "subscriptions",
+    "method": "keep",
+    "nativeSignature": "pub async fn keep(\n        &self,\n        product_subscription: &str,\n        params: KeepParams,\n    ) -> Result<SdkKeepSubscriptionResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "keep",
+        "params": [
+          {
+            "name": "product_subscription",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "KeepParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkKeepSubscriptionResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/subscriptions.rs"
+  },
+  {
     "operationId": "pauseSubscription",
     "resource": "subscriptions",
     "method": "pause",
@@ -2045,7 +2145,7 @@
     "operationId": "updateSubscriptionPaymentMethod",
     "resource": "subscriptions",
     "method": "update_payment_method",
-    "nativeSignature": "pub async fn update_payment_method(\n        &self,\n        product_subscription: &str,\n        params: UpdatePaymentMethodParams,\n    ) -> Result<String, Error>",
+    "nativeSignature": "pub async fn update_payment_method(\n        &self,\n        product_subscription: &str,\n        params: UpdatePaymentMethodParams,\n    ) -> Result<SdkUpdateSubscriptionPaymentMethodResponseValue200ApplicationJson, Error>",
     "signatures": [
       {
         "name": "update_payment_method",
@@ -2063,7 +2163,7 @@
             "passingStyle": "positional"
           }
         ],
-        "returnType": "String",
+        "returnType": "SdkUpdateSubscriptionPaymentMethodResponseValue200ApplicationJson",
         "async": true
       }
     ],
@@ -2073,7 +2173,7 @@
     "operationId": "previewSubscriptionPlanChange",
     "resource": "subscriptions",
     "method": "preview_plan_change",
-    "nativeSignature": "pub async fn preview_plan_change(\n        &self,\n        product_subscription: &str,\n        params: PreviewPlanChangeParams,\n    ) -> Result<String, Error>",
+    "nativeSignature": "pub async fn preview_plan_change(\n        &self,\n        product_subscription: &str,\n        params: PreviewPlanChangeParams,\n    ) -> Result<SdkPreviewSubscriptionPlanChangeResponseValue200ApplicationJson, Error>",
     "signatures": [
       {
         "name": "preview_plan_change",
@@ -2091,7 +2191,7 @@
             "passingStyle": "positional"
           }
         ],
-        "returnType": "String",
+        "returnType": "SdkPreviewSubscriptionPlanChangeResponseValue200ApplicationJson",
         "async": true
       }
     ],
@@ -2101,7 +2201,7 @@
     "operationId": "confirmSubscriptionPlanChange",
     "resource": "subscriptions",
     "method": "confirm_plan_change",
-    "nativeSignature": "pub async fn confirm_plan_change(\n        &self,\n        product_subscription: &str,\n        params: ConfirmPlanChangeParams,\n    ) -> Result<String, Error>",
+    "nativeSignature": "pub async fn confirm_plan_change(\n        &self,\n        product_subscription: &str,\n        params: ConfirmPlanChangeParams,\n    ) -> Result<SdkConfirmSubscriptionPlanChangeResponseValue200ApplicationJson, Error>",
     "signatures": [
       {
         "name": "confirm_plan_change",
@@ -2119,7 +2219,7 @@
             "passingStyle": "positional"
           }
         ],
-        "returnType": "String",
+        "returnType": "SdkConfirmSubscriptionPlanChangeResponseValue200ApplicationJson",
         "async": true
       }
     ],
@@ -2182,57 +2282,13 @@
     "sourceFile": "src/resources/subscriptions.rs"
   },
   {
-    "operationId": "listSubscriptions",
-    "resource": "subscriptions",
-    "method": "list_subscriptions",
-    "nativeSignature": "pub async fn list_subscriptions(\n        &self,\n        params: ListSubscriptionsParams,\n    ) -> Result<SdkListSubscriptionsResponseValue200ApplicationJson, Error>",
+    "operationId": "listSubscriptionActions",
+    "resource": "subscriptions_actions",
+    "method": "list",
+    "nativeSignature": "pub async fn list(\n        &self,\n        product_subscription: &str,\n        params: ListParams,\n    ) -> Result<SdkListSubscriptionActionsResponseValue200ApplicationJson, Error>",
     "signatures": [
       {
-        "name": "list_subscriptions",
-        "params": [
-          {
-            "name": "params",
-            "type": "ListSubscriptionsParams",
-            "optional": false,
-            "passingStyle": "positional"
-          }
-        ],
-        "returnType": "SdkListSubscriptionsResponseValue200ApplicationJson",
-        "async": true
-      }
-    ],
-    "sourceFile": "src/resources/subscriptions.rs"
-  },
-  {
-    "operationId": "searchSubscriptions",
-    "resource": "subscriptions",
-    "method": "search_subscriptions",
-    "nativeSignature": "pub async fn search_subscriptions(\n        &self,\n        params: SearchSubscriptionsParams,\n    ) -> Result<SdkSearchSubscriptionsResponseValue200ApplicationJson, Error>",
-    "signatures": [
-      {
-        "name": "search_subscriptions",
-        "params": [
-          {
-            "name": "params",
-            "type": "SearchSubscriptionsParams",
-            "optional": false,
-            "passingStyle": "positional"
-          }
-        ],
-        "returnType": "SdkSearchSubscriptionsResponseValue200ApplicationJson",
-        "async": true
-      }
-    ],
-    "sourceFile": "src/resources/subscriptions.rs"
-  },
-  {
-    "operationId": "getSubscription",
-    "resource": "subscriptions",
-    "method": "get_subscription",
-    "nativeSignature": "pub async fn get_subscription(\n        &self,\n        product_subscription: &str,\n        params: GetSubscriptionParams,\n    ) -> Result<SdkGetSubscriptionResponseValue200ApplicationJson, Error>",
-    "signatures": [
-      {
-        "name": "get_subscription",
+        "name": "list",
         "params": [
           {
             "name": "product_subscription",
@@ -2242,16 +2298,84 @@
           },
           {
             "name": "params",
-            "type": "GetSubscriptionParams",
+            "type": "ListParams",
             "optional": false,
             "passingStyle": "positional"
           }
         ],
-        "returnType": "SdkGetSubscriptionResponseValue200ApplicationJson",
+        "returnType": "SdkListSubscriptionActionsResponseValue200ApplicationJson",
         "async": true
       }
     ],
-    "sourceFile": "src/resources/subscriptions.rs"
+    "sourceFile": "src/resources/subscriptions_actions.rs"
+  },
+  {
+    "operationId": "getSubscriptionAction",
+    "resource": "subscriptions_actions",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        product_subscription: &str,\n        action: &str,\n        params: GetParams,\n    ) -> Result<SdkGetSubscriptionActionResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "product_subscription",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "action",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetSubscriptionActionResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/subscriptions_actions.rs"
+  },
+  {
+    "operationId": "dismissSubscriptionAction",
+    "resource": "subscriptions_actions",
+    "method": "dismiss",
+    "nativeSignature": "pub async fn dismiss(\n        &self,\n        product_subscription: &str,\n        action: &str,\n        params: DismissParams,\n    ) -> Result<SdkDismissSubscriptionActionResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "dismiss",
+        "params": [
+          {
+            "name": "product_subscription",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "action",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "DismissParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkDismissSubscriptionActionResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/subscriptions_actions.rs"
   },
   {
     "operationId": "listAppointments",
@@ -8841,7 +8965,7 @@
     "operationId": "resumeCustomerSubscription",
     "resource": "customer_portal",
     "method": "resume_customer_subscription",
-    "nativeSignature": "pub async fn resume_customer_subscription(\n        &self,\n        product_subscription: &str,\n        params: ResumeCustomerSubscriptionParams,\n    ) -> Result<SdkResumeCustomerSubscriptionResponseValue200ApplicationJson, Error>",
+    "nativeSignature": "pub async fn resume_customer_subscription(\n        &self,\n        product_subscription: &str,\n    ) -> Result<SdkResumeCustomerSubscriptionResponseValue200ApplicationJson, Error>",
     "signatures": [
       {
         "name": "resume_customer_subscription",
@@ -8849,12 +8973,6 @@
           {
             "name": "product_subscription",
             "type": "&str",
-            "optional": false,
-            "passingStyle": "positional"
-          },
-          {
-            "name": "params",
-            "type": "ResumeCustomerSubscriptionParams",
             "optional": false,
             "passingStyle": "positional"
           }

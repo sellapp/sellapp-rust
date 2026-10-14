@@ -13,8 +13,7 @@ pub struct GetSubscriptionResponseValue200ApplicationJsonPropertyDataPropertyCus
     pub external_id: Option<String>,
     pub name: Option<String>,
     pub locale: Option<String>,
-    pub metadata:
-        GetSubscriptionResponseValue200ApplicationJsonPropertyDataPropertyCustomerPropertyMetadata,
+    pub metadata: std::collections::HashMap<String, ScalarMetadataValue>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

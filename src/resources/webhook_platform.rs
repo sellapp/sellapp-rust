@@ -156,7 +156,7 @@ impl<'a> WebhookPlatformApi<'a> {
 
     /// Retrieve a webhook delivery
     ///
-    /// Retrieve one redacted delivery. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Retrieve one redacted delivery. A disabled delivery with zero attempts was retained without contacting the endpoint. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn get_webhook_delivery(
         &self,
         delivery: &str,
@@ -206,7 +206,7 @@ impl<'a> WebhookPlatformApi<'a> {
 
     /// Replay a webhook delivery
     ///
-    /// Accept no URL, payload, or query overrides. Resolve the current channel server-side, create a new delivery ID, retain the integration-event ID, and sign with a new timestamp. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Accept no URL, payload, or query overrides. Resolve the current channel server-side, create a new delivery ID, retain the integration-event ID, and sign with a new timestamp. A disabled channel returns 422: fix the endpoint and save the channel before replaying. A successful test alone does not re-enable delivery. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn replay_webhook_delivery(
         &self,
         delivery: &str,

@@ -13,15 +13,15 @@ pub struct SdkUpdateCouponRequestApplicationJson {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub type_: Option<SdkUpdateCouponRequestApplicationJsonType>,
-    /// A decimal discount value of at least 1. Percentage discounts cannot exceed 100; amount discounts use the store currency's major unit.
+    /// A decimal discount value of at least 1. Percentage discounts cannot exceed 100; amount discounts use the store currency's major unit. A `subscriptions` coupon cannot take 100% off: that returns `422` on `discount`, so offer a free trial instead.
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub discount: Option<SdkCreateCouponRequestApplicationJsonDiscountOneOf>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub store_wide: Option<bool>,
-    /// Product IDs the coupon applies to when store_wide is false.
+    /// Product IDs the coupon applies to when store_wide is false. Each product you add must sell a variant of the coupon's kind: a subscription plan for a `subscriptions` coupon, or a one-time variant for a `one_time` one. Another product returns `422` on `products`.
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub products: Option<Vec<i64>>,
-    /// Optional variant restrictions. Omit to preserve existing restrictions or send an empty array to allow every variant of the selected products.
+    /// Optional variant restrictions. Omit to preserve existing restrictions or send an empty array to allow every variant of the selected products. Each variant you add must be of the coupon's kind, a subscription plan or a one-time variant; another returns `422` on `product_variants`.
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub product_variants: Option<Vec<i64>>,
     #[serde(
@@ -37,13 +37,23 @@ pub struct SdkUpdateCouponRequestApplicationJson {
         deserialize_with = "crate::runtime_schema::present_nullable"
     )]
     pub expires_at: Option<Option<String>>,
-    /// A decimal minimum order amount in the store currency's major unit, or null for no minimum.
+    /// A decimal minimum amount in the store currency's major unit that the order lines of the coupon's kind must reach, or null for no minimum.
     #[serde(
         skip_serializing_if = "Option::is_none",
         default,
         deserialize_with = "crate::runtime_schema::present_nullable"
     )]
     pub minimum_amount: Option<Option<SdkCreateCouponRequestApplicationJsonDiscountOneOf>>,
+    /// What the coupon discounts: `one_time` for one-time purchases, or `subscriptions` for the first payments of a subscription plan. A new coupon defaults to `one_time`, and an update that leaves this out keeps the current kind. The coupon only discounts order lines of its kind.
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub applies_to: Option<SdkUpdateCouponRequestApplicationJsonAppliesTo>,
+    /// How many payments a `subscriptions` coupon discounts, counting the signup payment as the first, so `3` discounts the signup and the next two renewals. A `subscriptions` coupon needs one, and an update that leaves it out keeps the stored number. Missing on a `subscriptions` coupon, or outside 1 to 36, it returns `422` on `subscription_payments` with `The number of discounted payments must be between 1 and 36.` A `one_time` coupon always stores null here.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub subscription_payments: Option<Option<i64>>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

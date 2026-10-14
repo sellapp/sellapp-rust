@@ -7,11 +7,10 @@ use crate::enums::*;
 use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
-pub struct GetCustomerPortalSubscriptionCapabilitiesResponseValue200ApplicationJsonPropertyDataPropertyCapabilitiesMapValue
-{
-    pub available: bool,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub reason: Option<String>,
+pub struct GetCustomerPortalSubscriptionCapabilitiesResponseValue200ApplicationJsonPropertyDataPropertyCapabilitiesMapValue {
+    pub status: GetCustomerPortalSubscriptionCapabilitiesResponseValue200ApplicationJsonPropertyDataPropertyCapabilitiesMapValueStatus,
+    pub customer_reason: Option<String>,
+    pub seller_reason: Option<String>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

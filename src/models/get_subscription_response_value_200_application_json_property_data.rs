@@ -9,26 +9,84 @@ use serde::{Deserialize, Serialize};
 #[serde(remote = "Self")]
 pub struct GetSubscriptionResponseValue200ApplicationJsonPropertyData {
     pub id: i64,
-    pub status: String,
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        deserialize_with = "crate::runtime_schema::present_nullable"
-    )]
+    /// The original order linked to this subscription, resolved from its first invoice line.
+    pub invoice_id: Option<i64>,
+    /// The billing provider, such as `stripe`, `paypal`, `razorpay`, or `internal` for a subscription the store bills in house.
+    pub provider: Option<String>,
+    /// Deprecated alias of provider_subscription_id.
     #[deprecated]
-    pub subscription_id: Option<Option<String>>,
-    #[serde(
-        skip_serializing_if = "Option::is_none",
-        default,
-        deserialize_with = "crate::runtime_schema::present_nullable"
-    )]
+    pub subscription_id: Option<String>,
+    /// Deprecated alias of provider_customer_id.
     #[deprecated]
-    pub customer_id: Option<Option<String>>,
+    pub customer_id: Option<String>,
+    /// The provider subscription identifier, or null for a subscription the store bills in house.
     pub provider_subscription_id: Option<String>,
+    /// The provider customer identifier, or null for a subscription the store bills in house.
     pub provider_customer_id: Option<String>,
-    pub customer: GetSubscriptionResponseValue200ApplicationJsonPropertyDataPropertyCustomer,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub customer:
+        Option<GetSubscriptionResponseValue200ApplicationJsonPropertyDataPropertyCustomer>,
+    pub customer_email: Option<String>,
+    pub status: GetSubscriptionResponseValue200ApplicationJsonPropertyDataStatus,
+    pub current_period_start: Option<String>,
+    pub current_period_end: Option<String>,
+    /// When the trial the subscription started with ends, or `null` when it started without one. It keeps its value after the trial is over.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub trial_ends_at: Option<Option<String>>,
+    pub cancel_at_period_end: bool,
+    pub cancellation_in_progress: bool,
+    pub store_id: Option<i64>,
     pub product_variant_id: Option<i64>,
+    /// The variant the current period bills on. Falls back to product_variant_id while the subscription still bills its original plan.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub current_plan_variant_id: Option<Option<i64>>,
+    /// Whether a subscription the store bills in house renews itself from the customer wallet.
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub auto_renew: Option<bool>,
+    /// When the subscription was paused, or `null` when it is not paused.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub paused_at: Option<Option<String>>,
+    /// When a paused subscription resumes automatically, or `null` when no resume date was set.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub pause_resumes_at: Option<Option<String>>,
+    /// When the subscription was cancelled immediately, or `null` when it was not.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub canceled_immediately_at: Option<Option<String>>,
+    /// When the customer last updated the payment method behind the subscription.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub payment_method_updated_at: Option<Option<String>>,
+    /// When the customer last started a lifecycle action, from the customer portal or through a store integration acting for them on a plan change or payment method update. Seller and SellApp actions don't change it.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub last_customer_action_at: Option<Option<String>>,
+    pub created_at: String,
+    pub updated_at: String,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

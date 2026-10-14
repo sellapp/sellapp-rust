@@ -136,12 +136,28 @@ impl UpdateParams {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct DeleteParams {
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
     pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkDeleteProductVariantRequestApplicationJson,
+}
+
+impl DeleteParams {
+    /// Construct a new `DeleteParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkDeleteProductVariantRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -395,7 +411,7 @@ impl<'a> ProductVariantsApi<'a> {
 
     /// Update a product variant with PUT
     ///
-    /// Update a product variant using the PUT compatibility method. Fields remain partial for backward compatibility. Requires a token with the listing ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Update a product variant using the PUT compatibility method. Fields remain partial for backward compatibility. Bundle products only support one-time pricing. Adding the bundle deliverable type to a subscription variant is refused with a `422` carrying that sentence on `deliverable.types`. Requires a token with the listing ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn replace(
         &self,
         product: &str,
@@ -452,7 +468,7 @@ impl<'a> ProductVariantsApi<'a> {
 
     /// Update a product variant
     ///
-    /// Updates a product variant's details. Requires a token with the listing ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Updates a product variant's details. Bundle products only support one-time pricing. Adding the bundle deliverable type to a subscription variant is refused with a `422` carrying that sentence on `deliverable.types`. Requires a token with the listing ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn update(
         &self,
         product: &str,
@@ -507,7 +523,7 @@ impl<'a> ProductVariantsApi<'a> {
 
     /// Delete a product variant
     ///
-    /// Deletes a product variant. This will permanently delete the product variant and all of its details, including the sensitive deliverables, will no longer be retrievable. Requires a token with the listing ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Soft-delete a variant in the authenticated store. Variants referenced by non-terminal subscriptions cannot be deleted. Send expected_updated_at from the latest variant response to reject a stale deletion with 422. Requires a token with the listing ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn delete(
         &self,
         product: &str,
@@ -549,10 +565,11 @@ impl<'a> ProductVariantsApi<'a> {
         merged.operation_id = Some("deleteProductVariant".to_string());
         let options = Some(&merged);
         self.client
-            .request_with_query_schema_opts_raw(
+            .request_with_body_schema_opts_raw(
                 method,
                 &path,
                 &params,
+                Some(&params.body),
                 options,
                 "DELETE /v2/products/{product}/variants/{variant}",
             )

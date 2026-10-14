@@ -15,6 +15,7 @@ pub struct SearchOrdersResponseValue200ApplicationJsonPropertyDataItem {
     pub customer: SearchOrdersResponseValue200ApplicationJsonPropertyDataItemPropertyCustomer,
     pub payment: SearchOrdersResponseValue200ApplicationJsonPropertyDataItemPropertyPayment,
     pub totals: SearchOrdersResponseValue200ApplicationJsonPropertyDataItemPropertyTotals,
+    /// The coupon this order was sold with, or null. A subscription's renewal and plan-change orders carry null, even while the subscription still bills a discounted price, so a coupon's `limit` counts a subscription once, at signup.
     pub coupon_id: Option<i64>,
     pub line_items:
         Vec<SearchOrdersResponseValue200ApplicationJsonPropertyDataItemPropertyLineItemsItem>,

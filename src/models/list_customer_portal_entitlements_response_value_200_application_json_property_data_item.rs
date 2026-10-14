@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 pub struct ListCustomerPortalEntitlementsResponseValue200ApplicationJsonPropertyDataItem {
     pub id: String,
     pub kind: ListCustomerPortalEntitlementsResponseValue200ApplicationJsonPropertyDataItemKind,
+    /// Whether the customer has this access now. For `subscription_access`: `active` while the subscription is active, trialing, or past due, because a past-due subscription keeps access while its payment is collected; `suspended` while it is unpaid, paused, or on hold for an unpaid renewal, until it is paid or resumed; `revoked` once cancelled; `pending` while incomplete; `expired` when its first payment expired.
     pub state: ListCustomerPortalEntitlementsResponseValue200ApplicationJsonPropertyDataItemState,
     pub customer_id: i64,
     pub subject: ListCustomerPortalEntitlementsResponseValue200ApplicationJsonPropertyDataItemPropertySubject,

@@ -8,19 +8,19 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct CancelCustomerSubscriptionImmediatelyResponseValue200ApplicationJsonPropertyData {
+    /// The subscription action ID.
     pub id: i64,
-    pub status: String,
-    #[serde(skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::runtime_schema::present_nullable")]
-    #[deprecated]
-    pub subscription_id: Option<Option<String>>,
-    #[serde(skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::runtime_schema::present_nullable")]
-    #[deprecated]
-    pub customer_id: Option<Option<String>>,
-    pub provider_subscription_id: Option<String>,
-    pub provider_customer_id: Option<String>,
-    pub customer: CancelCustomerSubscriptionImmediatelyResponseValue200ApplicationJsonPropertyDataPropertyCustomer,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub product_variant_id: Option<i64>,
+    /// The SellApp subscription ID the action belongs to.
+    pub subscription_id: i64,
+    pub action:
+        CancelCustomerSubscriptionImmediatelyResponseValue200ApplicationJsonPropertyDataAction,
+    /// `pending` means the provider or the customer still has to finish the action.
+    pub status:
+        CancelCustomerSubscriptionImmediatelyResponseValue200ApplicationJsonPropertyDataStatus,
+    pub customer_message: Option<String>,
+    /// Where to send the customer to finish the action, such as a payment method update or a plan change they approve or pay for with the provider. `null` when nothing is left to do.
+    pub redirect_url: Option<String>,
+    pub created_at: Option<String>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

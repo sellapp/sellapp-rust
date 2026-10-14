@@ -31,6 +31,16 @@ pub struct UpdatePromotionResponseValue200ApplicationJsonPropertyData {
         deserialize_with = "crate::runtime_schema::present_nullable"
     )]
     pub max_redemptions: Option<Option<i64>>,
+    /// `one_time` when the promotion discounts one-time purchases, or `subscriptions` when it discounts the first payments of a subscription plan.
+    pub applies_to: UpdatePromotionResponseValue200ApplicationJsonPropertyDataAppliesTo,
+    /// How many payments a `subscriptions` promotion discounts, counting the signup payment as the first. Null on a `one_time` promotion.
+    pub subscription_payments: Option<i64>,
+    /// Whether the promotion reaches every product of its kind. A `one_time` promotion is always store-wide. A `subscriptions` promotion with `false` reaches only the products in `products`, limited to the plans in `product_variants`.
+    pub store_wide: bool,
+    /// Product IDs a narrowed subscription promotion reaches. Empty when the promotion is store-wide.
+    pub products: Vec<i64>,
+    /// Subscription plan IDs the picked products are limited to. A picked product with none of its plans listed here takes every plan of that product, including plans added later. Empty when the promotion is store-wide.
+    pub product_variants: Vec<i64>,
     pub phases: Vec<UpdatePromotionResponseValue200ApplicationJsonPropertyDataPropertyPhasesItem>,
     #[serde(
         skip_serializing_if = "Option::is_none",

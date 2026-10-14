@@ -14,7 +14,7 @@ pub struct SdkCancelSubscriptionRequestApplicationJson {
     /// Defaults to `false`.
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub refund_last_payment: Option<bool>,
-    /// Request a prorated refund. Requires refund_last_payment=true. False requests a full latest-payment refund when refund_last_payment is enabled.
+    /// Request a prorated refund. Requires refund_last_payment=true. False requests a full latest-payment refund when refund_last_payment is enabled. Refused with `422` while a Stripe, PayPal, or Razorpay subscription is past due or unpaid.
     ///
     /// Defaults to `false`.
     #[serde(skip_serializing_if = "Option::is_none", default)]

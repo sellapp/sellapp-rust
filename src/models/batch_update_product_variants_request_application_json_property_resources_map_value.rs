@@ -22,13 +22,20 @@ pub struct BatchUpdateProductVariantsRequestApplicationJsonPropertyResourcesMapV
     pub maximum_purchase_quantity: Option<Option<i64>>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub bulk_discount: Option<Vec<BatchUpdateProductVariantsRequestApplicationJsonPropertyResourcesMapValuePropertyBulkDiscountItem>>,
+    /// Complete gateway selection for this variant. Selecting CUSTOM_PAYMENT_METHOD also requires at least one custom_payment_method_ids entry.
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub payment_methods: Option<Vec<BatchUpdateProductVariantsRequestApplicationJsonPropertyResourcesMapValuePaymentMethods>>,
+    /// Enabled, usable custom payment method ULIDs belonging to the selected store. Supply at least one when payment_methods includes CUSTOM_PAYMENT_METHOD. Include CUSTOM_PAYMENT_METHOD in payment_methods whenever sending nonempty IDs. On updates, omitting both selections preserves the current methods. Nonempty IDs are rejected when custom payments are not selected.
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub custom_payment_method_ids: Option<Vec<String>>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub other_settings: Option<BatchUpdateProductVariantsRequestApplicationJsonPropertyResourcesMapValuePropertyOtherSettings>,
     /// Optional optimistic-concurrency snapshot for updates. Use the variant's latest updated_at value; stale snapshots receive a 422 validation response.
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub expected_updated_at: Option<String>,
+    /// Set an existing variant's stock count while preserving delivery instructions and uploaded files. Send 0 for out of stock or null for unlimited stock. Omit deliverable for a stock-only change. TEXT variants manage stock through their serial inventory and reject this field.
+    #[serde(skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::runtime_schema::present_nullable")]
+    pub stock: Option<Option<i64>>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

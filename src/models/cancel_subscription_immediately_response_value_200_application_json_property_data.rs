@@ -21,11 +21,27 @@ pub struct CancelSubscriptionImmediatelyResponseValue200ApplicationJsonPropertyD
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub action:
         Option<CancelSubscriptionImmediatelyResponseValue200ApplicationJsonPropertyDataAction>,
+    /// `pending` while the provider or the customer still has to respond, then `confirmed`, `failed`, `expired`, `dismissed`, or `force_resolved`.
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub status:
         Option<CancelSubscriptionImmediatelyResponseValue200ApplicationJsonPropertyDataStatus>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub provider: Option<String>,
+    /// The order a plan change's proration was billed on. Only a subscription the store bills in house bills a proration as an order of its own, so this is null for every other provider, including one that prorated the change itself.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub proration_order_id: Option<Option<i64>>,
+    /// The seller-facing failure message, truncated to 255 characters. A dismissed action carries its dismissal note here instead.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub error: Option<Option<String>>,
+    /// The sentence SellApp shows the customer about this action, such as why it failed or that the seller dismissed it. SellApp writes it; the customer never types it. `null` when there is nothing to tell them.
     #[serde(
         skip_serializing_if = "Option::is_none",
         default,

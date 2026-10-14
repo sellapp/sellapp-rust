@@ -5,6 +5,7 @@ use super::*;
 #[allow(unused_imports)]
 use crate::enums::*;
 use serde::{Deserialize, Serialize};
+/// The request the preview was taken for. The confirmation has to describe the same change, or it is rejected.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct PreviewSubscriptionRenewalDateChangeResponseValue200ApplicationJsonPropertyDataPropertyRequestPayload

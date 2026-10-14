@@ -29,6 +29,14 @@ pub struct UpdateProductVariantPricingRequestApplicationJsonPropertyPricing {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub frequency:
         Option<UpdateProductVariantPricingRequestApplicationJsonPropertyPricingPropertyFrequency>,
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub trial: Option<
+        Option<UpdateProductVariantPricingRequestApplicationJsonPropertyPricingPropertyTrial>,
+    >,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

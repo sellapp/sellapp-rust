@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 #[serde(remote = "Self")]
 pub struct RestorePromotionRequestApplicationJsonPropertyPhasesItem {
     pub discount_type: RestorePromotionRequestApplicationJsonPropertyPhasesItemDiscountType,
-    /// Percentage from 1 through 100, or a fixed decimal amount of at least 1.
+    /// Percentage from 1 through 100, or a fixed decimal amount of at least 1. A `subscriptions` promotion cannot take 100% off: such a phase returns `422` on `phases.{index}.discount_value`, or on `subscription_payments` when an update switches the promotion to `subscriptions` without sending `phases`. Offer a free trial instead.
     pub discount_value: SdkCreateCouponRequestApplicationJsonDiscountOneOf,
     /// A future date and time, or null for no time limit.
     #[serde(

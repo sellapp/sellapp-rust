@@ -14,6 +14,7 @@ pub struct SendOrderFulfillmentNotificationsResponseValue200ApplicationJsonPrope
     pub customer: SendOrderFulfillmentNotificationsResponseValue200ApplicationJsonPropertyDataPropertyCustomer,
     pub payment: SendOrderFulfillmentNotificationsResponseValue200ApplicationJsonPropertyDataPropertyPayment,
     pub totals: SendOrderFulfillmentNotificationsResponseValue200ApplicationJsonPropertyDataPropertyTotals,
+    /// The coupon this order was sold with, or null. A subscription's renewal and plan-change orders carry null, even while the subscription still bills a discounted price, so a coupon's `limit` counts a subscription once, at signup.
     pub coupon_id: Option<i64>,
     pub line_items: Vec<SendOrderFulfillmentNotificationsResponseValue200ApplicationJsonPropertyDataPropertyLineItemsItem>,
     pub created_at: Option<String>,

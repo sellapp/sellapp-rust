@@ -6,6 +6,7 @@ use sellapp::Error;
 use wiremock::matchers::{method, path as path_matcher};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
+#[allow(deprecated)]
 #[tokio::test]
 async fn subscriptions_cancel_round_trip() {
     let server = MockServer::start().await;
@@ -33,6 +34,7 @@ async fn subscriptions_cancel_round_trip() {
         .expect("valid generated response");
 }
 
+#[allow(deprecated)]
 #[tokio::test]
 async fn subscriptions_cancel_unauthorized() {
     let server = MockServer::start().await;
@@ -64,6 +66,7 @@ async fn subscriptions_cancel_unauthorized() {
     assert_eq!(api.status, 401);
 }
 
+#[allow(deprecated)]
 #[tokio::test]
 async fn subscriptions_cancel_not_found() {
     let server = MockServer::start().await;
@@ -95,6 +98,7 @@ async fn subscriptions_cancel_not_found() {
     assert_eq!(api.status, 404);
 }
 
+#[allow(deprecated)]
 #[tokio::test]
 async fn subscriptions_cancel_rate_limited() {
     let server = MockServer::start().await;
@@ -129,6 +133,7 @@ async fn subscriptions_cancel_rate_limited() {
     assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
 }
 
+#[allow(deprecated)]
 #[tokio::test]
 async fn subscriptions_cancel_server_error() {
     let server = MockServer::start().await;
@@ -160,6 +165,7 @@ async fn subscriptions_cancel_server_error() {
     assert_eq!(api.status, 500);
 }
 
+#[allow(deprecated)]
 #[tokio::test]
 async fn subscriptions_cancel_bad_request() {
     let server = MockServer::start().await;
@@ -193,6 +199,7 @@ async fn subscriptions_cancel_bad_request() {
     assert_eq!(api.code.as_deref(), Some("validation_error"));
 }
 
+#[allow(deprecated)]
 #[tokio::test]
 async fn subscriptions_cancel_unprocessable() {
     let server = MockServer::start().await;
@@ -222,6 +229,456 @@ async fn subscriptions_cancel_unprocessable() {
         other => panic!("expected Error::Api, got {other:?}"),
     };
     assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn subscriptions_list_subscriptions_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/subscriptions"))
+        .respond_with(ResponseTemplate::new(200).set_body_string("{}"))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .subscriptions()
+        .list_subscriptions(sellapp::resources::subscriptions::ListSubscriptionsParams::default())
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn subscriptions_list_subscriptions_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/subscriptions"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .list_subscriptions(sellapp::resources::subscriptions::ListSubscriptionsParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn subscriptions_list_subscriptions_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/subscriptions"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .list_subscriptions(sellapp::resources::subscriptions::ListSubscriptionsParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn subscriptions_list_subscriptions_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/subscriptions"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .list_subscriptions(sellapp::resources::subscriptions::ListSubscriptionsParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn subscriptions_list_subscriptions_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/subscriptions"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .list_subscriptions(sellapp::resources::subscriptions::ListSubscriptionsParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn subscriptions_search_subscriptions_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/subscriptions/search"))
+        .respond_with(ResponseTemplate::new(200).set_body_string("{}"))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .subscriptions()
+        .search_subscriptions(
+            sellapp::resources::subscriptions::SearchSubscriptionsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_search_subscriptions_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkSearchSubscriptionsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn subscriptions_search_subscriptions_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/subscriptions/search"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .search_subscriptions(
+            sellapp::resources::subscriptions::SearchSubscriptionsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_search_subscriptions_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkSearchSubscriptionsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn subscriptions_search_subscriptions_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/subscriptions/search"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .search_subscriptions(
+            sellapp::resources::subscriptions::SearchSubscriptionsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_search_subscriptions_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkSearchSubscriptionsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn subscriptions_search_subscriptions_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/subscriptions/search"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .search_subscriptions(
+            sellapp::resources::subscriptions::SearchSubscriptionsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_search_subscriptions_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkSearchSubscriptionsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn subscriptions_search_subscriptions_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/subscriptions/search"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .search_subscriptions(
+            sellapp::resources::subscriptions::SearchSubscriptionsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_search_subscriptions_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkSearchSubscriptionsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn subscriptions_search_subscriptions_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/subscriptions/search"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .search_subscriptions(
+            sellapp::resources::subscriptions::SearchSubscriptionsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_search_subscriptions_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkSearchSubscriptionsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn subscriptions_search_subscriptions_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/subscriptions/search"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .search_subscriptions(
+            sellapp::resources::subscriptions::SearchSubscriptionsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_search_subscriptions_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkSearchSubscriptionsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn subscriptions_get_subscription_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/subscriptions/test_id"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_get_subscription_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .subscriptions()
+        .get_subscription(
+            "test_id",
+            sellapp::resources::subscriptions::GetSubscriptionParams::default(),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn subscriptions_get_subscription_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/subscriptions/test_id"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .get_subscription(
+            "test_id",
+            sellapp::resources::subscriptions::GetSubscriptionParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn subscriptions_get_subscription_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/subscriptions/test_id"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .get_subscription(
+            "test_id",
+            sellapp::resources::subscriptions::GetSubscriptionParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn subscriptions_get_subscription_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/subscriptions/test_id"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .get_subscription(
+            "test_id",
+            sellapp::resources::subscriptions::GetSubscriptionParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn subscriptions_get_subscription_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/subscriptions/test_id"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .get_subscription(
+            "test_id",
+            sellapp::resources::subscriptions::GetSubscriptionParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
 }
 
 #[tokio::test]
@@ -814,6 +1271,224 @@ async fn subscriptions_cancel_immediately_unprocessable() {
 }
 
 #[tokio::test]
+async fn subscriptions_keep_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/subscriptions/test_id/actions/keep"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_keep_subscription_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .subscriptions()
+        .keep(
+            "test_id",
+            sellapp::resources::subscriptions::KeepParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_keep_subscription_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkKeepSubscriptionRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn subscriptions_keep_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/subscriptions/test_id/actions/keep"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .keep(
+            "test_id",
+            sellapp::resources::subscriptions::KeepParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_keep_subscription_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkKeepSubscriptionRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn subscriptions_keep_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/subscriptions/test_id/actions/keep"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .keep(
+            "test_id",
+            sellapp::resources::subscriptions::KeepParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_keep_subscription_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkKeepSubscriptionRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn subscriptions_keep_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/subscriptions/test_id/actions/keep"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .keep(
+            "test_id",
+            sellapp::resources::subscriptions::KeepParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_keep_subscription_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkKeepSubscriptionRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn subscriptions_keep_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/subscriptions/test_id/actions/keep"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .keep(
+            "test_id",
+            sellapp::resources::subscriptions::KeepParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_keep_subscription_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkKeepSubscriptionRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn subscriptions_keep_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/subscriptions/test_id/actions/keep"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .keep(
+            "test_id",
+            sellapp::resources::subscriptions::KeepParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_keep_subscription_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkKeepSubscriptionRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn subscriptions_keep_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/subscriptions/test_id/actions/keep"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .subscriptions()
+        .keep(
+            "test_id",
+            sellapp::resources::subscriptions::KeepParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_keep_subscription_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkKeepSubscriptionRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
 async fn subscriptions_pause_round_trip() {
     let server = MockServer::start().await;
     Mock::given(method("POST"))
@@ -1253,10 +1928,8 @@ async fn subscriptions_resume_unprocessable() {
 async fn subscriptions_update_payment_method_round_trip() {
     let server = MockServer::start().await;
     Mock::given(method("POST"))
-        .and(path_matcher(
-            "/v2/subscriptions/test_id/actions/update-payment-method",
-        ))
-        .respond_with(ResponseTemplate::new(200).set_body_string("\"test_value\""))
+        .and(path_matcher("/v2/subscriptions/test_id/actions/update-payment-method"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!("fixtures/sdk_update_subscription_payment_method_response_value_200_application_json.json")))
         .expect(1)
         .mount(&server)
         .await;
@@ -1500,7 +2173,9 @@ async fn subscriptions_preview_plan_change_round_trip() {
         .and(path_matcher(
             "/v2/subscriptions/test_id/actions/change-plan/preview",
         ))
-        .respond_with(ResponseTemplate::new(200).set_body_string("\"test_value\""))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_preview_subscription_plan_change_response_value_200_application_json.json"
+        )))
         .expect(1)
         .mount(&server)
         .await;
@@ -1730,7 +2405,9 @@ async fn subscriptions_confirm_plan_change_round_trip() {
         .and(path_matcher(
             "/v2/subscriptions/test_id/actions/change-plan/confirm",
         ))
-        .respond_with(ResponseTemplate::new(200).set_body_string("\"test_value\""))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_confirm_subscription_plan_change_response_value_200_application_json.json"
+        )))
         .expect(1)
         .mount(&server)
         .await;
@@ -2239,501 +2916,4 @@ async fn subscriptions_confirm_renewal_date_unprocessable() {
         other => panic!("expected Error::Api, got {other:?}"),
     };
     assert_eq!(api.status, 422);
-}
-
-#[tokio::test]
-async fn subscriptions_list_subscriptions_round_trip() {
-    let server = MockServer::start().await;
-    Mock::given(method("GET"))
-        .and(path_matcher("/v2/subscriptions"))
-        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
-            "fixtures/sdk_list_subscriptions_response_value_200_application_json.json"
-        )))
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let _ = client
-        .subscriptions()
-        .list_subscriptions(sellapp::resources::subscriptions::ListSubscriptionsParams::default())
-        .await
-        .expect("valid generated response");
-}
-
-#[tokio::test]
-async fn subscriptions_list_subscriptions_unauthorized() {
-    let server = MockServer::start().await;
-    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
-    Mock::given(method("GET"))
-        .and(path_matcher("/v2/subscriptions"))
-        .respond_with(template)
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let err = client
-        .subscriptions()
-        .list_subscriptions(sellapp::resources::subscriptions::ListSubscriptionsParams::default())
-        .await
-        .expect_err("expected error");
-    let api = match &err {
-        Error::Authentication(api) => api.as_ref(),
-        other => panic!("expected Error::Authentication, got {other:?}"),
-    };
-    assert_eq!(api.status, 401);
-}
-
-#[tokio::test]
-async fn subscriptions_list_subscriptions_not_found() {
-    let server = MockServer::start().await;
-    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
-    Mock::given(method("GET"))
-        .and(path_matcher("/v2/subscriptions"))
-        .respond_with(template)
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let err = client
-        .subscriptions()
-        .list_subscriptions(sellapp::resources::subscriptions::ListSubscriptionsParams::default())
-        .await
-        .expect_err("expected error");
-    let api = match &err {
-        Error::Api(api) => api.as_ref(),
-        other => panic!("expected Error::Api, got {other:?}"),
-    };
-    assert_eq!(api.status, 404);
-}
-
-#[tokio::test]
-async fn subscriptions_list_subscriptions_rate_limited() {
-    let server = MockServer::start().await;
-    let template = ResponseTemplate::new(429)
-        .insert_header("retry-after", "1")
-        .set_body_string("{\"message\":\"Slow down\"}");
-    Mock::given(method("GET"))
-        .and(path_matcher("/v2/subscriptions"))
-        .respond_with(template)
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let err = client
-        .subscriptions()
-        .list_subscriptions(sellapp::resources::subscriptions::ListSubscriptionsParams::default())
-        .await
-        .expect_err("expected error");
-    let api = match &err {
-        Error::Api(api) => api.as_ref(),
-        other => panic!("expected Error::Api, got {other:?}"),
-    };
-    assert_eq!(api.status, 429);
-    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
-}
-
-#[tokio::test]
-async fn subscriptions_list_subscriptions_server_error() {
-    let server = MockServer::start().await;
-    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
-    Mock::given(method("GET"))
-        .and(path_matcher("/v2/subscriptions"))
-        .respond_with(template)
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let err = client
-        .subscriptions()
-        .list_subscriptions(sellapp::resources::subscriptions::ListSubscriptionsParams::default())
-        .await
-        .expect_err("expected error");
-    let api = match &err {
-        Error::Api(api) => api.as_ref(),
-        other => panic!("expected Error::Api, got {other:?}"),
-    };
-    assert_eq!(api.status, 500);
-}
-
-#[tokio::test]
-async fn subscriptions_list_subscriptions_empty_page() {
-    let server = MockServer::start().await;
-    Mock::given(method("GET"))
-        .and(path_matcher("/v2/subscriptions"))
-        .respond_with(ResponseTemplate::new(200).set_body_string("{\"data\":[],\"links\":{\"first\":\"https://sell.app/api/v1/blacklists?page=1\",\"last\":\"https://sell.app/api/v1/blacklists?page=4\",\"prev\":\"test_prev\",\"next\":\"https://sell.app/api/v1/blacklists?page=2\"},\"meta\":{\"current_page\":1,\"from\":1,\"last_page\":4,\"links\":[{\"url\":\"test_url\",\"label\":\"test_label\",\"active\":false}],\"path\":\"https://sell.app/api/v1/blacklists\",\"per_page\":15,\"to\":15,\"total\":57}}"))
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let resp = client
-        .subscriptions()
-        .list_subscriptions(sellapp::resources::subscriptions::ListSubscriptionsParams::default())
-        .await
-        .expect("expected success");
-    assert!(resp.data.is_empty(), "expected empty data array");
-}
-
-#[tokio::test]
-async fn subscriptions_search_subscriptions_round_trip() {
-    let server = MockServer::start().await;
-    Mock::given(method("POST"))
-        .and(path_matcher("/v2/subscriptions/search"))
-        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
-            "fixtures/sdk_search_subscriptions_response_value_200_application_json.json"
-        )))
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let _ = client
-        .subscriptions()
-        .search_subscriptions(
-            sellapp::resources::subscriptions::SearchSubscriptionsParams::new(
-                serde_json::from_str(include_str!(
-                    "fixtures/sdk_search_subscriptions_request_application_json.json"
-                ))
-                .expect("parse fixture for SdkSearchSubscriptionsRequestApplicationJson"),
-            ),
-        )
-        .await
-        .expect("valid generated response");
-}
-
-#[tokio::test]
-async fn subscriptions_search_subscriptions_unauthorized() {
-    let server = MockServer::start().await;
-    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
-    Mock::given(method("POST"))
-        .and(path_matcher("/v2/subscriptions/search"))
-        .respond_with(template)
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let err = client
-        .subscriptions()
-        .search_subscriptions(
-            sellapp::resources::subscriptions::SearchSubscriptionsParams::new(
-                serde_json::from_str(include_str!(
-                    "fixtures/sdk_search_subscriptions_request_application_json.json"
-                ))
-                .expect("parse fixture for SdkSearchSubscriptionsRequestApplicationJson"),
-            ),
-        )
-        .await
-        .expect_err("expected error");
-    let api = match &err {
-        Error::Authentication(api) => api.as_ref(),
-        other => panic!("expected Error::Authentication, got {other:?}"),
-    };
-    assert_eq!(api.status, 401);
-}
-
-#[tokio::test]
-async fn subscriptions_search_subscriptions_not_found() {
-    let server = MockServer::start().await;
-    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
-    Mock::given(method("POST"))
-        .and(path_matcher("/v2/subscriptions/search"))
-        .respond_with(template)
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let err = client
-        .subscriptions()
-        .search_subscriptions(
-            sellapp::resources::subscriptions::SearchSubscriptionsParams::new(
-                serde_json::from_str(include_str!(
-                    "fixtures/sdk_search_subscriptions_request_application_json.json"
-                ))
-                .expect("parse fixture for SdkSearchSubscriptionsRequestApplicationJson"),
-            ),
-        )
-        .await
-        .expect_err("expected error");
-    let api = match &err {
-        Error::Api(api) => api.as_ref(),
-        other => panic!("expected Error::Api, got {other:?}"),
-    };
-    assert_eq!(api.status, 404);
-}
-
-#[tokio::test]
-async fn subscriptions_search_subscriptions_rate_limited() {
-    let server = MockServer::start().await;
-    let template = ResponseTemplate::new(429)
-        .insert_header("retry-after", "1")
-        .set_body_string("{\"message\":\"Slow down\"}");
-    Mock::given(method("POST"))
-        .and(path_matcher("/v2/subscriptions/search"))
-        .respond_with(template)
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let err = client
-        .subscriptions()
-        .search_subscriptions(
-            sellapp::resources::subscriptions::SearchSubscriptionsParams::new(
-                serde_json::from_str(include_str!(
-                    "fixtures/sdk_search_subscriptions_request_application_json.json"
-                ))
-                .expect("parse fixture for SdkSearchSubscriptionsRequestApplicationJson"),
-            ),
-        )
-        .await
-        .expect_err("expected error");
-    let api = match &err {
-        Error::Api(api) => api.as_ref(),
-        other => panic!("expected Error::Api, got {other:?}"),
-    };
-    assert_eq!(api.status, 429);
-    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
-}
-
-#[tokio::test]
-async fn subscriptions_search_subscriptions_server_error() {
-    let server = MockServer::start().await;
-    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
-    Mock::given(method("POST"))
-        .and(path_matcher("/v2/subscriptions/search"))
-        .respond_with(template)
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let err = client
-        .subscriptions()
-        .search_subscriptions(
-            sellapp::resources::subscriptions::SearchSubscriptionsParams::new(
-                serde_json::from_str(include_str!(
-                    "fixtures/sdk_search_subscriptions_request_application_json.json"
-                ))
-                .expect("parse fixture for SdkSearchSubscriptionsRequestApplicationJson"),
-            ),
-        )
-        .await
-        .expect_err("expected error");
-    let api = match &err {
-        Error::Api(api) => api.as_ref(),
-        other => panic!("expected Error::Api, got {other:?}"),
-    };
-    assert_eq!(api.status, 500);
-}
-
-#[tokio::test]
-async fn subscriptions_search_subscriptions_bad_request() {
-    let server = MockServer::start().await;
-    let template = ResponseTemplate::new(400)
-        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
-    Mock::given(method("POST"))
-        .and(path_matcher("/v2/subscriptions/search"))
-        .respond_with(template)
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let err = client
-        .subscriptions()
-        .search_subscriptions(
-            sellapp::resources::subscriptions::SearchSubscriptionsParams::new(
-                serde_json::from_str(include_str!(
-                    "fixtures/sdk_search_subscriptions_request_application_json.json"
-                ))
-                .expect("parse fixture for SdkSearchSubscriptionsRequestApplicationJson"),
-            ),
-        )
-        .await
-        .expect_err("expected error");
-    let api = match &err {
-        Error::Api(api) => api.as_ref(),
-        other => panic!("expected Error::Api, got {other:?}"),
-    };
-    assert_eq!(api.status, 400);
-    assert_eq!(api.code.as_deref(), Some("validation_error"));
-}
-
-#[tokio::test]
-async fn subscriptions_search_subscriptions_unprocessable() {
-    let server = MockServer::start().await;
-    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
-    Mock::given(method("POST"))
-        .and(path_matcher("/v2/subscriptions/search"))
-        .respond_with(template)
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let err = client
-        .subscriptions()
-        .search_subscriptions(
-            sellapp::resources::subscriptions::SearchSubscriptionsParams::new(
-                serde_json::from_str(include_str!(
-                    "fixtures/sdk_search_subscriptions_request_application_json.json"
-                ))
-                .expect("parse fixture for SdkSearchSubscriptionsRequestApplicationJson"),
-            ),
-        )
-        .await
-        .expect_err("expected error");
-    let api = match &err {
-        Error::Api(api) => api.as_ref(),
-        other => panic!("expected Error::Api, got {other:?}"),
-    };
-    assert_eq!(api.status, 422);
-}
-
-#[tokio::test]
-async fn subscriptions_search_subscriptions_empty_page() {
-    let server = MockServer::start().await;
-    Mock::given(method("POST"))
-        .and(path_matcher("/v2/subscriptions/search"))
-        .respond_with(ResponseTemplate::new(200).set_body_string("{\"data\":[],\"links\":{\"first\":\"https://sell.app/api/v1/blacklists?page=1\",\"last\":\"https://sell.app/api/v1/blacklists?page=4\",\"prev\":\"test_prev\",\"next\":\"https://sell.app/api/v1/blacklists?page=2\"},\"meta\":{\"current_page\":1,\"from\":1,\"last_page\":4,\"links\":[{\"url\":\"test_url\",\"label\":\"test_label\",\"active\":false}],\"path\":\"https://sell.app/api/v1/blacklists\",\"per_page\":15,\"to\":15,\"total\":57}}"))
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let resp = client
-        .subscriptions()
-        .search_subscriptions(
-            sellapp::resources::subscriptions::SearchSubscriptionsParams::new(
-                serde_json::from_str(include_str!(
-                    "fixtures/sdk_search_subscriptions_request_application_json.json"
-                ))
-                .expect("parse fixture for SdkSearchSubscriptionsRequestApplicationJson"),
-            ),
-        )
-        .await
-        .expect("expected success");
-    assert!(resp.data.is_empty(), "expected empty data array");
-}
-
-#[tokio::test]
-async fn subscriptions_get_subscription_round_trip() {
-    let server = MockServer::start().await;
-    Mock::given(method("GET"))
-        .and(path_matcher("/v2/subscriptions/test_id"))
-        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
-            "fixtures/sdk_get_subscription_response_value_200_application_json.json"
-        )))
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let _ = client
-        .subscriptions()
-        .get_subscription(
-            "test_id",
-            sellapp::resources::subscriptions::GetSubscriptionParams::default(),
-        )
-        .await
-        .expect("valid generated response");
-}
-
-#[tokio::test]
-async fn subscriptions_get_subscription_unauthorized() {
-    let server = MockServer::start().await;
-    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
-    Mock::given(method("GET"))
-        .and(path_matcher("/v2/subscriptions/test_id"))
-        .respond_with(template)
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let err = client
-        .subscriptions()
-        .get_subscription(
-            "test_id",
-            sellapp::resources::subscriptions::GetSubscriptionParams::default(),
-        )
-        .await
-        .expect_err("expected error");
-    let api = match &err {
-        Error::Authentication(api) => api.as_ref(),
-        other => panic!("expected Error::Authentication, got {other:?}"),
-    };
-    assert_eq!(api.status, 401);
-}
-
-#[tokio::test]
-async fn subscriptions_get_subscription_not_found() {
-    let server = MockServer::start().await;
-    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
-    Mock::given(method("GET"))
-        .and(path_matcher("/v2/subscriptions/test_id"))
-        .respond_with(template)
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let err = client
-        .subscriptions()
-        .get_subscription(
-            "test_id",
-            sellapp::resources::subscriptions::GetSubscriptionParams::default(),
-        )
-        .await
-        .expect_err("expected error");
-    let api = match &err {
-        Error::Api(api) => api.as_ref(),
-        other => panic!("expected Error::Api, got {other:?}"),
-    };
-    assert_eq!(api.status, 404);
-}
-
-#[tokio::test]
-async fn subscriptions_get_subscription_rate_limited() {
-    let server = MockServer::start().await;
-    let template = ResponseTemplate::new(429)
-        .insert_header("retry-after", "1")
-        .set_body_string("{\"message\":\"Slow down\"}");
-    Mock::given(method("GET"))
-        .and(path_matcher("/v2/subscriptions/test_id"))
-        .respond_with(template)
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let err = client
-        .subscriptions()
-        .get_subscription(
-            "test_id",
-            sellapp::resources::subscriptions::GetSubscriptionParams::default(),
-        )
-        .await
-        .expect_err("expected error");
-    let api = match &err {
-        Error::Api(api) => api.as_ref(),
-        other => panic!("expected Error::Api, got {other:?}"),
-    };
-    assert_eq!(api.status, 429);
-    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
-}
-
-#[tokio::test]
-async fn subscriptions_get_subscription_server_error() {
-    let server = MockServer::start().await;
-    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
-    Mock::given(method("GET"))
-        .and(path_matcher("/v2/subscriptions/test_id"))
-        .respond_with(template)
-        .expect(1)
-        .mount(&server)
-        .await;
-    let client = common::test_client(&server).await;
-    let err = client
-        .subscriptions()
-        .get_subscription(
-            "test_id",
-            sellapp::resources::subscriptions::GetSubscriptionParams::default(),
-        )
-        .await
-        .expect_err("expected error");
-    let api = match &err {
-        Error::Api(api) => api.as_ref(),
-        other => panic!("expected Error::Api, got {other:?}"),
-    };
-    assert_eq!(api.status, 500);
 }

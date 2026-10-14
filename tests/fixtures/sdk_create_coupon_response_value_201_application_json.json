@@ -13,6 +13,8 @@
     "store_id": 0,
     "deleted_at": "2023-01-01T00:00:00.000Z",
     "maximum_discount_amount": "test_maximum_discount_amount",
+    "applies_to": "one_time",
+    "subscription_payments": 0,
     "products": [
       0
     ],

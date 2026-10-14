@@ -9,9 +9,13 @@ use serde::{Deserialize, Serialize};
 #[serde(remote = "Self")]
 pub struct SdkSearchSubscriptionsRequestApplicationJson {
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub search: Option<String>,
+    pub filters: Option<Vec<SearchSubscriptionsRequestApplicationJsonPropertyFiltersItem>>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub status: Option<String>,
+    pub sort: Option<Vec<SearchSubscriptionsRequestApplicationJsonPropertySortItem>>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub search: Option<SearchSubscriptionsRequestApplicationJsonPropertySearch>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub includes: Option<Vec<SearchSubscriptionsRequestApplicationJsonPropertyIncludesItem>>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

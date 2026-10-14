@@ -445,7 +445,7 @@
     "operationId": "deleteProductVariant",
     "mountTarget": "ProductVariants",
     "methodName": "delete",
-    "content": "use sellapp::Client;\nuse sellapp::resources::product_variants::DeleteParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = DeleteParams::default();\n    let result = client.product_variants().delete(\"1\", \"2\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::product_variants::DeleteParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = DeleteParams::new(serde_json::from_str(\"{}\")?);\n    let result = client.product_variants().delete(\"1\", \"2\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -530,6 +530,30 @@
   {
     "language": "rust",
     "fileExtension": "rs",
+    "operationId": "listSubscriptions",
+    "mountTarget": "Subscriptions",
+    "methodName": "list_subscriptions",
+    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions::ListSubscriptionsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ListSubscriptionsParams::default();\n    let result = client.subscriptions().list_subscriptions(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "searchSubscriptions",
+    "mountTarget": "Subscriptions",
+    "methodName": "search_subscriptions",
+    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions::SearchSubscriptionsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = SearchSubscriptionsParams::new(serde_json::from_str(\"{\\\"search\\\":{\\\"value\\\":\\\"maya.chen@example.com\\\"},\\\"filters\\\":[{\\\"field\\\":\\\"status\\\",\\\"operator\\\":\\\"=\\\",\\\"value\\\":\\\"ACTIVE\\\"}]}\")?);\n    let result = client.subscriptions().search_subscriptions(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getSubscription",
+    "mountTarget": "Subscriptions",
+    "methodName": "get_subscription",
+    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions::GetSubscriptionParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetSubscriptionParams::default();\n    let result = client.subscriptions().get_subscription(\"123\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
     "operationId": "getSubscriptionCapabilities",
     "mountTarget": "Subscriptions",
     "methodName": "get_capabilities",
@@ -554,6 +578,14 @@
   {
     "language": "rust",
     "fileExtension": "rs",
+    "operationId": "keepSubscription",
+    "mountTarget": "Subscriptions",
+    "methodName": "keep",
+    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions::KeepParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = KeepParams::new(serde_json::from_str(\"{}\")?);\n    let result = client.subscriptions().keep(\"55\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
     "operationId": "pauseSubscription",
     "mountTarget": "Subscriptions",
     "methodName": "pause",
@@ -573,7 +605,7 @@
     "operationId": "updateSubscriptionPaymentMethod",
     "mountTarget": "Subscriptions",
     "methodName": "update_payment_method",
-    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions::UpdatePaymentMethodParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdatePaymentMethodParams::new(serde_json::from_str(\"{}\")?);\n    let result = client.subscriptions().update_payment_method(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions::UpdatePaymentMethodParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdatePaymentMethodParams::new(serde_json::from_str(\"{\\\"return_url\\\":\\\"https://store.example.com/billing/updated\\\"}\")?);\n    let result = client.subscriptions().update_payment_method(\"55\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -589,7 +621,7 @@
     "operationId": "confirmSubscriptionPlanChange",
     "mountTarget": "Subscriptions",
     "methodName": "confirm_plan_change",
-    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions::ConfirmPlanChangeParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ConfirmPlanChangeParams::new(serde_json::from_str(\"{\\\"target_variant_id\\\":4321,\\\"preview_token\\\":\\\"subprev_9c4b2f\\\"}\")?);\n    let result = client.subscriptions().confirm_plan_change(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions::ConfirmPlanChangeParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ConfirmPlanChangeParams::new(serde_json::from_str(\"{\\\"target_variant_id\\\":4321,\\\"preview_token\\\":\\\"subprev_9c4b2f\\\"}\")?);\n    let result = client.subscriptions().confirm_plan_change(\"55\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -610,26 +642,26 @@
   {
     "language": "rust",
     "fileExtension": "rs",
-    "operationId": "listSubscriptions",
-    "mountTarget": "Subscriptions",
-    "methodName": "list_subscriptions",
-    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions::ListSubscriptionsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ListSubscriptionsParams::default();\n    let result = client.subscriptions().list_subscriptions(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "operationId": "listSubscriptionActions",
+    "mountTarget": "SubscriptionsActions",
+    "methodName": "list",
+    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions_actions::ListParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ListParams::default();\n    let result = client.subscriptions_actions().list(\"124\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
     "fileExtension": "rs",
-    "operationId": "searchSubscriptions",
-    "mountTarget": "Subscriptions",
-    "methodName": "search_subscriptions",
-    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions::SearchSubscriptionsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = SearchSubscriptionsParams::new(serde_json::from_str(\"{\\\"search\\\":\\\"maya.chen@example.com\\\",\\\"status\\\":\\\"active\\\"}\")?);\n    let result = client.subscriptions().search_subscriptions(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "operationId": "getSubscriptionAction",
+    "mountTarget": "SubscriptionsActions",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions_actions::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.subscriptions_actions().get(\"124\", \"4192\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
     "fileExtension": "rs",
-    "operationId": "getSubscription",
-    "mountTarget": "Subscriptions",
-    "methodName": "get_subscription",
-    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions::GetSubscriptionParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetSubscriptionParams::default();\n    let result = client.subscriptions().get_subscription(\"991\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "operationId": "dismissSubscriptionAction",
+    "mountTarget": "SubscriptionsActions",
+    "methodName": "dismiss",
+    "content": "use sellapp::Client;\nuse sellapp::resources::subscriptions_actions::DismissParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = DismissParams::new(serde_json::from_str(\"{\\\"note\\\":\\\"Confirmed with the customer that they no longer want the upgrade.\\\"}\")?);\n    let result = client.subscriptions_actions().dismiss(\"124\", \"4207\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -2605,7 +2637,7 @@
     "operationId": "cancelCustomerSubscriptionAtPeriodEnd",
     "mountTarget": "CustomerPortal",
     "methodName": "cancel_customer_subscription_at_period_end",
-    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::CancelCustomerSubscriptionAtPeriodEndParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = CancelCustomerSubscriptionAtPeriodEndParams::new(serde_json::from_str(\"{\\\"reason\\\":\\\"Customer requested this change\\\"}\")?);\n    let mut request_options = sellapp::RequestOptions::default();\n    request_options.idempotency_key = Some(\"example-mutation-001\".to_string());\n    let result = client.customer_portal().cancel_customer_subscription_at_period_end_with_options(\"42\", params, Some(&request_options)).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::CancelCustomerSubscriptionAtPeriodEndParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = CancelCustomerSubscriptionAtPeriodEndParams::new(serde_json::from_str(\"{\\\"reason\\\":\\\"Taking a break over the summer.\\\"}\")?);\n    let result = client.customer_portal().cancel_customer_subscription_at_period_end(\"42\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -2613,7 +2645,7 @@
     "operationId": "cancelCustomerSubscriptionImmediately",
     "mountTarget": "CustomerPortal",
     "methodName": "cancel_customer_subscription_immediately",
-    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::CancelCustomerSubscriptionImmediatelyParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = CancelCustomerSubscriptionImmediatelyParams::new(serde_json::from_str(\"{\\\"reason\\\":\\\"Customer requested this change\\\"}\")?);\n    let mut request_options = sellapp::RequestOptions::default();\n    request_options.idempotency_key = Some(\"example-mutation-001\".to_string());\n    let result = client.customer_portal().cancel_customer_subscription_immediately_with_options(\"42\", params, Some(&request_options)).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::CancelCustomerSubscriptionImmediatelyParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = CancelCustomerSubscriptionImmediatelyParams::new(serde_json::from_str(\"{\\\"reason\\\":\\\"No longer needed.\\\"}\")?);\n    let result = client.customer_portal().cancel_customer_subscription_immediately(\"42\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -2621,7 +2653,7 @@
     "operationId": "pauseCustomerSubscription",
     "mountTarget": "CustomerPortal",
     "methodName": "pause_customer_subscription",
-    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::PauseCustomerSubscriptionParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = PauseCustomerSubscriptionParams::new(serde_json::from_str(\"{\\\"reason\\\":\\\"Customer requested this change\\\"}\")?);\n    let mut request_options = sellapp::RequestOptions::default();\n    request_options.idempotency_key = Some(\"example-mutation-001\".to_string());\n    let result = client.customer_portal().pause_customer_subscription_with_options(\"42\", params, Some(&request_options)).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::PauseCustomerSubscriptionParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = PauseCustomerSubscriptionParams::new(serde_json::from_str(\"{\\\"resume_at\\\":\\\"2026-11-01T00:00:00Z\\\"}\")?);\n    let result = client.customer_portal().pause_customer_subscription(\"42\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -2629,7 +2661,7 @@
     "operationId": "resumeCustomerSubscription",
     "mountTarget": "CustomerPortal",
     "methodName": "resume_customer_subscription",
-    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::ResumeCustomerSubscriptionParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = ResumeCustomerSubscriptionParams::new(serde_json::from_str(\"{\\\"reason\\\":\\\"Customer requested this change\\\"}\")?);\n    let mut request_options = sellapp::RequestOptions::default();\n    request_options.idempotency_key = Some(\"example-mutation-001\".to_string());\n    let result = client.customer_portal().resume_customer_subscription_with_options(\"42\", params, Some(&request_options)).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let result = client.customer_portal().resume_customer_subscription(\"42\").await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -2637,7 +2669,7 @@
     "operationId": "updateCustomerSubscriptionPaymentMethod",
     "mountTarget": "CustomerPortal",
     "methodName": "update_customer_subscription_payment_method",
-    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::UpdateCustomerSubscriptionPaymentMethodParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = UpdateCustomerSubscriptionPaymentMethodParams::new(serde_json::from_str(\"{\\\"reason\\\":\\\"Customer requested this change\\\"}\")?);\n    let mut request_options = sellapp::RequestOptions::default();\n    request_options.idempotency_key = Some(\"example-mutation-001\".to_string());\n    let result = client.customer_portal().update_customer_subscription_payment_method_with_options(\"42\", params, Some(&request_options)).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::UpdateCustomerSubscriptionPaymentMethodParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = UpdateCustomerSubscriptionPaymentMethodParams::new(serde_json::from_str(\"{\\\"return_url\\\":\\\"https://acme.sell.app/customer-portal/subscriptions/991\\\"}\")?);\n    let result = client.customer_portal().update_customer_subscription_payment_method(\"42\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -2645,7 +2677,7 @@
     "operationId": "previewCustomerSubscriptionPlanChange",
     "mountTarget": "CustomerPortal",
     "methodName": "preview_customer_subscription_plan_change",
-    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::PreviewCustomerSubscriptionPlanChangeParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = PreviewCustomerSubscriptionPlanChangeParams::new(serde_json::from_str(\"{\\\"product_variant_id\\\":84}\")?);\n    let mut request_options = sellapp::RequestOptions::default();\n    request_options.idempotency_key = Some(\"example-mutation-001\".to_string());\n    let result = client.customer_portal().preview_customer_subscription_plan_change_with_options(\"42\", params, Some(&request_options)).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::PreviewCustomerSubscriptionPlanChangeParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = PreviewCustomerSubscriptionPlanChangeParams::new(serde_json::from_str(\"{\\\"target_variant_id\\\":97}\")?);\n    let result = client.customer_portal().preview_customer_subscription_plan_change(\"42\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -2653,7 +2685,7 @@
     "operationId": "confirmCustomerSubscriptionPlanChange",
     "mountTarget": "CustomerPortal",
     "methodName": "confirm_customer_subscription_plan_change",
-    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::ConfirmCustomerSubscriptionPlanChangeParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = ConfirmCustomerSubscriptionPlanChangeParams::new(serde_json::from_str(\"{\\\"preview_id\\\":\\\"preview_01K4\\\"}\")?);\n    let mut request_options = sellapp::RequestOptions::default();\n    request_options.idempotency_key = Some(\"example-mutation-001\".to_string());\n    let result = client.customer_portal().confirm_customer_subscription_plan_change_with_options(\"42\", params, Some(&request_options)).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::ConfirmCustomerSubscriptionPlanChangeParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = ConfirmCustomerSubscriptionPlanChangeParams::new(serde_json::from_str(\"{\\\"target_variant_id\\\":97,\\\"preview_token\\\":\\\"subprev_portal_991\\\"}\")?);\n    let result = client.customer_portal().confirm_customer_subscription_plan_change(\"42\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -2661,7 +2693,7 @@
     "operationId": "previewCustomerSubscriptionRenewalDateChange",
     "mountTarget": "CustomerPortal",
     "methodName": "preview_customer_subscription_renewal_date_change",
-    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::PreviewCustomerSubscriptionRenewalDateChangeParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = PreviewCustomerSubscriptionRenewalDateChangeParams::new(serde_json::from_str(\"{\\\"renewal_date\\\":\\\"2026-10-15\\\"}\")?);\n    let mut request_options = sellapp::RequestOptions::default();\n    request_options.idempotency_key = Some(\"example-mutation-001\".to_string());\n    let result = client.customer_portal().preview_customer_subscription_renewal_date_change_with_options(\"42\", params, Some(&request_options)).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::PreviewCustomerSubscriptionRenewalDateChangeParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = PreviewCustomerSubscriptionRenewalDateChangeParams::new(serde_json::from_str(\"{\\\"renewal_date\\\":\\\"2026-10-15T00:00:00Z\\\"}\")?);\n    let result = client.customer_portal().preview_customer_subscription_renewal_date_change(\"42\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -2669,7 +2701,7 @@
     "operationId": "confirmCustomerSubscriptionRenewalDateChange",
     "mountTarget": "CustomerPortal",
     "methodName": "confirm_customer_subscription_renewal_date_change",
-    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::ConfirmCustomerSubscriptionRenewalDateChangeParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = ConfirmCustomerSubscriptionRenewalDateChangeParams::new(serde_json::from_str(\"{\\\"preview_id\\\":\\\"preview_01K4\\\"}\")?);\n    let mut request_options = sellapp::RequestOptions::default();\n    request_options.idempotency_key = Some(\"example-mutation-001\".to_string());\n    let result = client.customer_portal().confirm_customer_subscription_renewal_date_change_with_options(\"42\", params, Some(&request_options)).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::customer_portal::ConfirmCustomerSubscriptionRenewalDateChangeParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(\"\", \"\").with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?).with_customer_session(std::env::var(\"SELLAPP_CUSTOMER_SESSION\")?);\n    let mut params = ConfirmCustomerSubscriptionRenewalDateChangeParams::new(serde_json::from_str(\"{\\\"renewal_date\\\":\\\"2026-10-15T00:00:00Z\\\",\\\"preview_token\\\":\\\"subprev_portal_renewal_991\\\"}\")?);\n    let result = client.customer_portal().confirm_customer_subscription_renewal_date_change(\"42\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",

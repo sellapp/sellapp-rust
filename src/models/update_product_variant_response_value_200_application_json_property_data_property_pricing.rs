@@ -13,6 +13,8 @@ pub struct UpdateProductVariantResponseValue200ApplicationJsonPropertyDataProper
     #[serde(rename = "type")]
     pub type_: String,
     pub price: UpdateProductVariantResponseValue200ApplicationJsonPropertyDataPropertyPricingPropertyPrice,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub trial: Option<UpdateProductVariantResponseValue200ApplicationJsonPropertyDataPropertyPricingPropertyTrial>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

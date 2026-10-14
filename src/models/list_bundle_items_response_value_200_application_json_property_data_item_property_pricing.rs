@@ -13,6 +13,8 @@ pub struct ListBundleItemsResponseValue200ApplicationJsonPropertyDataItemPropert
     #[serde(rename = "type")]
     pub type_: String,
     pub price: ListBundleItemsResponseValue200ApplicationJsonPropertyDataItemPropertyPricingPropertyPrice,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub trial: Option<ListBundleItemsResponseValue200ApplicationJsonPropertyDataItemPropertyPricingPropertyTrial>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

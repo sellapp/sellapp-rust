@@ -9,8 +9,9 @@ use serde::{Deserialize, Serialize};
 #[serde(remote = "Self")]
 pub struct MarkPendingInvoiceVoidedResponseValue200ApplicationJsonPropertyPaymentPropertyGateway {
     pub data: MarkPendingInvoiceVoidedResponseValue200ApplicationJsonPropertyPaymentPropertyGatewayPropertyData,
+    /// The payment method, or `null` for an invoice that costs nothing. A free trial sold through Stripe, PayPal, or Razorpay keeps its payment method, because that provider bills the plan once the trial ends.
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: Option<String>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

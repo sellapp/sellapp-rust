@@ -5,6 +5,7 @@ use super::*;
 #[allow(unused_imports)]
 use crate::enums::*;
 use serde::{Deserialize, Serialize};
+/// These endpoints do not write a subscription trial. A `trial` object is refused with a `422` on `pricing.trial`; `trial: null` removes the stored trial, and leaving the key out keeps it. Set a trial through the [pricing endpoint](https://sell.app/docs/api/product-variants/update-product-variant-pricing).
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct CreateAddOnDraftRequestApplicationJsonPropertyVariantPropertyPricing {

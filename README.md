@@ -15,7 +15,7 @@ Create an application, then add the SDK and Tokio, the runtime used by the async
 ```sh
 cargo new sellapp-example
 cd sellapp-example
-cargo add sellapp-sdk@0.1.1 --rename sellapp
+cargo add sellapp-sdk@0.2.0 --rename sellapp
 cargo add tokio@1 --features macros,rt-multi-thread
 ```
 
@@ -23,7 +23,7 @@ The SDK is published as `sellapp-sdk` on [crates.io](https://crates.io/crates/se
 
 ```toml
 [dependencies]
-sellapp = { package = "sellapp-sdk", version = "0.1.1" }
+sellapp = { package = "sellapp-sdk", version = "0.2.0" }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 ```
 

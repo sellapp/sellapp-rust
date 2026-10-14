@@ -15,7 +15,7 @@ pub struct BatchCreateCouponsResponseValue200ApplicationJsonPropertyDataItem {
     pub discount: String,
     pub limit: Option<i64>,
     pub store_wide: bool,
-    /// The decimal minimum order amount in the store currency's major unit, or null when no minimum applies.
+    /// The decimal minimum amount in the store currency's major unit that the order lines of the coupon's kind must reach, or null when no minimum applies.
     pub minimum_amount: Option<String>,
     /// When the coupon stops applying, as a `Y-m-d H:i:s` timestamp in the store timezone, or null when it never expires. Unlike the other timestamps in this API, this is not an ISO 8601 instant.
     pub expires_at: Option<String>,
@@ -25,6 +25,10 @@ pub struct BatchCreateCouponsResponseValue200ApplicationJsonPropertyDataItem {
     pub deleted_at: Option<String>,
     /// The maximum decimal discount in the store currency's major unit for percentage coupons. This field is managed from the dashboard and is read-only in the v1 Coupons API.
     pub maximum_discount_amount: Option<String>,
+    /// `one_time` when the coupon discounts one-time purchases, or `subscriptions` when it discounts the first payments of a subscription plan.
+    pub applies_to: BatchCreateCouponsResponseValue200ApplicationJsonPropertyDataItemAppliesTo,
+    /// How many payments a `subscriptions` coupon discounts, counting the signup payment as the first. Null on a `one_time` coupon.
+    pub subscription_payments: Option<i64>,
     /// Product IDs this coupon applies to. Store-wide coupons return an empty array.
     pub products: Vec<i64>,
     /// Variant IDs explicitly included in the coupon scope. An empty array means all variants of the selected products are eligible.

@@ -25,9 +25,13 @@ pub enum CreateWebhookChannelResponseValue201ApplicationJsonPropertyDataAllowedN
     ProductCreated,
     ProductTrashed,
     ProductUpdated,
+    SubscriptionAction,
     SubscriptionCancelled,
     SubscriptionCreated,
+    SubscriptionPlanChangeNeedsAttention,
+    SubscriptionRenewalNeedsAttention,
     SubscriptionRenewed,
+    SubscriptionSignupNeedsAttention,
     TicketMessageCreated,
     VariantCreated,
     VariantSoldOut,
@@ -63,9 +67,15 @@ impl CreateWebhookChannelResponseValue201ApplicationJsonPropertyDataAllowedNotif
             Self::ProductCreated => "product.created",
             Self::ProductTrashed => "product.trashed",
             Self::ProductUpdated => "product.updated",
+            Self::SubscriptionAction => "subscription.action",
             Self::SubscriptionCancelled => "subscription.cancelled",
             Self::SubscriptionCreated => "subscription.created",
+            Self::SubscriptionPlanChangeNeedsAttention => {
+                "subscription.plan_change_needs_attention"
+            }
+            Self::SubscriptionRenewalNeedsAttention => "subscription.renewal_needs_attention",
             Self::SubscriptionRenewed => "subscription.renewed",
+            Self::SubscriptionSignupNeedsAttention => "subscription.signup_needs_attention",
             Self::TicketMessageCreated => "ticket_message.created",
             Self::VariantCreated => "variant.created",
             Self::VariantSoldOut => "variant.sold_out",
@@ -121,9 +131,15 @@ impl FromStr
             "product.created" => Self::ProductCreated,
             "product.trashed" => Self::ProductTrashed,
             "product.updated" => Self::ProductUpdated,
+            "subscription.action" => Self::SubscriptionAction,
             "subscription.cancelled" => Self::SubscriptionCancelled,
             "subscription.created" => Self::SubscriptionCreated,
+            "subscription.plan_change_needs_attention" => {
+                Self::SubscriptionPlanChangeNeedsAttention
+            }
+            "subscription.renewal_needs_attention" => Self::SubscriptionRenewalNeedsAttention,
             "subscription.renewed" => Self::SubscriptionRenewed,
+            "subscription.signup_needs_attention" => Self::SubscriptionSignupNeedsAttention,
             "ticket_message.created" => Self::TicketMessageCreated,
             "variant.created" => Self::VariantCreated,
             "variant.sold_out" => Self::VariantSoldOut,

@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct SdkGetCustomerPortalSubscriptionResponseValue200ApplicationJson {
-    pub data: GetCustomerPortalSubscriptionResponseValue200ApplicationJsonPropertyData,
+    pub data: CustomerPortalSubscription,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

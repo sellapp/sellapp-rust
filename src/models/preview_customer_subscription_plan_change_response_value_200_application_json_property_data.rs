@@ -8,19 +8,11 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct PreviewCustomerSubscriptionPlanChangeResponseValue200ApplicationJsonPropertyData {
-    pub id: i64,
-    pub status: String,
-    #[serde(skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::runtime_schema::present_nullable")]
-    #[deprecated]
-    pub subscription_id: Option<Option<String>>,
-    #[serde(skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::runtime_schema::present_nullable")]
-    #[deprecated]
-    pub customer_id: Option<Option<String>>,
-    pub provider_subscription_id: Option<String>,
-    pub provider_customer_id: Option<String>,
-    pub customer: PreviewCustomerSubscriptionPlanChangeResponseValue200ApplicationJsonPropertyDataPropertyCustomer,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub product_variant_id: Option<i64>,
+    /// Send this back to the matching confirm route. A preview expires 30 minutes after it is created.
+    pub preview_token: Option<crate::SecretString>,
+    pub expires_at: Option<String>,
+    pub preview: SubscriptionPlanChangePreviewPayload,
+    pub customer_message: Option<String>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

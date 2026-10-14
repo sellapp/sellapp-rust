@@ -4,6 +4,15 @@
   "status": "active",
   "priority": 0,
   "is_stackable": false,
+  "applies_to": "one_time",
+  "subscription_payments": 0,
+  "store_wide": false,
+  "products": [
+    0
+  ],
+  "product_variants": [
+    0
+  ],
   "phases": [
     {
       "id": 0,

@@ -8,7 +8,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct GetCustomerPortalSubscriptionCapabilitiesResponseValue200ApplicationJsonPropertyData {
-    pub subscription_id: i64,
+    /// The SellApp subscription ID.
+    pub id: i64,
     pub capabilities: GetCustomerPortalSubscriptionCapabilitiesResponseValue200ApplicationJsonPropertyDataPropertyCapabilities,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]

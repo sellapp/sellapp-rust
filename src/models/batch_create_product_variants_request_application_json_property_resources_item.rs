@@ -18,7 +18,11 @@ pub struct BatchCreateProductVariantsRequestApplicationJsonPropertyResourcesItem
     pub maximum_purchase_quantity: Option<Option<i64>>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub bulk_discount: Option<Vec<BatchCreateProductVariantsRequestApplicationJsonPropertyResourcesItemPropertyBulkDiscountItem>>,
+    /// Complete gateway selection for this variant. Selecting CUSTOM_PAYMENT_METHOD also requires at least one custom_payment_method_ids entry.
     pub payment_methods: Vec<BatchCreateProductVariantsRequestApplicationJsonPropertyResourcesItemPaymentMethods>,
+    /// Enabled, usable custom payment method ULIDs belonging to the selected store. Supply at least one when payment_methods includes CUSTOM_PAYMENT_METHOD. Include CUSTOM_PAYMENT_METHOD in payment_methods whenever sending nonempty IDs. On updates, omitting both selections preserves the current methods. Nonempty IDs are rejected when custom payments are not selected.
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub custom_payment_method_ids: Option<Vec<String>>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub other_settings: Option<BatchCreateProductVariantsRequestApplicationJsonPropertyResourcesItemPropertyOtherSettings>,
     /// Optional optimistic-concurrency snapshot for updates. Use the variant's latest updated_at value; stale snapshots receive a 422 validation response.

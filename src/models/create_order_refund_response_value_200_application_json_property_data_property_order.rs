@@ -14,6 +14,7 @@ pub struct CreateOrderRefundResponseValue200ApplicationJsonPropertyDataPropertyO
     pub customer: CreateOrderRefundResponseValue200ApplicationJsonPropertyDataPropertyOrderPropertyCustomer,
     pub payment: CreateOrderRefundResponseValue200ApplicationJsonPropertyDataPropertyOrderPropertyPayment,
     pub totals: CreateOrderRefundResponseValue200ApplicationJsonPropertyDataPropertyOrderPropertyTotals,
+    /// The coupon this order was sold with, or null. A subscription's renewal and plan-change orders carry null, even while the subscription still bills a discounted price, so a coupon's `limit` counts a subscription once, at signup.
     pub coupon_id: Option<i64>,
     pub line_items: Vec<CreateOrderRefundResponseValue200ApplicationJsonPropertyDataPropertyOrderPropertyLineItemsItem>,
     pub created_at: Option<String>,

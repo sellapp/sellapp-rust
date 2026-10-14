@@ -8,16 +8,12 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct SdkCancelCustomerSubscriptionImmediatelyRequestApplicationJson {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub preview_id: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub product_variant_id: Option<i64>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub renewal_date: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub return_url: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub reason: Option<String>,
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub reason: Option<Option<String>>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

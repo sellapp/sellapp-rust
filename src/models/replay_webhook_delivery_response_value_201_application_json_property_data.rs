@@ -11,6 +11,7 @@ pub struct ReplayWebhookDeliveryResponseValue201ApplicationJsonPropertyData {
     pub id: String,
     pub event_id: String,
     pub event_type: String,
+    /// A disabled channel retains new deliveries with zero attempts. Fix the endpoint and save the channel to re-enable automatic delivery. Retained deliveries require an explicit replay; saving does not send the backlog.
     pub status: ReplayWebhookDeliveryResponseValue201ApplicationJsonPropertyDataStatus,
     pub destination_origin: String,
     pub attempts: i64,

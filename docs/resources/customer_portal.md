@@ -400,10 +400,8 @@ use sellapp::resources::customer_portal::CancelCustomerSubscriptionAtPeriodEndPa
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new("", "").with_base_url(std::env::var("SELLAPP_API_BASE_URL")?).with_customer_session(std::env::var("SELLAPP_CUSTOMER_SESSION")?);
-    let mut params = CancelCustomerSubscriptionAtPeriodEndParams::new(serde_json::from_str("{\"reason\":\"Customer requested this change\"}")?);
-    let mut request_options = sellapp::RequestOptions::default();
-    request_options.idempotency_key = Some("example-mutation-001".to_string());
-    let result = client.customer_portal().cancel_customer_subscription_at_period_end_with_options("42", params, Some(&request_options)).await?;
+    let mut params = CancelCustomerSubscriptionAtPeriodEndParams::new(serde_json::from_str("{\"reason\":\"Taking a break over the summer.\"}")?);
+    let result = client.customer_portal().cancel_customer_subscription_at_period_end("42", params).await?;
     println!("{result:?}");
     Ok(())
 }
@@ -453,10 +451,8 @@ use sellapp::resources::customer_portal::CancelCustomerSubscriptionImmediatelyPa
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new("", "").with_base_url(std::env::var("SELLAPP_API_BASE_URL")?).with_customer_session(std::env::var("SELLAPP_CUSTOMER_SESSION")?);
-    let mut params = CancelCustomerSubscriptionImmediatelyParams::new(serde_json::from_str("{\"reason\":\"Customer requested this change\"}")?);
-    let mut request_options = sellapp::RequestOptions::default();
-    request_options.idempotency_key = Some("example-mutation-001".to_string());
-    let result = client.customer_portal().cancel_customer_subscription_immediately_with_options("42", params, Some(&request_options)).await?;
+    let mut params = CancelCustomerSubscriptionImmediatelyParams::new(serde_json::from_str("{\"reason\":\"No longer needed.\"}")?);
+    let result = client.customer_portal().cancel_customer_subscription_immediately("42", params).await?;
     println!("{result:?}");
     Ok(())
 }
@@ -506,10 +502,8 @@ use sellapp::resources::customer_portal::PauseCustomerSubscriptionParams;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new("", "").with_base_url(std::env::var("SELLAPP_API_BASE_URL")?).with_customer_session(std::env::var("SELLAPP_CUSTOMER_SESSION")?);
-    let mut params = PauseCustomerSubscriptionParams::new(serde_json::from_str("{\"reason\":\"Customer requested this change\"}")?);
-    let mut request_options = sellapp::RequestOptions::default();
-    request_options.idempotency_key = Some("example-mutation-001".to_string());
-    let result = client.customer_portal().pause_customer_subscription_with_options("42", params, Some(&request_options)).await?;
+    let mut params = PauseCustomerSubscriptionParams::new(serde_json::from_str("{\"resume_at\":\"2026-11-01T00:00:00Z\"}")?);
+    let result = client.customer_portal().pause_customer_subscription("42", params).await?;
     println!("{result:?}");
     Ok(())
 }
@@ -541,28 +535,22 @@ Resume a subscription
 pub async fn resume_customer_subscription(
         &self,
         product_subscription: &str,
-        params: ResumeCustomerSubscriptionParams,
     ) -> Result<SdkResumeCustomerSubscriptionResponseValue200ApplicationJson, Error>
 ```
 
 | Argument | Native type | Required |
 | --- | --- | --- |
 | product_subscription | `&str` | Yes |
-| params | `ResumeCustomerSubscriptionParams` | Yes |
 
 Returns: `SdkResumeCustomerSubscriptionResponseValue200ApplicationJson`.
 
 ```rs
 use sellapp::Client;
-use sellapp::resources::customer_portal::ResumeCustomerSubscriptionParams;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new("", "").with_base_url(std::env::var("SELLAPP_API_BASE_URL")?).with_customer_session(std::env::var("SELLAPP_CUSTOMER_SESSION")?);
-    let mut params = ResumeCustomerSubscriptionParams::new(serde_json::from_str("{\"reason\":\"Customer requested this change\"}")?);
-    let mut request_options = sellapp::RequestOptions::default();
-    request_options.idempotency_key = Some("example-mutation-001".to_string());
-    let result = client.customer_portal().resume_customer_subscription_with_options("42", params, Some(&request_options)).await?;
+    let result = client.customer_portal().resume_customer_subscription("42").await?;
     println!("{result:?}");
     Ok(())
 }
@@ -612,10 +600,8 @@ use sellapp::resources::customer_portal::UpdateCustomerSubscriptionPaymentMethod
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new("", "").with_base_url(std::env::var("SELLAPP_API_BASE_URL")?).with_customer_session(std::env::var("SELLAPP_CUSTOMER_SESSION")?);
-    let mut params = UpdateCustomerSubscriptionPaymentMethodParams::new(serde_json::from_str("{\"reason\":\"Customer requested this change\"}")?);
-    let mut request_options = sellapp::RequestOptions::default();
-    request_options.idempotency_key = Some("example-mutation-001".to_string());
-    let result = client.customer_portal().update_customer_subscription_payment_method_with_options("42", params, Some(&request_options)).await?;
+    let mut params = UpdateCustomerSubscriptionPaymentMethodParams::new(serde_json::from_str("{\"return_url\":\"https://acme.sell.app/customer-portal/subscriptions/991\"}")?);
+    let result = client.customer_portal().update_customer_subscription_payment_method("42", params).await?;
     println!("{result:?}");
     Ok(())
 }
@@ -665,10 +651,8 @@ use sellapp::resources::customer_portal::PreviewCustomerSubscriptionPlanChangePa
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new("", "").with_base_url(std::env::var("SELLAPP_API_BASE_URL")?).with_customer_session(std::env::var("SELLAPP_CUSTOMER_SESSION")?);
-    let mut params = PreviewCustomerSubscriptionPlanChangeParams::new(serde_json::from_str("{\"product_variant_id\":84}")?);
-    let mut request_options = sellapp::RequestOptions::default();
-    request_options.idempotency_key = Some("example-mutation-001".to_string());
-    let result = client.customer_portal().preview_customer_subscription_plan_change_with_options("42", params, Some(&request_options)).await?;
+    let mut params = PreviewCustomerSubscriptionPlanChangeParams::new(serde_json::from_str("{\"target_variant_id\":97}")?);
+    let result = client.customer_portal().preview_customer_subscription_plan_change("42", params).await?;
     println!("{result:?}");
     Ok(())
 }
@@ -718,10 +702,8 @@ use sellapp::resources::customer_portal::ConfirmCustomerSubscriptionPlanChangePa
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new("", "").with_base_url(std::env::var("SELLAPP_API_BASE_URL")?).with_customer_session(std::env::var("SELLAPP_CUSTOMER_SESSION")?);
-    let mut params = ConfirmCustomerSubscriptionPlanChangeParams::new(serde_json::from_str("{\"preview_id\":\"preview_01K4\"}")?);
-    let mut request_options = sellapp::RequestOptions::default();
-    request_options.idempotency_key = Some("example-mutation-001".to_string());
-    let result = client.customer_portal().confirm_customer_subscription_plan_change_with_options("42", params, Some(&request_options)).await?;
+    let mut params = ConfirmCustomerSubscriptionPlanChangeParams::new(serde_json::from_str("{\"target_variant_id\":97,\"preview_token\":\"subprev_portal_991\"}")?);
+    let result = client.customer_portal().confirm_customer_subscription_plan_change("42", params).await?;
     println!("{result:?}");
     Ok(())
 }
@@ -771,10 +753,8 @@ use sellapp::resources::customer_portal::PreviewCustomerSubscriptionRenewalDateC
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new("", "").with_base_url(std::env::var("SELLAPP_API_BASE_URL")?).with_customer_session(std::env::var("SELLAPP_CUSTOMER_SESSION")?);
-    let mut params = PreviewCustomerSubscriptionRenewalDateChangeParams::new(serde_json::from_str("{\"renewal_date\":\"2026-10-15\"}")?);
-    let mut request_options = sellapp::RequestOptions::default();
-    request_options.idempotency_key = Some("example-mutation-001".to_string());
-    let result = client.customer_portal().preview_customer_subscription_renewal_date_change_with_options("42", params, Some(&request_options)).await?;
+    let mut params = PreviewCustomerSubscriptionRenewalDateChangeParams::new(serde_json::from_str("{\"renewal_date\":\"2026-10-15T00:00:00Z\"}")?);
+    let result = client.customer_portal().preview_customer_subscription_renewal_date_change("42", params).await?;
     println!("{result:?}");
     Ok(())
 }
@@ -824,10 +804,8 @@ use sellapp::resources::customer_portal::ConfirmCustomerSubscriptionRenewalDateC
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new("", "").with_base_url(std::env::var("SELLAPP_API_BASE_URL")?).with_customer_session(std::env::var("SELLAPP_CUSTOMER_SESSION")?);
-    let mut params = ConfirmCustomerSubscriptionRenewalDateChangeParams::new(serde_json::from_str("{\"preview_id\":\"preview_01K4\"}")?);
-    let mut request_options = sellapp::RequestOptions::default();
-    request_options.idempotency_key = Some("example-mutation-001".to_string());
-    let result = client.customer_portal().confirm_customer_subscription_renewal_date_change_with_options("42", params, Some(&request_options)).await?;
+    let mut params = ConfirmCustomerSubscriptionRenewalDateChangeParams::new(serde_json::from_str("{\"renewal_date\":\"2026-10-15T00:00:00Z\",\"preview_token\":\"subprev_portal_renewal_991\"}")?);
+    let result = client.customer_portal().confirm_customer_subscription_renewal_date_change("42", params).await?;
     println!("{result:?}");
     Ok(())
 }

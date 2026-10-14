@@ -977,7 +977,12 @@ async fn product_variants_delete_round_trip() {
         .delete(
             "test_id",
             "test_id",
-            sellapp::resources::product_variants::DeleteParams::default(),
+            sellapp::resources::product_variants::DeleteParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_delete_product_variant_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkDeleteProductVariantRequestApplicationJson"),
+            ),
         )
         .await
         .expect("valid generated response");
@@ -999,7 +1004,12 @@ async fn product_variants_delete_unauthorized() {
         .delete(
             "test_id",
             "test_id",
-            sellapp::resources::product_variants::DeleteParams::default(),
+            sellapp::resources::product_variants::DeleteParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_delete_product_variant_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkDeleteProductVariantRequestApplicationJson"),
+            ),
         )
         .await
         .expect_err("expected error");
@@ -1026,7 +1036,12 @@ async fn product_variants_delete_not_found() {
         .delete(
             "test_id",
             "test_id",
-            sellapp::resources::product_variants::DeleteParams::default(),
+            sellapp::resources::product_variants::DeleteParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_delete_product_variant_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkDeleteProductVariantRequestApplicationJson"),
+            ),
         )
         .await
         .expect_err("expected error");
@@ -1055,7 +1070,12 @@ async fn product_variants_delete_rate_limited() {
         .delete(
             "test_id",
             "test_id",
-            sellapp::resources::product_variants::DeleteParams::default(),
+            sellapp::resources::product_variants::DeleteParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_delete_product_variant_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkDeleteProductVariantRequestApplicationJson"),
+            ),
         )
         .await
         .expect_err("expected error");
@@ -1083,7 +1103,12 @@ async fn product_variants_delete_server_error() {
         .delete(
             "test_id",
             "test_id",
-            sellapp::resources::product_variants::DeleteParams::default(),
+            sellapp::resources::product_variants::DeleteParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_delete_product_variant_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkDeleteProductVariantRequestApplicationJson"),
+            ),
         )
         .await
         .expect_err("expected error");
@@ -1111,7 +1136,12 @@ async fn product_variants_delete_bad_request() {
         .delete(
             "test_id",
             "test_id",
-            sellapp::resources::product_variants::DeleteParams::default(),
+            sellapp::resources::product_variants::DeleteParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_delete_product_variant_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkDeleteProductVariantRequestApplicationJson"),
+            ),
         )
         .await
         .expect_err("expected error");
@@ -1139,7 +1169,12 @@ async fn product_variants_delete_unprocessable() {
         .delete(
             "test_id",
             "test_id",
-            sellapp::resources::product_variants::DeleteParams::default(),
+            sellapp::resources::product_variants::DeleteParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_delete_product_variant_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkDeleteProductVariantRequestApplicationJson"),
+            ),
         )
         .await
         .expect_err("expected error");
