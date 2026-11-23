@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "invoice_id": 0,
+      "order_id": 0,
+      "product_id": 0,
+      "product_title": "test_product_title",
+      "currency": "USD",
+      "paid_cents": 0,
+      "active_support_refunds_cents": 0,
+      "refundable_cents": 0
+    }
+  ]
+}

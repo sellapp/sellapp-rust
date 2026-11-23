@@ -1,0 +1,10 @@
+{
+  "id": 0,
+  "customer_id": 0,
+  "customer_email": "test_customer_email",
+  "status": "active",
+  "balance_cents": 0,
+  "available_cents": 0,
+  "held_cents": 0,
+  "last_activity_at": "2023-01-01T00:00:00.000Z"
+}

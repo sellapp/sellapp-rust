@@ -1320,9 +1320,7 @@ async fn products_search_empty_page() {
     let server = MockServer::start().await;
     Mock::given(method("POST"))
         .and(path_matcher("/v2/products/search"))
-        .respond_with(
-            ResponseTemplate::new(200).set_body_string("{\"data\":[],\"links\":{},\"meta\":{}}"),
-        )
+        .respond_with(ResponseTemplate::new(200).set_body_string("{\"data\":[],\"links\":{\"first\":\"https://sell.app/api/v1/blacklists?page=1\",\"last\":\"https://sell.app/api/v1/blacklists?page=4\",\"prev\":\"test_prev\",\"next\":\"https://sell.app/api/v1/blacklists?page=2\"},\"meta\":{\"current_page\":1,\"from\":1,\"last_page\":4,\"links\":[{\"url\":\"test_url\",\"label\":\"test_label\",\"active\":false}],\"path\":\"https://sell.app/api/v1/blacklists\",\"per_page\":15,\"to\":15,\"total\":57}}"))
         .expect(1)
         .mount(&server)
         .await;
@@ -1922,6 +1920,625 @@ async fn products_batch_delete_unprocessable() {
             ))
             .expect("parse fixture for SdkBatchDeleteProductsRequestApplicationJson"),
         ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn products_publish_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/products/test_id/publish"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_publish_product_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .products()
+        .publish(
+            "test_id",
+            sellapp::resources::products::PublishParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_publish_product_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkPublishProductRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn products_publish_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/products/test_id/publish"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .publish(
+            "test_id",
+            sellapp::resources::products::PublishParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_publish_product_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkPublishProductRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn products_publish_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/products/test_id/publish"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .publish(
+            "test_id",
+            sellapp::resources::products::PublishParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_publish_product_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkPublishProductRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn products_publish_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/products/test_id/publish"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .publish(
+            "test_id",
+            sellapp::resources::products::PublishParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_publish_product_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkPublishProductRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn products_publish_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/products/test_id/publish"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .publish(
+            "test_id",
+            sellapp::resources::products::PublishParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_publish_product_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkPublishProductRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn products_publish_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/products/test_id/publish"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .publish(
+            "test_id",
+            sellapp::resources::products::PublishParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_publish_product_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkPublishProductRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn products_publish_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/products/test_id/publish"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .publish(
+            "test_id",
+            sellapp::resources::products::PublishParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_publish_product_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkPublishProductRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn products_duplicate_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/products/test_id/duplicate"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_duplicate_product_response_value_201_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .products()
+        .duplicate(
+            "test_id",
+            sellapp::resources::products::DuplicateParams::default(),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn products_duplicate_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/products/test_id/duplicate"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .duplicate(
+            "test_id",
+            sellapp::resources::products::DuplicateParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn products_duplicate_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/products/test_id/duplicate"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .duplicate(
+            "test_id",
+            sellapp::resources::products::DuplicateParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn products_duplicate_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/products/test_id/duplicate"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .duplicate(
+            "test_id",
+            sellapp::resources::products::DuplicateParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn products_duplicate_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/products/test_id/duplicate"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .duplicate(
+            "test_id",
+            sellapp::resources::products::DuplicateParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn products_duplicate_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/products/test_id/duplicate"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .duplicate(
+            "test_id",
+            sellapp::resources::products::DuplicateParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn products_duplicate_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/products/test_id/duplicate"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .duplicate(
+            "test_id",
+            sellapp::resources::products::DuplicateParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn products_move_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/products/test_id/position"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_move_product_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .products()
+        .move_(
+            "test_id",
+            sellapp::resources::products::MoveParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_move_product_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkMoveProductRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn products_move_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/products/test_id/position"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .move_(
+            "test_id",
+            sellapp::resources::products::MoveParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_move_product_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkMoveProductRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn products_move_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/products/test_id/position"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .move_(
+            "test_id",
+            sellapp::resources::products::MoveParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_move_product_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkMoveProductRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn products_move_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/products/test_id/position"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .move_(
+            "test_id",
+            sellapp::resources::products::MoveParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_move_product_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkMoveProductRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn products_move_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/products/test_id/position"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .move_(
+            "test_id",
+            sellapp::resources::products::MoveParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_move_product_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkMoveProductRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn products_move_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/products/test_id/position"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .move_(
+            "test_id",
+            sellapp::resources::products::MoveParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_move_product_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkMoveProductRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn products_move_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/products/test_id/position"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .products()
+        .move_(
+            "test_id",
+            sellapp::resources::products::MoveParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_move_product_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkMoveProductRequestApplicationJson"),
+            ),
+        )
         .await
         .expect_err("expected error");
     let api = match &err {

@@ -1,0 +1,13 @@
+{
+  "ticket_id": 0,
+  "matched": false,
+  "would_execute": false,
+  "rule_id": 0,
+  "rule_name": "test_rule_name",
+  "skip_reason": "auto_respond_disabled",
+  "rendered_reply": "test_rendered_reply",
+  "refund_amount_cents": 0,
+  "close_outcome": "refunded",
+  "automation_enabled": false,
+  "currency": "USD"
+}

@@ -353,6 +353,16 @@ impl V2CreateCouponParams {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct V2SearchCouponsParams {
+    /// Number of items to return per page.
+    ///
+    /// Defaults to `15`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// Page number to return.
+    ///
+    /// Defaults to `1`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page: Option<i64>,
     /// Include soft-deleted resources in the result.
     ///
     /// Defaults to `false`.
@@ -379,6 +389,8 @@ impl V2SearchCouponsParams {
     #[allow(deprecated)]
     pub fn new(body: SdkV2SearchCouponsRequestApplicationJson) -> Self {
         Self {
+            limit: Some(15),
+            page: Some(1),
             with_trashed: Some(false),
             only_trashed: Some(false),
             x_store: Default::default(),
@@ -611,6 +623,14 @@ impl V2BatchDeleteCouponsParams {
             body,
         }
     }
+}
+
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct V2GetCouponUsageParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
 }
 
 impl<'a> CouponsApi<'a> {
@@ -1536,6 +1556,55 @@ impl<'a> CouponsApi<'a> {
                 Some(&params.body),
                 options,
                 "DELETE /v2/coupons/batch",
+            )
+            .await
+    }
+
+    /// Retrieve coupon usage
+    ///
+    /// Count the completed orders that used a coupon, over the coupon's whole life. Only orders whose status is `COMPLETED` count; pending, failed, and refunded orders do not. A coupon from another store, a deleted coupon, and a coupon issued by a reward return `404`. Requires the `coupon` API-key ability and the coupon permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn v_2_get_coupon_usage(
+        &self,
+        coupon: &str,
+        params: V2GetCouponUsageParams,
+    ) -> Result<SdkV2GetCouponUsageResponseValue200ApplicationJson, Error> {
+        self.v_2_get_coupon_usage_with_options(coupon, params, None)
+            .await
+    }
+
+    /// Variant of [`Self::v_2_get_coupon_usage`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn v_2_get_coupon_usage_with_options(
+        &self,
+        coupon: &str,
+        params: V2GetCouponUsageParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkV2GetCouponUsageResponseValue200ApplicationJson, Error> {
+        self.v_2_get_coupon_usage_raw(coupon, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn v_2_get_coupon_usage_raw(
+        &self,
+        coupon: &str,
+        params: V2GetCouponUsageParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkV2GetCouponUsageResponseValue200ApplicationJson>, Error> {
+        let coupon = crate::client::path_segment(coupon);
+        let path = format!("/v2/coupons/{coupon}/usage");
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("v2GetCouponUsage".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/coupons/{coupon}/usage",
             )
             .await
     }

@@ -2,6 +2,65 @@
 
 [All resources](../methods.md)
 
+## reverse
+
+Reverse a wallet transaction
+
+[API reference](https://sell.app/docs/api/wallet/reverse-wallet-transaction) · Effect: **consequential**
+
+```rust
+pub async fn reverse(
+        &self,
+        customer: &str,
+        transaction: &str,
+        params: ReverseParams,
+    ) -> Result<SdkReverseWalletTransactionResponseValue201ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| customer | `&str` | Yes |
+| transaction | `&str` | Yes |
+| params | `ReverseParams` | Yes |
+
+Returns: `SdkReverseWalletTransactionResponseValue201ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::wallet_transactions::ReverseParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = ReverseParams::new(serde_json::from_str("{\"note\":\"Credit went to the wrong customer\",\"expected_balance_cents\":2500}")?);
+    let result = client.wallet_transactions().reverse("42", "501", params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 201, 400, 401, 403, 404, 409, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
 ## list
 
 List wallet transactions

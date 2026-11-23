@@ -142,7 +142,7 @@ use sellapp::resources::wallet::AdjustParams;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
-    let mut params = AdjustParams::new(serde_json::from_str("{\"amount_cents\":2500,\"idempotency_key\":\"wallet-adjustment-01992a65\",\"note\":\"Launch-day account credit\"}")?);
+    let mut params = AdjustParams::new(serde_json::from_str("{\"amount_cents\":2500,\"idempotency_key\":\"wallet-adjustment-01992a65\",\"note\":\"Launch-day account credit\",\"expected_balance_cents\":0}")?);
     let result = client.wallet().adjust("1", params).await?;
     println!("{result:?}");
     Ok(())

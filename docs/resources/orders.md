@@ -140,7 +140,7 @@ use sellapp::resources::orders::SearchParams;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
-    let mut params = SearchParams::new(serde_json::from_str("{\"filters\":[{\"field\":\"transaction_id\",\"operator\":\"contains\",\"value\":\"pi_3Example\"},{\"field\":\"status\",\"operator\":\"in\",\"value\":[\"COMPLETED\"]}],\"sort\":[{\"field\":\"created_at\",\"direction\":\"desc\"}],\"pagination\":{\"page\":1,\"limit\":25}}")?);
+    let mut params = SearchParams::new(serde_json::from_str("{\"filters\":[{\"field\":\"created_at\",\"operator\":\"gte\",\"value\":\"2026-07-01T00:00:00Z\"},{\"field\":\"created_at\",\"operator\":\"lte\",\"value\":\"2026-07-31T23:59:59Z\"},{\"field\":\"total\",\"operator\":\"gte\",\"value\":1000},{\"field\":\"currency\",\"operator\":\"eq\",\"value\":\"USD\"},{\"field\":\"status\",\"operator\":\"in\",\"value\":[\"COMPLETED\"]}],\"sort\":[{\"field\":\"created_at\",\"direction\":\"desc\"}],\"pagination\":{\"page\":1,\"limit\":25}}")?);
     let result = client.orders().search(params).await?;
     println!("{result:?}");
     Ok(())
@@ -431,7 +431,7 @@ use sellapp::resources::orders::CreateRefundParams;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
-    let mut params = CreateRefundParams::new(serde_json::from_str("{\"amount\":\"5.00\"}")?);
+    let mut params = CreateRefundParams::new(serde_json::from_str("{\"amount\":\"5.00\",\"expected_refunded_total_cents\":0}")?);
     let mut request_options = sellapp::RequestOptions::default();
     request_options.idempotency_key = Some("example-mutation-001".to_string());
     let result = client.orders().create_refund_with_options("9001", params, Some(&request_options)).await?;
@@ -636,6 +636,65 @@ Supported credential alternatives (each object is one alternative):
 ```
 
 Documented HTTP responses: 200, 400, 401, 403, 404, 409, 410, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
+## regenerate_telegram_invite
+
+Create a Telegram invite link
+
+[API reference](https://sell.app/docs/api/orders/create-a-telegram-invite-link) · Effect: **consequential**
+
+```rust
+pub async fn regenerate_telegram_invite(
+        &self,
+        order: &str,
+        params: RegenerateTelegramInviteParams,
+    ) -> Result<SdkRegenerateOrderTelegramInviteResponseValue201ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| order | `&str` | Yes |
+| params | `RegenerateTelegramInviteParams` | Yes |
+
+Returns: `SdkRegenerateOrderTelegramInviteResponseValue201ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::orders::RegenerateTelegramInviteParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = RegenerateTelegramInviteParams::new(serde_json::from_str("{\"variant_id\":4321}")?);
+    let mut request_options = sellapp::RequestOptions::default();
+    request_options.idempotency_key = Some("example-mutation-001".to_string());
+    let result = client.orders().regenerate_telegram_invite_with_options("9001", params, Some(&request_options)).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 201, 400, 401, 403, 404, 409, 410, 422, 429, 500. See the API reference for field-level validation and consequences.
 
 [Response access, transport controls, pagination, and typed errors](../usage.md)
 

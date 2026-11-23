@@ -1,0 +1,17 @@
+{
+  "data": [
+    {
+      "payout_id": 0,
+      "outcome": "paid",
+      "message": "test_message",
+      "payout": {
+        "id": 0,
+        "affiliate_id": 0,
+        "amount_usd_cents": 0,
+        "status": "due",
+        "payout_account": "test_payout_account",
+        "referrals_count": 0
+      }
+    }
+  ]
+}

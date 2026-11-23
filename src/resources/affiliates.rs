@@ -21,6 +21,15 @@ pub struct ListParams {
     /// Search affiliate email addresses and profile identifiers.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub search: Option<String>,
+    /// Send `true` to list only affiliates with custom per-product commission rates (see `GET /v2/affiliates/{affiliate}/products`). `false` lists everyone. Accepts `true`, `false`, `1`, or `0`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_rates_only: Option<bool>,
+    /// List only affiliates who chose this payout method. Uppercase, as returned in `payout_method`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub payout_method: Option<AffiliatesPayoutMethod>,
+    /// Send `-earnings` to list the affiliates who earned the most first: available, pending, and paid balances added together, largest first. Without it, or with any other value, the newest affiliates come first.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort: Option<String>,
     /// Number of items to return per page.
     ///
     /// Defaults to `15`.
@@ -43,6 +52,9 @@ impl Default for ListParams {
         Self {
             status: Default::default(),
             search: Default::default(),
+            custom_rates_only: Default::default(),
+            payout_method: Default::default(),
+            sort: Default::default(),
             limit: Some(15),
             page: Some(1),
             x_store: Default::default(),
@@ -85,7 +97,7 @@ impl UpdateParams {
 impl<'a> AffiliatesApi<'a> {
     /// List affiliates
     ///
-    /// List store affiliate memberships, approved profile details, referral counts, and integer USD-cent balances. Requires the `affiliate` ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// List store affiliate memberships, approved profile details, referral counts, and integer USD-cent balances, newest first, 15 per page by default. Requires the `affiliate` ability. Filter by `status`, `search`, `custom_rates_only`, and `payout_method`, and send `sort=-earnings` to list the top earners first. A `status`, `custom_rates_only`, or `payout_method` value the API does not know returns `422`; an unknown `sort` value is ignored. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn list(
         &self,
         params: ListParams,

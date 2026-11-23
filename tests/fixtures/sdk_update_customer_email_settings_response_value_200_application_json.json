@@ -1,0 +1,6 @@
+{
+  "data": {
+    "send_delivery_email": false,
+    "send_payment_failure_email": false
+  }
+}

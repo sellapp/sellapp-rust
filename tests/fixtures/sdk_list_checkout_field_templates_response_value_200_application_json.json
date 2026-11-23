@@ -1,0 +1,18 @@
+{
+  "data": [
+    {
+      "id": 0,
+      "name": "test_name",
+      "fields": [
+        {
+          "type": "text",
+          "label": "test_label",
+          "key": "test_key",
+          "required": false
+        }
+      ],
+      "created_at": "2023-01-01T00:00:00.000Z",
+      "updated_at": "2023-01-01T00:00:00.000Z"
+    }
+  ]
+}

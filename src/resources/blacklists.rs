@@ -71,12 +71,42 @@ impl UpdateParams {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct V2ListBlacklistsParams {
+    /// Number of items to return per page.
+    ///
+    /// Defaults to `15`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// Page number to return.
+    ///
+    /// Defaults to `1`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page: Option<i64>,
+    /// Text to look for in the blocked value or the description, matched literally and anywhere in the text, up to 255 characters.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search: Option<String>,
+    /// Return only rules of this type.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "type")]
+    pub type_: Option<BlacklistsType>,
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
     pub x_store: Option<String>,
+}
+
+impl Default for V2ListBlacklistsParams {
+    #[allow(deprecated)]
+    fn default() -> Self {
+        Self {
+            limit: Some(15),
+            page: Some(1),
+            search: Default::default(),
+            type_: Default::default(),
+            x_store: Default::default(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -386,7 +416,7 @@ impl<'a> BlacklistsApi<'a> {
 
     /// List blacklist rules
     ///
-    /// List store-scoped blacklist rules. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// List your store's blacklist rules, oldest first, 15 per page by default. Narrow the list with `type` and with `search`, which matches part of the blocked value or of the description. An unknown `type`, a `search` longer than 255 characters or a `limit` over 100 returns `422`. An empty `data` array means no rule matches. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn v_2_list_blacklists(
         &self,
         params: V2ListBlacklistsParams,

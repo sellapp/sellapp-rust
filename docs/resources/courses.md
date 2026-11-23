@@ -57,6 +57,61 @@ Documented HTTP responses: 200, 400, 401, 403, 422, 429, 500. See the API refere
 
 [Response access, transport controls, pagination, and typed errors](../usage.md)
 
+## create
+
+Create a course
+
+[API reference](https://sell.app/docs/api/courses/create-a-course) · Effect: **write**
+
+```rust
+pub async fn create(
+        &self,
+        params: CreateParams,
+    ) -> Result<SdkCreateCourseResponseValue201ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| params | `CreateParams` | Yes |
+
+Returns: `SdkCreateCourseResponseValue201ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::courses::CreateParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = CreateParams::new(serde_json::from_str("{\"title\":\"Brand identity basics\",\"description\":\"<p>Design a logo, color palette, and type system for your next project.</p>\",\"category\":\"design\",\"level\":\"beginner\",\"language\":\"English\",\"what_you_learn\":[\"Sketch a logo concept.\",\"Choose a color palette.\"],\"certificate_enabled\":true,\"delivery_text\":\"Open your course from the link in your receipt.\"}")?);
+    let result = client.courses().create(params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 201, 400, 401, 403, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
 ## search
 
 Search courses
@@ -280,6 +335,61 @@ Supported credential alternatives (each object is one alternative):
 ```
 
 Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
+## get_student_summary
+
+Retrieve a course student summary
+
+[API reference](https://sell.app/docs/api/courses/retrieve-course-student-summary) · Effect: **read**
+
+```rust
+pub async fn get_student_summary(
+        &self,
+        params: GetStudentSummaryParams,
+    ) -> Result<SdkGetCourseStudentSummaryResponseValue200ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| params | `GetStudentSummaryParams` | Yes |
+
+Returns: `SdkGetCourseStudentSummaryResponseValue200ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::courses::GetStudentSummaryParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = GetStudentSummaryParams::new("2026-08-01", "2026-08-31");
+    let result = client.courses().get_student_summary(params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 200, 400, 401, 403, 422, 429, 500. See the API reference for field-level validation and consequences.
 
 [Response access, transport controls, pagination, and typed errors](../usage.md)
 

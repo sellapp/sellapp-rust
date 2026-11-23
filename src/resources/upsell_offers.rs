@@ -178,10 +178,39 @@ pub struct DeleteParams {
     pub x_store: Option<String>,
 }
 
+#[derive(Debug, Clone, Serialize)]
+pub struct GetPerformanceParams {
+    /// Set to `true` to also find a deleted upsell offer.
+    ///
+    /// Defaults to `false`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub with_trashed: Option<bool>,
+    /// Set to `true` to find only a deleted upsell offer. Ignored when `with_trashed` is `true`.
+    ///
+    /// Defaults to `false`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub only_trashed: Option<bool>,
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+impl Default for GetPerformanceParams {
+    #[allow(deprecated)]
+    fn default() -> Self {
+        Self {
+            with_trashed: Some(false),
+            only_trashed: Some(false),
+            x_store: Default::default(),
+        }
+    }
+}
+
 impl<'a> UpsellOffersApi<'a> {
     /// List upsell offers
     ///
-    /// List the authenticated store's ordered post-purchase offers. Requires a Sanctum token with the `upsell` ability and the Upsells role for the store selected by `X-STORE`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// List the authenticated store's ordered post-purchase offers. Requires the `upsell` API-key ability and the Upsells role for the store selected by `X-STORE`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn list(
         &self,
         params: ListParams,
@@ -225,7 +254,7 @@ impl<'a> UpsellOffersApi<'a> {
 
     /// Create an upsell offer
     ///
-    /// Create an ordered post-purchase offer. Every product and variant ID is checked against the selected store and expected parent product. Requires a Sanctum token with the `upsell` ability and the Upsells role for the store selected by `X-STORE`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Create an ordered post-purchase offer. Every product and variant ID is checked against the selected store and expected parent product. Requires the `upsell` API-key ability and the Upsells role for the store selected by `X-STORE`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn create(
         &self,
         params: CreateParams,
@@ -271,7 +300,7 @@ impl<'a> UpsellOffersApi<'a> {
 
     /// Search upsell offers
     ///
-    /// Search offer names and descriptions and compose supported filters and sort instructions. Requires a Sanctum token with the `upsell` ability and the Upsells role for the store selected by `X-STORE`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Search offer names and descriptions and compose supported filters and sort instructions. Requires the `upsell` API-key ability and the Upsells role for the store selected by `X-STORE`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn search(
         &self,
         params: SearchParams,
@@ -317,7 +346,7 @@ impl<'a> UpsellOffersApi<'a> {
 
     /// Retrieve an upsell offer
     ///
-    /// Retrieve one store-scoped upsell offer and its ordered target items. Requires a Sanctum token with the `upsell` ability and the Upsells role for the store selected by `X-STORE`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Retrieve one store-scoped upsell offer and its ordered target items. Requires the `upsell` API-key ability and the Upsells role for the store selected by `X-STORE`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn get(
         &self,
         upsell_offer: &str,
@@ -365,7 +394,7 @@ impl<'a> UpsellOffersApi<'a> {
 
     /// Update an upsell offer
     ///
-    /// Update supplied fields. When items are supplied, they replace the complete ordered target-item set. Requires a Sanctum token with the `upsell` ability and the Upsells role for the store selected by `X-STORE`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Update supplied fields. When items are supplied, they replace the complete ordered target-item set. Requires the `upsell` API-key ability and the Upsells role for the store selected by `X-STORE`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn replace(
         &self,
         upsell_offer: &str,
@@ -415,7 +444,7 @@ impl<'a> UpsellOffersApi<'a> {
 
     /// Update an upsell offer
     ///
-    /// Update supplied fields. When items are supplied, they replace the complete ordered target-item set. Requires a Sanctum token with the `upsell` ability and the Upsells role for the store selected by `X-STORE`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Update supplied fields. When items are supplied, they replace the complete ordered target-item set. Requires the `upsell` API-key ability and the Upsells role for the store selected by `X-STORE`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn update(
         &self,
         upsell_offer: &str,
@@ -465,7 +494,7 @@ impl<'a> UpsellOffersApi<'a> {
 
     /// Delete an upsell offer
     ///
-    /// Soft-delete an upsell offer while preserving checkout and reporting attribution. Requires a Sanctum token with the `upsell` ability and the Upsells role for the store selected by `X-STORE`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Soft-delete an upsell offer while preserving checkout and reporting attribution. Requires the `upsell` API-key ability and the Upsells role for the store selected by `X-STORE`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn delete(
         &self,
         upsell_offer: &str,
@@ -508,6 +537,58 @@ impl<'a> UpsellOffersApi<'a> {
                 &params,
                 options,
                 "DELETE /v2/upsell-offers/{upsellOffer}",
+            )
+            .await
+    }
+
+    /// Retrieve upsell offer performance
+    ///
+    /// Report how an upsell offer has performed over its whole life: how often customers saw it, started its checkout, and bought it, and the revenue those purchases brought. An offer from another store returns `404`, and so does a deleted one unless you send `with_trashed=true`. Requires the `upsell` API-key ability and the Upsells role for the store selected by `X-STORE`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn get_performance(
+        &self,
+        upsell_offer: &str,
+        params: GetPerformanceParams,
+    ) -> Result<SdkGetUpsellOfferPerformanceResponseValue200ApplicationJson, Error> {
+        self.get_performance_with_options(upsell_offer, params, None)
+            .await
+    }
+
+    /// Variant of [`Self::get_performance`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn get_performance_with_options(
+        &self,
+        upsell_offer: &str,
+        params: GetPerformanceParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkGetUpsellOfferPerformanceResponseValue200ApplicationJson, Error> {
+        self.get_performance_raw(upsell_offer, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn get_performance_raw(
+        &self,
+        upsell_offer: &str,
+        params: GetPerformanceParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<
+        crate::RawResponse<SdkGetUpsellOfferPerformanceResponseValue200ApplicationJson>,
+        Error,
+    > {
+        let upsell_offer = crate::client::path_segment(upsell_offer);
+        let path = format!("/v2/upsell-offers/{upsell_offer}/performance");
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("getUpsellOfferPerformance".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/upsell-offers/{upsellOffer}/performance",
             )
             .await
     }

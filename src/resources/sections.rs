@@ -262,6 +262,16 @@ impl V2CreateSectionParams {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct V2SearchSectionsParams {
+    /// Number of items to return per page.
+    ///
+    /// Defaults to `15`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// Page number to return.
+    ///
+    /// Defaults to `1`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page: Option<i64>,
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
@@ -278,6 +288,8 @@ impl V2SearchSectionsParams {
     #[allow(deprecated)]
     pub fn new(body: SdkV2SearchSectionsRequestApplicationJson) -> Self {
         Self {
+            limit: Some(15),
+            page: Some(1),
             x_store: Default::default(),
             body,
         }

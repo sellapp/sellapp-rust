@@ -1,0 +1,8 @@
+{
+  "server_id": "test_server_id",
+  "roles": [
+    "test_roles"
+  ],
+  "required": false,
+  "remove_on_expire": false
+}

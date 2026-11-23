@@ -1,0 +1,39 @@
+{
+  "data": {
+    "id": 0,
+    "name": "test_name",
+    "is_active": false,
+    "archived": false,
+    "priority": 0,
+    "match_reason_source": "platform",
+    "match_reason_code": "test_match_reason_code",
+    "match_product_ids": [
+      0
+    ],
+    "match_customer_filter": "first_purchase",
+    "history_window": "7d",
+    "match_min_order_total_cents": 0,
+    "match_max_order_total_cents": 0,
+    "min_completed_orders": 0,
+    "max_completed_orders": 0,
+    "min_lifetime_spend_cents": 0,
+    "max_lifetime_spend_cents": 0,
+    "min_prior_ticket_count": 0,
+    "max_prior_ticket_count": 0,
+    "min_prior_support_refund_count": 0,
+    "max_prior_support_refund_count": 0,
+    "min_prior_support_refund_cents": 0,
+    "max_prior_support_refund_cents": 0,
+    "customer_age_days_min": 0,
+    "customer_age_days_max": 0,
+    "response_template_id": 0,
+    "action_refund_kind": "full",
+    "action_refund_percent_basis": 1,
+    "action_refund_fixed_cents": 1,
+    "action_refund_cap_cents": 1,
+    "action_close_outcome": "refunded",
+    "currency": "USD",
+    "created_at": "2023-01-01T00:00:00.000Z",
+    "updated_at": "2023-01-01T00:00:00.000Z"
+  }
+}

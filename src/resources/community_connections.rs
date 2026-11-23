@@ -106,6 +106,38 @@ pub struct DisconnectParams {
     pub x_store: Option<String>,
 }
 
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct ListFailedGrantReasonsParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct SyncDiscordRolesParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkSyncDiscordRolesRequestApplicationJson,
+}
+
+impl SyncDiscordRolesParams {
+    /// Construct a new `SyncDiscordRolesParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkSyncDiscordRolesRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
 impl<'a> CommunityConnectionsApi<'a> {
     /// List community connections
     ///
@@ -401,6 +433,99 @@ impl<'a> CommunityConnectionsApi<'a> {
                 &params,
                 options,
                 "DELETE /v2/community-connections/{platform}",
+            )
+            .await
+    }
+
+    /// List community failed grant reasons
+    ///
+    /// List why community access grants failed across all platforms, with how many grants failed for each reason and what you can do about it, most frequent first. A grant is the access a purchase gives a customer, such as a Discord role or a place in a Telegram group. Only reasons that still need attention or are retried are counted; failures nobody can act on, such as a customer who left the server, are not. Only SellApp's records are read; no platform is contacted. An empty `data` array means no grant is failing. Requires the `community` API-key ability and the `community` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn list_failed_grant_reasons(
+        &self,
+        params: ListFailedGrantReasonsParams,
+    ) -> Result<SdkListCommunityFailedGrantReasonsResponseValue200ApplicationJson, Error> {
+        self.list_failed_grant_reasons_with_options(params, None)
+            .await
+    }
+
+    /// Variant of [`Self::list_failed_grant_reasons`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn list_failed_grant_reasons_with_options(
+        &self,
+        params: ListFailedGrantReasonsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkListCommunityFailedGrantReasonsResponseValue200ApplicationJson, Error> {
+        self.list_failed_grant_reasons_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn list_failed_grant_reasons_raw(
+        &self,
+        params: ListFailedGrantReasonsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<
+        crate::RawResponse<SdkListCommunityFailedGrantReasonsResponseValue200ApplicationJson>,
+        Error,
+    > {
+        let path = "/v2/community-connections/failed-grant-reasons".to_string();
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("listCommunityFailedGrantReasons".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/community-connections/failed-grant-reasons",
+            )
+            .await
+    }
+
+    /// Sync Discord roles
+    ///
+    /// Read the role list of the store's Discord servers from Discord again and check the bot's role position, which tells whether the bot can give the roles your products sell. Syncs every connected server, or only `server_id`. A server Discord refuses is reported on its own row with `synced: false`, and the others still sync; `failed_count` counts those rows. Nothing is given to or taken from a member, so repeating the request is safe. `422` on `platform` when no Discord server is connected, and on `server_id` when that server is not connected to this store. Requires the `community` API-key ability and the `community` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn sync_discord_roles(
+        &self,
+        params: SyncDiscordRolesParams,
+    ) -> Result<SdkSyncDiscordRolesResponseValue200ApplicationJson, Error> {
+        self.sync_discord_roles_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::sync_discord_roles`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn sync_discord_roles_with_options(
+        &self,
+        params: SyncDiscordRolesParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkSyncDiscordRolesResponseValue200ApplicationJson, Error> {
+        self.sync_discord_roles_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn sync_discord_roles_raw(
+        &self,
+        params: SyncDiscordRolesParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkSyncDiscordRolesResponseValue200ApplicationJson>, Error> {
+        let path = "/v2/community-connections/discord/sync-roles".to_string();
+        let method = http::Method::POST;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("syncDiscordRoles".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "POST /v2/community-connections/discord/sync-roles",
             )
             .await
     }

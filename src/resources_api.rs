@@ -9,13 +9,18 @@ use crate::resources::AffiliateProgramApi;
 use crate::resources::AffiliateReferralSessionsApi;
 use crate::resources::AffiliateReferralsApi;
 use crate::resources::AffiliatesApi;
+use crate::resources::AffiliatesCouponApi;
+use crate::resources::AffiliatesProductsApi;
 use crate::resources::BlacklistsApi;
 use crate::resources::BookingsApi;
 use crate::resources::BookingsCalendarEventsApi;
 use crate::resources::BundleItemsApi;
 use crate::resources::CashbackRulesApi;
 use crate::resources::ChargesApi;
+use crate::resources::CheckoutFieldTemplatesApi;
 use crate::resources::CommunityConnectionsApi;
+use crate::resources::CommunityConnectionsServersApi;
+use crate::resources::CommunityConnectionsSlackApi;
 use crate::resources::CouponsApi;
 use crate::resources::CoursesApi;
 use crate::resources::CoursesLessonsApi;
@@ -41,17 +46,23 @@ use crate::resources::LicenseInstancesApi;
 use crate::resources::LicensesApi;
 use crate::resources::LicensesInstancesApi;
 use crate::resources::LineItemsApi;
+use crate::resources::NotificationsApi;
 use crate::resources::OAuthApi;
 use crate::resources::OAuthManagementApi;
 use crate::resources::OrdersApi;
 use crate::resources::OrdersLineItemsApi;
 use crate::resources::PaymentMethodsApi;
 use crate::resources::PaymentMethodsCustomApi;
+use crate::resources::PaymentMethodsModifierApi;
 use crate::resources::ProductVariantsApi;
 use crate::resources::ProductVariantsBookingApi;
+use crate::resources::ProductVariantsCommunityAccessApi;
 use crate::resources::ProductVariantsPricingApi;
+use crate::resources::ProductVariantsSubscriptionSettingsApi;
 use crate::resources::ProductsAddonsApi;
 use crate::resources::ProductsApi;
+use crate::resources::ProductsFeaturedVariantApi;
+use crate::resources::ProductsSimilarProductsApi;
 use crate::resources::PromotionsApi;
 use crate::resources::PromotionsPhasesApi;
 use crate::resources::RefundsApi;
@@ -60,12 +71,20 @@ use crate::resources::RewardGrantsApi;
 use crate::resources::RewardRulesApi;
 use crate::resources::SectionsApi;
 use crate::resources::StoreCustomDomainsApi;
+use crate::resources::StoreIntegrationsApi;
 use crate::resources::StoreNotificationChannelsApi;
+use crate::resources::StoreSenderEmailApi;
 use crate::resources::StoreSettingsApi;
 use crate::resources::SubscriptionsActionsApi;
 use crate::resources::SubscriptionsApi;
+use crate::resources::SupportAutomationRulesApi;
+use crate::resources::SupportAutomationSettingsApi;
+use crate::resources::SupportReasonsApi;
+use crate::resources::SupportReplyTemplatesApi;
+use crate::resources::TicketsAnalyticsApi;
 use crate::resources::TicketsApi;
 use crate::resources::TicketsMessagesApi;
+use crate::resources::TicketsWalletRefundsApi;
 use crate::resources::UpsellOffersApi;
 use crate::resources::VariantDeliverableFilesApi;
 use crate::resources::VariantDeliverableFoldersApi;
@@ -73,6 +92,8 @@ use crate::resources::VariantDeliverablesApi;
 use crate::resources::VariantSerialsApi;
 use crate::resources::WalletApi;
 use crate::resources::WalletBonusTiersApi;
+use crate::resources::WalletLedgerApi;
+use crate::resources::WalletOverviewApi;
 use crate::resources::WalletSettingsApi;
 use crate::resources::WalletTopupsApi;
 use crate::resources::WalletTransactionsApi;
@@ -120,6 +141,16 @@ impl Client {
         AffiliatesApi { client: self }
     }
 
+    /// Access the `affiliates_coupon` resource.
+    pub fn affiliates_coupon(&self) -> AffiliatesCouponApi<'_> {
+        AffiliatesCouponApi { client: self }
+    }
+
+    /// Access the `affiliates_products` resource.
+    pub fn affiliates_products(&self) -> AffiliatesProductsApi<'_> {
+        AffiliatesProductsApi { client: self }
+    }
+
     /// Access the `blacklists` resource.
     pub fn blacklists(&self) -> BlacklistsApi<'_> {
         BlacklistsApi { client: self }
@@ -150,9 +181,24 @@ impl Client {
         ChargesApi { client: self }
     }
 
+    /// Access the `checkout_field_templates` resource.
+    pub fn checkout_field_templates(&self) -> CheckoutFieldTemplatesApi<'_> {
+        CheckoutFieldTemplatesApi { client: self }
+    }
+
     /// Access the `community_connections` resource.
     pub fn community_connections(&self) -> CommunityConnectionsApi<'_> {
         CommunityConnectionsApi { client: self }
+    }
+
+    /// Access the `community_connections_servers` resource.
+    pub fn community_connections_servers(&self) -> CommunityConnectionsServersApi<'_> {
+        CommunityConnectionsServersApi { client: self }
+    }
+
+    /// Access the `community_connections_slack` resource.
+    pub fn community_connections_slack(&self) -> CommunityConnectionsSlackApi<'_> {
+        CommunityConnectionsSlackApi { client: self }
     }
 
     /// Access the `coupons` resource.
@@ -280,6 +326,11 @@ impl Client {
         LineItemsApi { client: self }
     }
 
+    /// Access the `notifications` resource.
+    pub fn notifications(&self) -> NotificationsApi<'_> {
+        NotificationsApi { client: self }
+    }
+
     /// Access the `oauth` resource.
     pub fn oauth(&self) -> OAuthApi<'_> {
         OAuthApi { client: self }
@@ -310,6 +361,11 @@ impl Client {
         PaymentMethodsCustomApi { client: self }
     }
 
+    /// Access the `payment_methods_modifier` resource.
+    pub fn payment_methods_modifier(&self) -> PaymentMethodsModifierApi<'_> {
+        PaymentMethodsModifierApi { client: self }
+    }
+
     /// Access the `product_variants` resource.
     pub fn product_variants(&self) -> ProductVariantsApi<'_> {
         ProductVariantsApi { client: self }
@@ -320,9 +376,21 @@ impl Client {
         ProductVariantsBookingApi { client: self }
     }
 
+    /// Access the `product_variants_community_access` resource.
+    pub fn product_variants_community_access(&self) -> ProductVariantsCommunityAccessApi<'_> {
+        ProductVariantsCommunityAccessApi { client: self }
+    }
+
     /// Access the `product_variants_pricing` resource.
     pub fn product_variants_pricing(&self) -> ProductVariantsPricingApi<'_> {
         ProductVariantsPricingApi { client: self }
+    }
+
+    /// Access the `product_variants_subscription_settings` resource.
+    pub fn product_variants_subscription_settings(
+        &self,
+    ) -> ProductVariantsSubscriptionSettingsApi<'_> {
+        ProductVariantsSubscriptionSettingsApi { client: self }
     }
 
     /// Access the `products` resource.
@@ -333,6 +401,16 @@ impl Client {
     /// Access the `products_addons` resource.
     pub fn products_addons(&self) -> ProductsAddonsApi<'_> {
         ProductsAddonsApi { client: self }
+    }
+
+    /// Access the `products_featured_variant` resource.
+    pub fn products_featured_variant(&self) -> ProductsFeaturedVariantApi<'_> {
+        ProductsFeaturedVariantApi { client: self }
+    }
+
+    /// Access the `products_similar_products` resource.
+    pub fn products_similar_products(&self) -> ProductsSimilarProductsApi<'_> {
+        ProductsSimilarProductsApi { client: self }
     }
 
     /// Access the `promotions` resource.
@@ -375,9 +453,19 @@ impl Client {
         StoreCustomDomainsApi { client: self }
     }
 
+    /// Access the `store_integrations` resource.
+    pub fn store_integrations(&self) -> StoreIntegrationsApi<'_> {
+        StoreIntegrationsApi { client: self }
+    }
+
     /// Access the `store_notification_channels` resource.
     pub fn store_notification_channels(&self) -> StoreNotificationChannelsApi<'_> {
         StoreNotificationChannelsApi { client: self }
+    }
+
+    /// Access the `store_sender_email` resource.
+    pub fn store_sender_email(&self) -> StoreSenderEmailApi<'_> {
+        StoreSenderEmailApi { client: self }
     }
 
     /// Access the `store_settings` resource.
@@ -395,14 +483,44 @@ impl Client {
         SubscriptionsActionsApi { client: self }
     }
 
+    /// Access the `support_automation_rules` resource.
+    pub fn support_automation_rules(&self) -> SupportAutomationRulesApi<'_> {
+        SupportAutomationRulesApi { client: self }
+    }
+
+    /// Access the `support_automation_settings` resource.
+    pub fn support_automation_settings(&self) -> SupportAutomationSettingsApi<'_> {
+        SupportAutomationSettingsApi { client: self }
+    }
+
+    /// Access the `support_reasons` resource.
+    pub fn support_reasons(&self) -> SupportReasonsApi<'_> {
+        SupportReasonsApi { client: self }
+    }
+
+    /// Access the `support_reply_templates` resource.
+    pub fn support_reply_templates(&self) -> SupportReplyTemplatesApi<'_> {
+        SupportReplyTemplatesApi { client: self }
+    }
+
     /// Access the `tickets` resource.
     pub fn tickets(&self) -> TicketsApi<'_> {
         TicketsApi { client: self }
     }
 
+    /// Access the `tickets_analytics` resource.
+    pub fn tickets_analytics(&self) -> TicketsAnalyticsApi<'_> {
+        TicketsAnalyticsApi { client: self }
+    }
+
     /// Access the `tickets_messages` resource.
     pub fn tickets_messages(&self) -> TicketsMessagesApi<'_> {
         TicketsMessagesApi { client: self }
+    }
+
+    /// Access the `tickets_wallet_refunds` resource.
+    pub fn tickets_wallet_refunds(&self) -> TicketsWalletRefundsApi<'_> {
+        TicketsWalletRefundsApi { client: self }
     }
 
     /// Access the `upsell_offers` resource.
@@ -438,6 +556,16 @@ impl Client {
     /// Access the `wallet_bonus_tiers` resource.
     pub fn wallet_bonus_tiers(&self) -> WalletBonusTiersApi<'_> {
         WalletBonusTiersApi { client: self }
+    }
+
+    /// Access the `wallet_ledger` resource.
+    pub fn wallet_ledger(&self) -> WalletLedgerApi<'_> {
+        WalletLedgerApi { client: self }
+    }
+
+    /// Access the `wallet_overview` resource.
+    pub fn wallet_overview(&self) -> WalletOverviewApi<'_> {
+        WalletOverviewApi { client: self }
     }
 
     /// Access the `wallet_settings` resource.

@@ -342,3 +342,113 @@ Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API r
 
 [Response access, transport controls, pagination, and typed errors](../usage.md)
 
+## list_failed_grant_reasons
+
+List community failed grant reasons
+
+[API reference](https://sell.app/docs/api/community-connections/list-failed-grant-reasons) · Effect: **read**
+
+```rust
+pub async fn list_failed_grant_reasons(
+        &self,
+        params: ListFailedGrantReasonsParams,
+    ) -> Result<SdkListCommunityFailedGrantReasonsResponseValue200ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| params | `ListFailedGrantReasonsParams` | Yes |
+
+Returns: `SdkListCommunityFailedGrantReasonsResponseValue200ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::community_connections::ListFailedGrantReasonsParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = ListFailedGrantReasonsParams::default();
+    let result = client.community_connections().list_failed_grant_reasons(params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 200, 400, 401, 403, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
+## sync_discord_roles
+
+Sync Discord roles
+
+[API reference](https://sell.app/docs/api/community-connections/sync-discord-roles) · Effect: **consequential**
+
+```rust
+pub async fn sync_discord_roles(
+        &self,
+        params: SyncDiscordRolesParams,
+    ) -> Result<SdkSyncDiscordRolesResponseValue200ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| params | `SyncDiscordRolesParams` | Yes |
+
+Returns: `SdkSyncDiscordRolesResponseValue200ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::community_connections::SyncDiscordRolesParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = SyncDiscordRolesParams::new(serde_json::from_str("{}")?);
+    let result = client.community_connections().sync_discord_roles(params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 200, 400, 401, 403, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+

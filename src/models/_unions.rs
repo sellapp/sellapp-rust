@@ -40,6 +40,148 @@ impl SdkCreateCouponRequestApplicationJsonDiscountOneOf {
 
 #[derive(Debug, Clone, Serialize)]
 #[serde(untagged)]
+pub enum SdkIssueReplacementForCompletedInvoiceRequestApplicationJsonProductVariantsOneOf {
+    I64(i64),
+    Veci64(Vec<i64>),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de>
+    for SdkIssueReplacementForCompletedInvoiceRequestApplicationJsonProductVariantsOneOf
+{
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"anyOf\",\"variants\":[{\"kind\":\"primitive\",\"type\":\"integer\"},{\"kind\":\"array\",\"items\":{\"kind\":\"primitive\",\"type\":\"integer\"}}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<i64>(value.clone()) {
+            return Ok(Self::I64(inner));
+        }
+        if let Ok(inner) = serde_json::from_value::<Vec<i64>>(value.clone()) {
+            return Ok(Self::Veci64(inner));
+        }
+        if crate::runtime_schema::allow_unknown_union() {
+            Ok(Self::Unknown(value))
+        } else {
+            Err(serde::de::Error::custom("unknown union variant"))
+        }
+    }
+}
+
+impl SdkIssueReplacementForCompletedInvoiceRequestApplicationJsonProductVariantsOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool {
+        !matches!(self, Self::Unknown(_))
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum CancelSubscriptionResponseValue200ApplicationJsonPropertyDataPropertyCustomerMetadataOneOf
+{
+    String(String),
+    F64(f64),
+    Bool(bool),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de>
+    for CancelSubscriptionResponseValue200ApplicationJsonPropertyDataPropertyCustomerMetadataOneOf
+{
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"oneOf\",\"variants\":[{\"kind\":\"primitive\",\"type\":\"string\",\"constraints\":{\"maxLength\":500}},{\"kind\":\"primitive\",\"type\":\"number\"},{\"kind\":\"primitive\",\"type\":\"boolean\"}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<String>(value.clone()) {
+            return Ok(Self::String(inner));
+        }
+        if let Ok(inner) = serde_json::from_value::<f64>(value.clone()) {
+            return Ok(Self::F64(inner));
+        }
+        if let Ok(inner) = serde_json::from_value::<bool>(value.clone()) {
+            return Ok(Self::Bool(inner));
+        }
+        if crate::runtime_schema::allow_unknown_union() {
+            Ok(Self::Unknown(value))
+        } else {
+            Err(serde::de::Error::custom("unknown union variant"))
+        }
+    }
+}
+
+impl CancelSubscriptionResponseValue200ApplicationJsonPropertyDataPropertyCustomerMetadataOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool {
+        !matches!(self, Self::Unknown(_))
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum GetVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataDataOneOf {
+    GetVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataPropertyDataAnyOfValue1(
+        GetVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataPropertyDataAnyOfValue1,
+    ),
+    VecserdeJsonValue(Vec<serde_json::Value>),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de>
+    for GetVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataDataOneOf
+{
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"anyOf\",\"variants\":[{\"kind\":\"ref\",\"name\":\"GetVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataPropertyDataAnyOfValue1\"},{\"kind\":\"array\",\"items\":{\"kind\":\"primitive\",\"type\":\"unknown\"},\"constraints\":{\"maxItems\":0}}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<GetVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataPropertyDataAnyOfValue1>(value.clone()) { return Ok(Self::GetVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataPropertyDataAnyOfValue1(inner)); }
+        if let Ok(inner) = serde_json::from_value::<Vec<serde_json::Value>>(value.clone()) {
+            return Ok(Self::VecserdeJsonValue(inner));
+        }
+        if crate::runtime_schema::allow_unknown_union() {
+            Ok(Self::Unknown(value))
+        } else {
+            Err(serde::de::Error::custom("unknown union variant"))
+        }
+    }
+}
+
+impl GetVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataDataOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool {
+        !matches!(self, Self::Unknown(_))
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum ReplaceVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataDataOneOf
+{
+    ReplaceVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataPropertyDataAnyOfValue1(
+        ReplaceVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataPropertyDataAnyOfValue1,
+    ),
+    VecserdeJsonValue(Vec<serde_json::Value>),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de>
+    for ReplaceVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataDataOneOf
+{
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"anyOf\",\"variants\":[{\"kind\":\"ref\",\"name\":\"ReplaceVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataPropertyDataAnyOfValue1\"},{\"kind\":\"array\",\"items\":{\"kind\":\"primitive\",\"type\":\"unknown\"},\"constraints\":{\"maxItems\":0}}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<ReplaceVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataPropertyDataAnyOfValue1>(value.clone()) { return Ok(Self::ReplaceVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataPropertyDataAnyOfValue1(inner)); }
+        if let Ok(inner) = serde_json::from_value::<Vec<serde_json::Value>>(value.clone()) {
+            return Ok(Self::VecserdeJsonValue(inner));
+        }
+        if crate::runtime_schema::allow_unknown_union() {
+            Ok(Self::Unknown(value))
+        } else {
+            Err(serde::de::Error::custom("unknown union variant"))
+        }
+    }
+}
+
+impl ReplaceVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataDataOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool {
+        !matches!(self, Self::Unknown(_))
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
 pub enum SdkCreateRewardCouponTemplateRequestApplicationJsonDiscountOneOf {
     String(String),
     F64(f64),
@@ -72,22 +214,329 @@ impl SdkCreateRewardCouponTemplateRequestApplicationJsonDiscountOneOf {
 
 #[derive(Debug, Clone, Serialize)]
 #[serde(untagged)]
-pub enum V2ListTicketsResponseValue200ApplicationJsonPropertyDataItemPropertyCustomerIdOneOf {
+pub enum ListCheckoutFieldTemplatesResponseValue200ApplicationJsonPropertyDataItemPropertyFieldsItemPropertyDateOptionsStartDayOneOf
+{
     I64(i64),
     String(String),
     Unknown(serde_json::Value),
 }
-impl<'de> Deserialize<'de>
-    for V2ListTicketsResponseValue200ApplicationJsonPropertyDataItemPropertyCustomerIdOneOf
-{
+impl<'de> Deserialize<'de> for ListCheckoutFieldTemplatesResponseValue200ApplicationJsonPropertyDataItemPropertyFieldsItemPropertyDateOptionsStartDayOneOf {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         let value = serde_json::Value::deserialize(deserializer)?;
         crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"oneOf\",\"variants\":[{\"kind\":\"primitive\",\"type\":\"integer\"},{\"kind\":\"primitive\",\"type\":\"string\"}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<i64>(value.clone()) { return Ok(Self::I64(inner)); }
+        if let Ok(inner) = serde_json::from_value::<String>(value.clone()) { return Ok(Self::String(inner)); }
+        if crate::runtime_schema::allow_unknown_union() { Ok(Self::Unknown(value)) } else { Err(serde::de::Error::custom("unknown union variant")) }
+    }
+}
+
+impl ListCheckoutFieldTemplatesResponseValue200ApplicationJsonPropertyDataItemPropertyFieldsItemPropertyDateOptionsStartDayOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool { !matches!(self, Self::Unknown(_)) }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum ListCheckoutFieldTemplatesResponseValue200ApplicationJsonPropertyDataItemPropertyFieldsItemOptionsOneOf
+{
+    String(String),
+    ListCheckoutFieldTemplatesResponseValue200ApplicationJsonPropertyDataItemPropertyFieldsItemPropertyOptionsItemAnyOfValue2(
+        ListCheckoutFieldTemplatesResponseValue200ApplicationJsonPropertyDataItemPropertyFieldsItemPropertyOptionsItemAnyOfValue2,
+    ),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de> for ListCheckoutFieldTemplatesResponseValue200ApplicationJsonPropertyDataItemPropertyFieldsItemOptionsOneOf {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"anyOf\",\"variants\":[{\"kind\":\"primitive\",\"type\":\"string\",\"constraints\":{\"minLength\":1,\"maxLength\":100}},{\"kind\":\"ref\",\"name\":\"ListCheckoutFieldTemplatesResponseValue200ApplicationJsonPropertyDataItemPropertyFieldsItemPropertyOptionsItemAnyOfValue2\"}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<String>(value.clone()) { return Ok(Self::String(inner)); }
+        if let Ok(inner) = serde_json::from_value::<ListCheckoutFieldTemplatesResponseValue200ApplicationJsonPropertyDataItemPropertyFieldsItemPropertyOptionsItemAnyOfValue2>(value.clone()) { return Ok(Self::ListCheckoutFieldTemplatesResponseValue200ApplicationJsonPropertyDataItemPropertyFieldsItemPropertyOptionsItemAnyOfValue2(inner)); }
+        if crate::runtime_schema::allow_unknown_union() { Ok(Self::Unknown(value)) } else { Err(serde::de::Error::custom("unknown union variant")) }
+    }
+}
+
+impl ListCheckoutFieldTemplatesResponseValue200ApplicationJsonPropertyDataItemPropertyFieldsItemOptionsOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool { !matches!(self, Self::Unknown(_)) }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum CreateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemOptionsOneOf {
+    String(String),
+    CreateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemPropertyOptionsItemAnyOfValue2(
+        CreateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemPropertyOptionsItemAnyOfValue2,
+    ),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de>
+    for CreateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemOptionsOneOf
+{
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"anyOf\",\"variants\":[{\"kind\":\"primitive\",\"type\":\"string\",\"constraints\":{\"minLength\":1,\"maxLength\":100}},{\"kind\":\"ref\",\"name\":\"CreateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemPropertyOptionsItemAnyOfValue2\"}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<String>(value.clone()) {
+            return Ok(Self::String(inner));
+        }
+        if let Ok(inner) = serde_json::from_value::<CreateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemPropertyOptionsItemAnyOfValue2>(value.clone()) { return Ok(Self::CreateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemPropertyOptionsItemAnyOfValue2(inner)); }
+        if crate::runtime_schema::allow_unknown_union() {
+            Ok(Self::Unknown(value))
+        } else {
+            Err(serde::de::Error::custom("unknown union variant"))
+        }
+    }
+}
+
+impl CreateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemOptionsOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool {
+        !matches!(self, Self::Unknown(_))
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum CreateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf
+{
+    String(String),
+    CreateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2(
+        CreateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2,
+    ),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de> for CreateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"anyOf\",\"variants\":[{\"kind\":\"primitive\",\"type\":\"string\",\"constraints\":{\"minLength\":1,\"maxLength\":100}},{\"kind\":\"ref\",\"name\":\"CreateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2\"}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<String>(value.clone()) { return Ok(Self::String(inner)); }
+        if let Ok(inner) = serde_json::from_value::<CreateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2>(value.clone()) { return Ok(Self::CreateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2(inner)); }
+        if crate::runtime_schema::allow_unknown_union() { Ok(Self::Unknown(value)) } else { Err(serde::de::Error::custom("unknown union variant")) }
+    }
+}
+
+impl CreateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool { !matches!(self, Self::Unknown(_)) }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum GetCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf
+{
+    String(String),
+    GetCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2(
+        GetCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2,
+    ),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de> for GetCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"anyOf\",\"variants\":[{\"kind\":\"primitive\",\"type\":\"string\",\"constraints\":{\"minLength\":1,\"maxLength\":100}},{\"kind\":\"ref\",\"name\":\"GetCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2\"}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<String>(value.clone()) { return Ok(Self::String(inner)); }
+        if let Ok(inner) = serde_json::from_value::<GetCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2>(value.clone()) { return Ok(Self::GetCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2(inner)); }
+        if crate::runtime_schema::allow_unknown_union() { Ok(Self::Unknown(value)) } else { Err(serde::de::Error::custom("unknown union variant")) }
+    }
+}
+
+impl GetCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool { !matches!(self, Self::Unknown(_)) }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum ReplaceCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemOptionsOneOf {
+    String(String),
+    ReplaceCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemPropertyOptionsItemAnyOfValue2(
+        ReplaceCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemPropertyOptionsItemAnyOfValue2,
+    ),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de>
+    for ReplaceCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemOptionsOneOf
+{
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"anyOf\",\"variants\":[{\"kind\":\"primitive\",\"type\":\"string\",\"constraints\":{\"minLength\":1,\"maxLength\":100}},{\"kind\":\"ref\",\"name\":\"ReplaceCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemPropertyOptionsItemAnyOfValue2\"}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<String>(value.clone()) {
+            return Ok(Self::String(inner));
+        }
+        if let Ok(inner) = serde_json::from_value::<ReplaceCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemPropertyOptionsItemAnyOfValue2>(value.clone()) { return Ok(Self::ReplaceCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemPropertyOptionsItemAnyOfValue2(inner)); }
+        if crate::runtime_schema::allow_unknown_union() {
+            Ok(Self::Unknown(value))
+        } else {
+            Err(serde::de::Error::custom("unknown union variant"))
+        }
+    }
+}
+
+impl ReplaceCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemOptionsOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool {
+        !matches!(self, Self::Unknown(_))
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum ReplaceCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf
+{
+    String(String),
+    ReplaceCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2(
+        ReplaceCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2,
+    ),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de> for ReplaceCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"anyOf\",\"variants\":[{\"kind\":\"primitive\",\"type\":\"string\",\"constraints\":{\"minLength\":1,\"maxLength\":100}},{\"kind\":\"ref\",\"name\":\"ReplaceCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2\"}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<String>(value.clone()) { return Ok(Self::String(inner)); }
+        if let Ok(inner) = serde_json::from_value::<ReplaceCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2>(value.clone()) { return Ok(Self::ReplaceCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2(inner)); }
+        if crate::runtime_schema::allow_unknown_union() { Ok(Self::Unknown(value)) } else { Err(serde::de::Error::custom("unknown union variant")) }
+    }
+}
+
+impl ReplaceCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool { !matches!(self, Self::Unknown(_)) }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum UpdateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemOptionsOneOf {
+    String(String),
+    UpdateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemPropertyOptionsItemAnyOfValue2(
+        UpdateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemPropertyOptionsItemAnyOfValue2,
+    ),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de>
+    for UpdateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemOptionsOneOf
+{
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"anyOf\",\"variants\":[{\"kind\":\"primitive\",\"type\":\"string\",\"constraints\":{\"minLength\":1,\"maxLength\":100}},{\"kind\":\"ref\",\"name\":\"UpdateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemPropertyOptionsItemAnyOfValue2\"}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<String>(value.clone()) {
+            return Ok(Self::String(inner));
+        }
+        if let Ok(inner) = serde_json::from_value::<UpdateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemPropertyOptionsItemAnyOfValue2>(value.clone()) { return Ok(Self::UpdateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemPropertyOptionsItemAnyOfValue2(inner)); }
+        if crate::runtime_schema::allow_unknown_union() {
+            Ok(Self::Unknown(value))
+        } else {
+            Err(serde::de::Error::custom("unknown union variant"))
+        }
+    }
+}
+
+impl UpdateCheckoutFieldTemplateRequestApplicationJsonPropertyFieldsItemOptionsOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool {
+        !matches!(self, Self::Unknown(_))
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum UpdateCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf
+{
+    String(String),
+    UpdateCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2(
+        UpdateCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2,
+    ),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de> for UpdateCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"anyOf\",\"variants\":[{\"kind\":\"primitive\",\"type\":\"string\",\"constraints\":{\"minLength\":1,\"maxLength\":100}},{\"kind\":\"ref\",\"name\":\"UpdateCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2\"}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<String>(value.clone()) { return Ok(Self::String(inner)); }
+        if let Ok(inner) = serde_json::from_value::<UpdateCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2>(value.clone()) { return Ok(Self::UpdateCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2(inner)); }
+        if crate::runtime_schema::allow_unknown_union() { Ok(Self::Unknown(value)) } else { Err(serde::de::Error::custom("unknown union variant")) }
+    }
+}
+
+impl UpdateCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool { !matches!(self, Self::Unknown(_)) }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum DeleteCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf
+{
+    String(String),
+    DeleteCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2(
+        DeleteCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2,
+    ),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de> for DeleteCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"anyOf\",\"variants\":[{\"kind\":\"primitive\",\"type\":\"string\",\"constraints\":{\"minLength\":1,\"maxLength\":100}},{\"kind\":\"ref\",\"name\":\"DeleteCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2\"}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<String>(value.clone()) { return Ok(Self::String(inner)); }
+        if let Ok(inner) = serde_json::from_value::<DeleteCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2>(value.clone()) { return Ok(Self::DeleteCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2(inner)); }
+        if crate::runtime_schema::allow_unknown_union() { Ok(Self::Unknown(value)) } else { Err(serde::de::Error::custom("unknown union variant")) }
+    }
+}
+
+impl DeleteCheckoutFieldTemplateResponseValue200ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool { !matches!(self, Self::Unknown(_)) }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum DuplicateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf
+{
+    String(String),
+    DuplicateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2(
+        DuplicateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2,
+    ),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de> for DuplicateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"anyOf\",\"variants\":[{\"kind\":\"primitive\",\"type\":\"string\",\"constraints\":{\"minLength\":1,\"maxLength\":100}},{\"kind\":\"ref\",\"name\":\"DuplicateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2\"}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<String>(value.clone()) { return Ok(Self::String(inner)); }
+        if let Ok(inner) = serde_json::from_value::<DuplicateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2>(value.clone()) { return Ok(Self::DuplicateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemPropertyOptionsItemAnyOfValue2(inner)); }
+        if crate::runtime_schema::allow_unknown_union() { Ok(Self::Unknown(value)) } else { Err(serde::de::Error::custom("unknown union variant")) }
+    }
+}
+
+impl DuplicateCheckoutFieldTemplateResponseValue201ApplicationJsonPropertyDataPropertyFieldsItemOptionsOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool { !matches!(self, Self::Unknown(_)) }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum SdkCreateOrderReplacementRequestApplicationJsonProductVariantsOneOf {
+    I64(i64),
+    Veci64(Vec<i64>),
+    CreateOrderReplacementRequestApplicationJsonPropertyProductVariantsAnyOfValue3(
+        CreateOrderReplacementRequestApplicationJsonPropertyProductVariantsAnyOfValue3,
+    ),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de> for SdkCreateOrderReplacementRequestApplicationJsonProductVariantsOneOf {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"anyOf\",\"variants\":[{\"kind\":\"primitive\",\"type\":\"integer\"},{\"kind\":\"array\",\"items\":{\"kind\":\"primitive\",\"type\":\"integer\"}},{\"kind\":\"ref\",\"name\":\"CreateOrderReplacementRequestApplicationJsonPropertyProductVariantsAnyOfValue3\"}]}").map_err(serde::de::Error::custom)?;
         if let Ok(inner) = serde_json::from_value::<i64>(value.clone()) {
             return Ok(Self::I64(inner));
         }
-        if let Ok(inner) = serde_json::from_value::<String>(value.clone()) {
-            return Ok(Self::String(inner));
+        if let Ok(inner) = serde_json::from_value::<Vec<i64>>(value.clone()) {
+            return Ok(Self::Veci64(inner));
+        }
+        if let Ok(inner) = serde_json::from_value::<
+            CreateOrderReplacementRequestApplicationJsonPropertyProductVariantsAnyOfValue3,
+        >(value.clone())
+        {
+            return Ok(Self::CreateOrderReplacementRequestApplicationJsonPropertyProductVariantsAnyOfValue3(inner));
         }
         if crate::runtime_schema::allow_unknown_union() {
             Ok(Self::Unknown(value))
@@ -97,7 +546,36 @@ impl<'de> Deserialize<'de>
     }
 }
 
-impl V2ListTicketsResponseValue200ApplicationJsonPropertyDataItemPropertyCustomerIdOneOf {
+impl SdkCreateOrderReplacementRequestApplicationJsonProductVariantsOneOf {
+    /// Whether this union value matches a variant known to this SDK version.
+    pub fn is_known_variant(&self) -> bool {
+        !matches!(self, Self::Unknown(_))
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum ListOrderDeliverablesResponseValue200ApplicationJsonPropertyDataItemPropertyDeliverableDataOneOf
+{
+    ListOrderDeliverablesResponseValue200ApplicationJsonPropertyDataItemPropertyDeliverablePropertyDataAnyOfValue1(
+        ListOrderDeliverablesResponseValue200ApplicationJsonPropertyDataItemPropertyDeliverablePropertyDataAnyOfValue1,
+    ),
+    VecserdeJsonValue(Vec<serde_json::Value>),
+    Unknown(serde_json::Value),
+}
+impl<'de> Deserialize<'de> for ListOrderDeliverablesResponseValue200ApplicationJsonPropertyDataItemPropertyDeliverableDataOneOf {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(deserializer)?;
+        crate::runtime_schema::union(&value, "{\"kind\":\"union\",\"composition\":\"anyOf\",\"variants\":[{\"kind\":\"ref\",\"name\":\"ListOrderDeliverablesResponseValue200ApplicationJsonPropertyDataItemPropertyDeliverablePropertyDataAnyOfValue1\"},{\"kind\":\"array\",\"items\":{\"kind\":\"primitive\",\"type\":\"unknown\"},\"constraints\":{\"maxItems\":0}}]}").map_err(serde::de::Error::custom)?;
+        if let Ok(inner) = serde_json::from_value::<ListOrderDeliverablesResponseValue200ApplicationJsonPropertyDataItemPropertyDeliverablePropertyDataAnyOfValue1>(value.clone()) { return Ok(Self::ListOrderDeliverablesResponseValue200ApplicationJsonPropertyDataItemPropertyDeliverablePropertyDataAnyOfValue1(inner)); }
+        if let Ok(inner) = serde_json::from_value::<Vec<serde_json::Value>>(value.clone()) { return Ok(Self::VecserdeJsonValue(inner)); }
+        if crate::runtime_schema::allow_unknown_union() { Ok(Self::Unknown(value)) } else { Err(serde::de::Error::custom("unknown union variant")) }
+    }
+}
+
+impl
+    ListOrderDeliverablesResponseValue200ApplicationJsonPropertyDataItemPropertyDeliverableDataOneOf
+{
     /// Whether this union value matches a variant known to this SDK version.
     pub fn is_known_variant(&self) -> bool {
         !matches!(self, Self::Unknown(_))

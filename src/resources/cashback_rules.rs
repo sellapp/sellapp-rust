@@ -109,10 +109,24 @@ pub struct RestoreParams {
     pub x_store: Option<String>,
 }
 
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct QuoteParams {
+    /// The product to quote. Leave it out to quote the store-wide rule.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_id: Option<i64>,
+    /// The purchase amount to quote, in integer USD cents.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub purchase_cents: Option<i64>,
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
 impl<'a> CashbackRulesApi<'a> {
     /// List cashback rules
     ///
-    /// List current and archived store records. Requires the `wallet` or `wallet:write` API ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// List current and archived store records. Requires the `wallet` or `wallet:write` API-key ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn list(
         &self,
         params: ListParams,
@@ -157,7 +171,7 @@ impl<'a> CashbackRulesApi<'a> {
 
     /// Create a cashback rule
     ///
-    /// Create a cashback rule. Requires the `wallet:write` API ability and the store wallet permission. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Create a cashback rule. Requires the `wallet:write` API-key ability and the wallet permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn create(
         &self,
         params: CreateParams,
@@ -203,7 +217,7 @@ impl<'a> CashbackRulesApi<'a> {
 
     /// Update a cashback rule
     ///
-    /// Update a cashback rule. Requires the `wallet:write` API ability and the store wallet permission. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Update a cashback rule. Requires the `wallet:write` API-key ability and the wallet permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn replace(
         &self,
         cashback_rule: &str,
@@ -253,7 +267,7 @@ impl<'a> CashbackRulesApi<'a> {
 
     /// Update a cashback rule
     ///
-    /// Update a cashback rule. Requires the `wallet:write` API ability and the store wallet permission. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Update a cashback rule. Requires the `wallet:write` API-key ability and the wallet permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn update(
         &self,
         cashback_rule: &str,
@@ -303,7 +317,7 @@ impl<'a> CashbackRulesApi<'a> {
 
     /// Archive a cashback rule
     ///
-    /// Archive a cashback rule. Requires the `wallet:write` API ability and the store wallet permission. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Archive a cashback rule. Requires the `wallet:write` API-key ability and the wallet permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn archive(
         &self,
         cashback_rule: &str,
@@ -352,7 +366,7 @@ impl<'a> CashbackRulesApi<'a> {
 
     /// Restore a cashback rule
     ///
-    /// Restore a cashback rule. Requires the `wallet:write` API ability and the store wallet permission. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Restore a cashback rule. Requires the `wallet:write` API-key ability and the wallet permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn restore(
         &self,
         cashback_rule: &str,
@@ -395,6 +409,51 @@ impl<'a> CashbackRulesApi<'a> {
                 &params,
                 options,
                 "POST /v2/cashback-rules/{cashbackRule}/restore",
+            )
+            .await
+    }
+
+    /// Quote a cashback rule
+    ///
+    /// See which cashback rule a purchase would earn right now, and how much it would add to the customer's wallet, without creating anything. Send `product_id` to check one product (a rule naming the product wins over the store-wide rule); leave it out to check only the store-wide rule. Add `purchase_cents` to get the cashback amount. Amounts are integer USD cents: `purchase_cents=10000` asks about a $100.00 purchase. Requires the `wallet` or `wallet:write` API-key ability and the wallet permission in your team role. A product that is not in your store returns `422` on `product_id`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn quote(
+        &self,
+        params: QuoteParams,
+    ) -> Result<SdkQuoteCashbackRuleResponseValue200ApplicationJson, Error> {
+        self.quote_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::quote`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn quote_with_options(
+        &self,
+        params: QuoteParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkQuoteCashbackRuleResponseValue200ApplicationJson, Error> {
+        self.quote_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn quote_raw(
+        &self,
+        params: QuoteParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkQuoteCashbackRuleResponseValue200ApplicationJson>, Error>
+    {
+        let path = "/v2/cashback-rules/quote".to_string();
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("quoteCashbackRule".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/cashback-rules/quote",
             )
             .await
     }

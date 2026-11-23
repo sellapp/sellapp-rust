@@ -165,6 +165,334 @@ impl UpdateMarketingParams {
     }
 }
 
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct GetCheckoutParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct ReplaceCheckoutParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkReplaceCheckoutSettingsRequestApplicationJson,
+}
+
+impl ReplaceCheckoutParams {
+    /// Construct a new `ReplaceCheckoutParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkReplaceCheckoutSettingsRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct UpdateCheckoutParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkUpdateCheckoutSettingsRequestApplicationJson,
+}
+
+impl UpdateCheckoutParams {
+    /// Construct a new `UpdateCheckoutParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkUpdateCheckoutSettingsRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct GetTaxesParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct ReplaceTaxesParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkReplaceTaxSettingsRequestApplicationJson,
+}
+
+impl ReplaceTaxesParams {
+    /// Construct a new `ReplaceTaxesParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkReplaceTaxSettingsRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct UpdateTaxesParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkUpdateTaxSettingsRequestApplicationJson,
+}
+
+impl UpdateTaxesParams {
+    /// Construct a new `UpdateTaxesParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkUpdateTaxSettingsRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct GetCustomerEmailsParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct ReplaceCustomerEmailsParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkReplaceCustomerEmailSettingsRequestApplicationJson,
+}
+
+impl ReplaceCustomerEmailsParams {
+    /// Construct a new `ReplaceCustomerEmailsParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkReplaceCustomerEmailSettingsRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct UpdateCustomerEmailsParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkUpdateCustomerEmailSettingsRequestApplicationJson,
+}
+
+impl UpdateCustomerEmailsParams {
+    /// Construct a new `UpdateCustomerEmailsParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkUpdateCustomerEmailSettingsRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct GetStoreAlertsParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct ReplaceStoreAlertsParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkReplaceStoreAlertSettingsRequestApplicationJson,
+}
+
+impl ReplaceStoreAlertsParams {
+    /// Construct a new `ReplaceStoreAlertsParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkReplaceStoreAlertSettingsRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct UpdateStoreAlertsParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkUpdateStoreAlertSettingsRequestApplicationJson,
+}
+
+impl UpdateStoreAlertsParams {
+    /// Construct a new `UpdateStoreAlertsParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkUpdateStoreAlertSettingsRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct GetPersonalizationParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct ReplacePersonalizationParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkReplacePersonalizationSettingsRequestApplicationJson,
+}
+
+impl ReplacePersonalizationParams {
+    /// Construct a new `ReplacePersonalizationParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkReplacePersonalizationSettingsRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct UpdatePersonalizationParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkUpdatePersonalizationSettingsRequestApplicationJson,
+}
+
+impl UpdatePersonalizationParams {
+    /// Construct a new `UpdatePersonalizationParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkUpdatePersonalizationSettingsRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct ReplaceCryptoCheckoutParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkReplaceCryptoCheckoutSettingsRequestApplicationJson,
+}
+
+impl ReplaceCryptoCheckoutParams {
+    /// Construct a new `ReplaceCryptoCheckoutParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkReplaceCryptoCheckoutSettingsRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct UpdateCryptoCheckoutParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkUpdateCryptoCheckoutSettingsRequestApplicationJson,
+}
+
+impl UpdateCryptoCheckoutParams {
+    /// Construct a new `UpdateCryptoCheckoutParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkUpdateCryptoCheckoutSettingsRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
 impl<'a> StoreSettingsApi<'a> {
     /// Retrieve store settings
     ///
@@ -486,6 +814,801 @@ impl<'a> StoreSettingsApi<'a> {
                 Some(&params.body),
                 options,
                 "PATCH /v2/store/settings/marketing",
+            )
+            .await
+    }
+
+    /// Retrieve checkout settings
+    ///
+    /// Get your store's checkout settings: the shopping cart, whether checkout asks for an email, fraud controls, the minimum order total, the billing descriptor, the checkout rate limits, and the crypto checkout values when the store takes crypto through SellApp's crypto processor. The response body can be sent back to `PUT /v2/store/settings/checkout` unchanged. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn get_checkout(
+        &self,
+        params: GetCheckoutParams,
+    ) -> Result<SdkGetCheckoutSettingsResponseValue200ApplicationJson, Error> {
+        self.get_checkout_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::get_checkout`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn get_checkout_with_options(
+        &self,
+        params: GetCheckoutParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkGetCheckoutSettingsResponseValue200ApplicationJson, Error> {
+        self.get_checkout_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn get_checkout_raw(
+        &self,
+        params: GetCheckoutParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkGetCheckoutSettingsResponseValue200ApplicationJson>, Error>
+    {
+        let path = "/v2/store/settings/checkout".to_string();
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("getCheckoutSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/store/settings/checkout",
+            )
+            .await
+    }
+
+    /// Update checkout settings
+    ///
+    /// Replace all eleven checkout settings. Every field except `crypto` is required; send `null` to remove a nullable one. A missing field returns `422` and nothing is saved. The body of `GET /v2/store/settings/checkout`, including `crypto`, can be sent back unchanged. Sending the same body again is safe. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn replace_checkout(
+        &self,
+        params: ReplaceCheckoutParams,
+    ) -> Result<SdkReplaceCheckoutSettingsResponseValue200ApplicationJson, Error> {
+        self.replace_checkout_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::replace_checkout`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn replace_checkout_with_options(
+        &self,
+        params: ReplaceCheckoutParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkReplaceCheckoutSettingsResponseValue200ApplicationJson, Error> {
+        self.replace_checkout_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn replace_checkout_raw(
+        &self,
+        params: ReplaceCheckoutParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkReplaceCheckoutSettingsResponseValue200ApplicationJson>, Error>
+    {
+        let path = "/v2/store/settings/checkout".to_string();
+        let method = http::Method::PUT;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("replaceCheckoutSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "PUT /v2/store/settings/checkout",
+            )
+            .await
+    }
+
+    /// Update checkout settings
+    ///
+    /// Change only the checkout settings you send and keep the others, including one someone else saved while your request was in flight. Send `null` to remove `minimum_spend`, `billing_descriptor`, `attempts_per_ip`, `attempts_per_email` or `attempts_per_fingerprint`. `crypto` is read-only here; change it with `PATCH /v2/store/settings/checkout/crypto`. A refused value returns `422` on the field name of this endpoint, such as `rate_limit_window_seconds`, and nothing is saved. Sending the same change again is safe. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn update_checkout(
+        &self,
+        params: UpdateCheckoutParams,
+    ) -> Result<SdkUpdateCheckoutSettingsResponseValue200ApplicationJson, Error> {
+        self.update_checkout_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::update_checkout`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn update_checkout_with_options(
+        &self,
+        params: UpdateCheckoutParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkUpdateCheckoutSettingsResponseValue200ApplicationJson, Error> {
+        self.update_checkout_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn update_checkout_raw(
+        &self,
+        params: UpdateCheckoutParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkUpdateCheckoutSettingsResponseValue200ApplicationJson>, Error>
+    {
+        let path = "/v2/store/settings/checkout".to_string();
+        let method = http::Method::PATCH;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("updateCheckoutSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "PATCH /v2/store/settings/checkout",
+            )
+            .await
+    }
+
+    /// Retrieve tax settings
+    ///
+    /// Get whether checkout collects VAT, whether your prices include it, and whether checkout asks for billing details. The response body can be sent back to `PUT /v2/store/settings/taxes` unchanged. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn get_taxes(
+        &self,
+        params: GetTaxesParams,
+    ) -> Result<SdkGetTaxSettingsResponseValue200ApplicationJson, Error> {
+        self.get_taxes_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::get_taxes`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn get_taxes_with_options(
+        &self,
+        params: GetTaxesParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkGetTaxSettingsResponseValue200ApplicationJson, Error> {
+        self.get_taxes_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn get_taxes_raw(
+        &self,
+        params: GetTaxesParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkGetTaxSettingsResponseValue200ApplicationJson>, Error> {
+        let path = "/v2/store/settings/taxes".to_string();
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("getTaxSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/store/settings/taxes",
+            )
+            .await
+    }
+
+    /// Update tax settings
+    ///
+    /// Replace all three tax settings; every field is required. A missing field returns `422` and nothing is saved. `vat_enabled: true` while Stripe Tax is on returns `422` on `vat_enabled` and saves nothing: turn Stripe Tax off in the dashboard first. When Stripe Tax was turned on but Stripe is now turned off as a payment method, turning VAT on also turns Stripe Tax off. Sending the same body again is safe. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn replace_taxes(
+        &self,
+        params: ReplaceTaxesParams,
+    ) -> Result<SdkReplaceTaxSettingsResponseValue200ApplicationJson, Error> {
+        self.replace_taxes_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::replace_taxes`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn replace_taxes_with_options(
+        &self,
+        params: ReplaceTaxesParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkReplaceTaxSettingsResponseValue200ApplicationJson, Error> {
+        self.replace_taxes_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn replace_taxes_raw(
+        &self,
+        params: ReplaceTaxesParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkReplaceTaxSettingsResponseValue200ApplicationJson>, Error>
+    {
+        let path = "/v2/store/settings/taxes".to_string();
+        let method = http::Method::PUT;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("replaceTaxSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "PUT /v2/store/settings/taxes",
+            )
+            .await
+    }
+
+    /// Update tax settings
+    ///
+    /// Change only the tax settings you send and keep the others. Turning VAT off also turns VAT-inclusive pricing off. Asking for VAT-inclusive pricing while VAT stays off returns `422` on `vat_inclusive_pricing` and saves nothing. Turning VAT on while Stripe Tax is on returns `422` on `vat_enabled` and saves nothing: turn Stripe Tax off in the dashboard first. When Stripe Tax was turned on but Stripe is now turned off as a payment method, turning VAT on also turns Stripe Tax off. Sending the same change again is safe. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn update_taxes(
+        &self,
+        params: UpdateTaxesParams,
+    ) -> Result<SdkUpdateTaxSettingsResponseValue200ApplicationJson, Error> {
+        self.update_taxes_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::update_taxes`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn update_taxes_with_options(
+        &self,
+        params: UpdateTaxesParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkUpdateTaxSettingsResponseValue200ApplicationJson, Error> {
+        self.update_taxes_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn update_taxes_raw(
+        &self,
+        params: UpdateTaxesParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkUpdateTaxSettingsResponseValue200ApplicationJson>, Error>
+    {
+        let path = "/v2/store/settings/taxes".to_string();
+        let method = http::Method::PATCH;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("updateTaxSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "PATCH /v2/store/settings/taxes",
+            )
+            .await
+    }
+
+    /// Retrieve customer email settings
+    ///
+    /// Get which automatic emails your customers get: the delivery email after they pay, and the email asking them to pay when a subscription payment cannot be collected. The address these emails come from is managed with `/v2/store/settings/sender-email`. The response body can be sent back to `PUT /v2/store/settings/customer-emails` unchanged. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn get_customer_emails(
+        &self,
+        params: GetCustomerEmailsParams,
+    ) -> Result<SdkGetCustomerEmailSettingsResponseValue200ApplicationJson, Error> {
+        self.get_customer_emails_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::get_customer_emails`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn get_customer_emails_with_options(
+        &self,
+        params: GetCustomerEmailsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkGetCustomerEmailSettingsResponseValue200ApplicationJson, Error> {
+        self.get_customer_emails_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn get_customer_emails_raw(
+        &self,
+        params: GetCustomerEmailsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkGetCustomerEmailSettingsResponseValue200ApplicationJson>, Error>
+    {
+        let path = "/v2/store/settings/customer-emails".to_string();
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("getCustomerEmailSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/store/settings/customer-emails",
+            )
+            .await
+    }
+
+    /// Update customer email settings
+    ///
+    /// Set both customer emails; both fields are required. A missing field returns `422` and nothing is saved. Sending the same body again is safe. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn replace_customer_emails(
+        &self,
+        params: ReplaceCustomerEmailsParams,
+    ) -> Result<SdkReplaceCustomerEmailSettingsResponseValue200ApplicationJson, Error> {
+        self.replace_customer_emails_with_options(params, None)
+            .await
+    }
+
+    /// Variant of [`Self::replace_customer_emails`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn replace_customer_emails_with_options(
+        &self,
+        params: ReplaceCustomerEmailsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkReplaceCustomerEmailSettingsResponseValue200ApplicationJson, Error> {
+        self.replace_customer_emails_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn replace_customer_emails_raw(
+        &self,
+        params: ReplaceCustomerEmailsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<
+        crate::RawResponse<SdkReplaceCustomerEmailSettingsResponseValue200ApplicationJson>,
+        Error,
+    > {
+        let path = "/v2/store/settings/customer-emails".to_string();
+        let method = http::Method::PUT;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("replaceCustomerEmailSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "PUT /v2/store/settings/customer-emails",
+            )
+            .await
+    }
+
+    /// Update customer email settings
+    ///
+    /// Turn the customer emails you send on or off and keep the other one. Takes effect for emails sent after the change. Sending the same change again is safe. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn update_customer_emails(
+        &self,
+        params: UpdateCustomerEmailsParams,
+    ) -> Result<SdkUpdateCustomerEmailSettingsResponseValue200ApplicationJson, Error> {
+        self.update_customer_emails_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::update_customer_emails`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn update_customer_emails_with_options(
+        &self,
+        params: UpdateCustomerEmailsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkUpdateCustomerEmailSettingsResponseValue200ApplicationJson, Error> {
+        self.update_customer_emails_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn update_customer_emails_raw(
+        &self,
+        params: UpdateCustomerEmailsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<
+        crate::RawResponse<SdkUpdateCustomerEmailSettingsResponseValue200ApplicationJson>,
+        Error,
+    > {
+        let path = "/v2/store/settings/customer-emails".to_string();
+        let method = http::Method::PATCH;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("updateCustomerEmailSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "PATCH /v2/store/settings/customer-emails",
+            )
+            .await
+    }
+
+    /// Retrieve store alert settings
+    ///
+    /// Get whether the store owner gets an email for each sale. Other alerts go to notification channels (`/v2/store/notification-channels`) and to the dashboard notifications (`/v2/notifications`). The response body can be sent back to `PUT /v2/store/settings/store-alerts` unchanged. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn get_store_alerts(
+        &self,
+        params: GetStoreAlertsParams,
+    ) -> Result<SdkGetStoreAlertSettingsResponseValue200ApplicationJson, Error> {
+        self.get_store_alerts_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::get_store_alerts`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn get_store_alerts_with_options(
+        &self,
+        params: GetStoreAlertsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkGetStoreAlertSettingsResponseValue200ApplicationJson, Error> {
+        self.get_store_alerts_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn get_store_alerts_raw(
+        &self,
+        params: GetStoreAlertsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkGetStoreAlertSettingsResponseValue200ApplicationJson>, Error>
+    {
+        let path = "/v2/store/settings/store-alerts".to_string();
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("getStoreAlertSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/store/settings/store-alerts",
+            )
+            .await
+    }
+
+    /// Update store alert settings
+    ///
+    /// Set the sale emails to the store owner; `sale_emails_enabled` is required. Sending the same body again is safe. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn replace_store_alerts(
+        &self,
+        params: ReplaceStoreAlertsParams,
+    ) -> Result<SdkReplaceStoreAlertSettingsResponseValue200ApplicationJson, Error> {
+        self.replace_store_alerts_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::replace_store_alerts`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn replace_store_alerts_with_options(
+        &self,
+        params: ReplaceStoreAlertsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkReplaceStoreAlertSettingsResponseValue200ApplicationJson, Error> {
+        self.replace_store_alerts_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn replace_store_alerts_raw(
+        &self,
+        params: ReplaceStoreAlertsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<
+        crate::RawResponse<SdkReplaceStoreAlertSettingsResponseValue200ApplicationJson>,
+        Error,
+    > {
+        let path = "/v2/store/settings/store-alerts".to_string();
+        let method = http::Method::PUT;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("replaceStoreAlertSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "PUT /v2/store/settings/store-alerts",
+            )
+            .await
+    }
+
+    /// Update store alert settings
+    ///
+    /// Turn the sale emails to the store owner on or off. Sending the same change again is safe. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn update_store_alerts(
+        &self,
+        params: UpdateStoreAlertsParams,
+    ) -> Result<SdkUpdateStoreAlertSettingsResponseValue200ApplicationJson, Error> {
+        self.update_store_alerts_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::update_store_alerts`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn update_store_alerts_with_options(
+        &self,
+        params: UpdateStoreAlertsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkUpdateStoreAlertSettingsResponseValue200ApplicationJson, Error> {
+        self.update_store_alerts_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn update_store_alerts_raw(
+        &self,
+        params: UpdateStoreAlertsParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkUpdateStoreAlertSettingsResponseValue200ApplicationJson>, Error>
+    {
+        let path = "/v2/store/settings/store-alerts".to_string();
+        let method = http::Method::PATCH;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("updateStoreAlertSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "PATCH /v2/store/settings/store-alerts",
+            )
+            .await
+    }
+
+    /// Retrieve personalization settings
+    ///
+    /// Get the details customers see from your store: the support and Trustpilot addresses, the sender name and custom sender email of customer emails, the business details printed on invoices, and the Back button link of product and checkout pages. The response body can be sent back to `PUT /v2/store/settings/personalization` unchanged. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn get_personalization(
+        &self,
+        params: GetPersonalizationParams,
+    ) -> Result<SdkGetPersonalizationSettingsResponseValue200ApplicationJson, Error> {
+        self.get_personalization_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::get_personalization`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn get_personalization_with_options(
+        &self,
+        params: GetPersonalizationParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkGetPersonalizationSettingsResponseValue200ApplicationJson, Error> {
+        self.get_personalization_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn get_personalization_raw(
+        &self,
+        params: GetPersonalizationParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<
+        crate::RawResponse<SdkGetPersonalizationSettingsResponseValue200ApplicationJson>,
+        Error,
+    > {
+        let path = "/v2/store/settings/personalization".to_string();
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("getPersonalizationSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/store/settings/personalization",
+            )
+            .await
+    }
+
+    /// Update personalization settings
+    ///
+    /// Replace every personalization setting. All fields except `sender_email` are required; send `null` to remove one. A missing field returns `422` and nothing is saved. The body of `GET /v2/store/settings/personalization`, including `sender_email`, can be sent back unchanged. Sending the same body again is safe. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn replace_personalization(
+        &self,
+        params: ReplacePersonalizationParams,
+    ) -> Result<SdkReplacePersonalizationSettingsResponseValue200ApplicationJson, Error> {
+        self.replace_personalization_with_options(params, None)
+            .await
+    }
+
+    /// Variant of [`Self::replace_personalization`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn replace_personalization_with_options(
+        &self,
+        params: ReplacePersonalizationParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkReplacePersonalizationSettingsResponseValue200ApplicationJson, Error> {
+        self.replace_personalization_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn replace_personalization_raw(
+        &self,
+        params: ReplacePersonalizationParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<
+        crate::RawResponse<SdkReplacePersonalizationSettingsResponseValue200ApplicationJson>,
+        Error,
+    > {
+        let path = "/v2/store/settings/personalization".to_string();
+        let method = http::Method::PUT;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("replacePersonalizationSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "PUT /v2/store/settings/personalization",
+            )
+            .await
+    }
+
+    /// Update personalization settings
+    ///
+    /// Change only the personalization settings you send and keep the others. Send `null` to remove one. A request with no field this endpoint knows returns `200` with the current settings and saves nothing. A return link needs both `back_link_label` and `back_link_url`: a change that leaves one empty returns `422` on that field. `sender_email` is read-only here. Sending the same change again is safe. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn update_personalization(
+        &self,
+        params: UpdatePersonalizationParams,
+    ) -> Result<SdkUpdatePersonalizationSettingsResponseValue200ApplicationJson, Error> {
+        self.update_personalization_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::update_personalization`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn update_personalization_with_options(
+        &self,
+        params: UpdatePersonalizationParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkUpdatePersonalizationSettingsResponseValue200ApplicationJson, Error> {
+        self.update_personalization_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn update_personalization_raw(
+        &self,
+        params: UpdatePersonalizationParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<
+        crate::RawResponse<SdkUpdatePersonalizationSettingsResponseValue200ApplicationJson>,
+        Error,
+    > {
+        let path = "/v2/store/settings/personalization".to_string();
+        let method = http::Method::PATCH;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("updatePersonalizationSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "PATCH /v2/store/settings/personalization",
+            )
+            .await
+    }
+
+    /// Update crypto checkout settings
+    ///
+    /// Replace both crypto checkout values, for a store that takes crypto through SellApp's crypto processor; `underpaid_percentage` and `minimum_confirmations` are required. SellApp sends the changed values to the crypto processor and saves them only once it accepts them; an unchanged value is not sent. Returns the checkout settings with the new `crypto` values. `422` on `crypto` when the store does not take crypto through SellApp's crypto processor, or when the processor refuses the values; nothing is saved then. `422` on `underpaid_percentage` or `minimum_confirmations` for a value out of range. Sending the same change again is safe. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn replace_crypto_checkout(
+        &self,
+        params: ReplaceCryptoCheckoutParams,
+    ) -> Result<SdkReplaceCryptoCheckoutSettingsResponseValue200ApplicationJson, Error> {
+        self.replace_crypto_checkout_with_options(params, None)
+            .await
+    }
+
+    /// Variant of [`Self::replace_crypto_checkout`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn replace_crypto_checkout_with_options(
+        &self,
+        params: ReplaceCryptoCheckoutParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkReplaceCryptoCheckoutSettingsResponseValue200ApplicationJson, Error> {
+        self.replace_crypto_checkout_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn replace_crypto_checkout_raw(
+        &self,
+        params: ReplaceCryptoCheckoutParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<
+        crate::RawResponse<SdkReplaceCryptoCheckoutSettingsResponseValue200ApplicationJson>,
+        Error,
+    > {
+        let path = "/v2/store/settings/checkout/crypto".to_string();
+        let method = http::Method::PUT;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("replaceCryptoCheckoutSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "PUT /v2/store/settings/checkout/crypto",
+            )
+            .await
+    }
+
+    /// Update crypto checkout settings
+    ///
+    /// Change the crypto checkout values you send, for a store that takes crypto through SellApp's crypto processor. SellApp sends the changed values to the crypto processor and saves them only once it accepts them; an unchanged value is not sent. Returns the checkout settings with the new `crypto` values. `422` on `crypto` when the store does not take crypto through SellApp's crypto processor, or when the processor refuses the values; nothing is saved then. `422` on `underpaid_percentage` or `minimum_confirmations` for a value out of range. Sending the same change again is safe. Requires the `store` API-key ability and the `store` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn update_crypto_checkout(
+        &self,
+        params: UpdateCryptoCheckoutParams,
+    ) -> Result<SdkUpdateCryptoCheckoutSettingsResponseValue200ApplicationJson, Error> {
+        self.update_crypto_checkout_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::update_crypto_checkout`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn update_crypto_checkout_with_options(
+        &self,
+        params: UpdateCryptoCheckoutParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkUpdateCryptoCheckoutSettingsResponseValue200ApplicationJson, Error> {
+        self.update_crypto_checkout_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn update_crypto_checkout_raw(
+        &self,
+        params: UpdateCryptoCheckoutParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<
+        crate::RawResponse<SdkUpdateCryptoCheckoutSettingsResponseValue200ApplicationJson>,
+        Error,
+    > {
+        let path = "/v2/store/settings/checkout/crypto".to_string();
+        let method = http::Method::PATCH;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("updateCryptoCheckoutSettings".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "PATCH /v2/store/settings/checkout/crypto",
             )
             .await
     }

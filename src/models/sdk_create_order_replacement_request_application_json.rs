@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct SdkCreateOrderReplacementRequestApplicationJson {
-    pub product_variants: CreateOrderReplacementRequestApplicationJsonPropertyProductVariants,
+    pub product_variants: SdkCreateOrderReplacementRequestApplicationJsonProductVariantsOneOf,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

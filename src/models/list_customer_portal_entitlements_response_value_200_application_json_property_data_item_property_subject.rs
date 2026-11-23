@@ -7,11 +7,10 @@ use crate::enums::*;
 use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
-pub struct ListCustomerPortalEntitlementsResponseValue200ApplicationJsonPropertyDataItemPropertySubject
-{
+pub struct ListCustomerPortalEntitlementsResponseValue200ApplicationJsonPropertyDataItemPropertySubject {
     #[serde(rename = "type")]
     pub type_: String,
-    pub id: V2ListTicketsResponseValue200ApplicationJsonPropertyDataItemPropertyCustomerIdOneOf,
+    pub id: ListCheckoutFieldTemplatesResponseValue200ApplicationJsonPropertyDataItemPropertyFieldsItemPropertyDateOptionsStartDayOneOf,
     pub name: String,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]

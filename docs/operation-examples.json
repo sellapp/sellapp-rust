@@ -42,6 +42,14 @@
   {
     "language": "rust",
     "fileExtension": "rs",
+    "operationId": "getChargeSummary",
+    "mountTarget": "Charges",
+    "methodName": "get_summary",
+    "content": "use sellapp::Client;\nuse sellapp::resources::charges::GetSummaryParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetSummaryParams::default();\n    let result = client.charges().get_summary(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
     "operationId": "listGroups",
     "mountTarget": "Groups",
     "methodName": "list",
@@ -221,7 +229,7 @@
     "operationId": "createInvoiceRefund",
     "mountTarget": "Invoices",
     "methodName": "create_refund",
-    "content": "use sellapp::Client;\nuse sellapp::resources::invoices::CreateRefundParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateRefundParams::new(serde_json::from_str(\"{\\\"amount\\\":\\\"12.50\\\"}\")?);\n    let result = client.invoices().create_refund(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::invoices::CreateRefundParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateRefundParams::new(serde_json::from_str(\"{\\\"amount\\\":\\\"12.50\\\",\\\"expected_refunded_total_cents\\\":0}\")?);\n    let result = client.invoices().create_refund(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -373,7 +381,7 @@
     "operationId": "searchProducts",
     "mountTarget": "Products",
     "methodName": "search",
-    "content": "use sellapp::Client;\nuse sellapp::resources::products::SearchParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = SearchParams::new(serde_json::from_str(\"{\\\"filters\\\":[{\\\"field\\\":\\\"id\\\",\\\"operator\\\":\\\"=\\\",\\\"value\\\":1}],\\\"sort\\\":[{\\\"field\\\":\\\"created_at\\\",\\\"direction\\\":\\\"desc\\\"}]}\")?);\n    let result = client.products().search(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::products::SearchParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = SearchParams::new(serde_json::from_str(\"{\\\"search\\\":{\\\"value\\\":\\\"launch\\\"},\\\"max_price\\\":2500,\\\"stock\\\":\\\"in_stock\\\",\\\"visibility\\\":[\\\"PUBLIC\\\"],\\\"has_sales\\\":true}\")?);\n    let result = client.products().search(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -398,6 +406,62 @@
     "mountTarget": "Products",
     "methodName": "batch_delete",
     "content": "use sellapp::Client;\nuse sellapp::resources::products::BatchDeleteParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = BatchDeleteParams::new(serde_json::from_str(\"{\\\"resources\\\":[1,2]}\")?);\n    let result = client.products().batch_delete(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "publishProduct",
+    "mountTarget": "Products",
+    "methodName": "publish",
+    "content": "use sellapp::Client;\nuse sellapp::resources::products::PublishParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = PublishParams::new(serde_json::from_str(\"{\\\"variant_ids\\\":[2]}\")?);\n    let result = client.products().publish(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "duplicateProduct",
+    "mountTarget": "Products",
+    "methodName": "duplicate",
+    "content": "use sellapp::Client;\nuse sellapp::resources::products::DuplicateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = DuplicateParams::default();\n    let result = client.products().duplicate(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "moveProduct",
+    "mountTarget": "Products",
+    "methodName": "move",
+    "content": "use sellapp::Client;\nuse sellapp::resources::products::MoveParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = MoveParams::new(serde_json::from_str(\"{\\\"position\\\":1,\\\"expected_position\\\":3}\")?);\n    let result = client.products().move_(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getProductFeaturedVariant",
+    "mountTarget": "ProductsFeaturedVariant",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::products_featured_variant::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.products_featured_variant().get(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replaceProductFeaturedVariant",
+    "mountTarget": "ProductsFeaturedVariant",
+    "methodName": "replace",
+    "content": "use sellapp::Client;\nuse sellapp::resources::products_featured_variant::ReplaceParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceParams::new(serde_json::from_str(\"{\\\"variant_id\\\":2,\\\"highlight_label\\\":\\\"best_value\\\"}\")?);\n    let result = client.products_featured_variant().replace(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "listProductSimilarProducts",
+    "mountTarget": "ProductsSimilarProducts",
+    "methodName": "list",
+    "content": "use sellapp::Client;\nuse sellapp::resources::products_similar_products::ListParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ListParams::default();\n    let result = client.products_similar_products().list(\"30\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replaceProductSimilarProducts",
+    "mountTarget": "ProductsSimilarProducts",
+    "methodName": "replace",
+    "content": "use sellapp::Client;\nuse sellapp::resources::products_similar_products::ReplaceParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceParams::new(serde_json::from_str(\"{\\\"variant_ids\\\":[31,41]}\")?);\n    let result = client.products_similar_products().replace(\"30\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -518,6 +582,54 @@
     "mountTarget": "ProductVariants",
     "methodName": "batch_delete",
     "content": "use sellapp::Client;\nuse sellapp::resources::product_variants::BatchDeleteParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = BatchDeleteParams::new(serde_json::from_str(\"{\\\"resources\\\":[1,2]}\")?);\n    let result = client.product_variants().batch_delete(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "publishProductVariant",
+    "mountTarget": "ProductVariants",
+    "methodName": "publish",
+    "content": "use sellapp::Client;\nuse sellapp::resources::product_variants::PublishParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = PublishParams::default();\n    let result = client.product_variants().publish(\"11\", \"12\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "duplicateProductVariant",
+    "mountTarget": "ProductVariants",
+    "methodName": "duplicate",
+    "content": "use sellapp::Client;\nuse sellapp::resources::product_variants::DuplicateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = DuplicateParams::default();\n    let result = client.product_variants().duplicate(\"1\", \"2\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "reorderProductVariants",
+    "mountTarget": "ProductVariants",
+    "methodName": "reorder",
+    "content": "use sellapp::Client;\nuse sellapp::resources::product_variants::ReorderParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReorderParams::new(serde_json::from_str(\"{\\\"variant_ids\\\":[2,1]}\")?);\n    let result = client.product_variants().reorder(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getVariantSubscriptionSettings",
+    "mountTarget": "ProductVariantsSubscriptionSettings",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::product_variants_subscription_settings::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.product_variants_subscription_settings().get(\"1\", \"4\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "updateVariantSubscriptionSettings",
+    "mountTarget": "ProductVariantsSubscriptionSettings",
+    "methodName": "update",
+    "content": "use sellapp::Client;\nuse sellapp::resources::product_variants_subscription_settings::UpdateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateParams::new(serde_json::from_str(\"{\\\"pause_policy\\\":{\\\"max_pause_days\\\":30},\\\"renewal_policy\\\":{\\\"redeliver_on_renewal\\\":false},\\\"expected_state\\\":\\\"3f9a1c0e7b2d4a6f8e1c5b9d0a7f3e2c4b6d8a0f1e3c5a7b9d2f4e6a8c0b1d3e\\\"}\")?);\n    let result = client.product_variants_subscription_settings().update(\"1\", \"4\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replaceVariantCommunityAccess",
+    "mountTarget": "ProductVariantsCommunityAccess",
+    "methodName": "replace",
+    "content": "use sellapp::Client;\nuse sellapp::resources::product_variants_community_access::ReplaceParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceParams::new(serde_json::from_str(\"{\\\"community\\\":{\\\"platform\\\":\\\"discord\\\",\\\"server_id\\\":\\\"1187040134912155648\\\",\\\"role_ids\\\":[\\\"1187040299781210112\\\"],\\\"required\\\":true,\\\"remove_on_expire\\\":true},\\\"expected_updated_at\\\":\\\"2024-01-10T18:47:22.000000Z\\\"}\")?);\n    let result = client.product_variants_community_access().replace(\"1\", \"2\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -746,6 +858,14 @@
   {
     "language": "rust",
     "fileExtension": "rs",
+    "operationId": "createBookingProduct",
+    "mountTarget": "Bookings",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::bookings::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"title\\\":\\\"Strategy consultation\\\",\\\"description\\\":\\\"<p>A private strategy session for your next launch.</p>\\\",\\\"variant_title\\\":\\\"60 minute session\\\",\\\"price_cents\\\":2500,\\\"currency\\\":\\\"USD\\\",\\\"payment_methods\\\":[\\\"STRIPE\\\"],\\\"timezone\\\":\\\"Europe/London\\\",\\\"duration_minutes\\\":60,\\\"availability\\\":[{\\\"day\\\":1,\\\"enabled\\\":true,\\\"start\\\":\\\"09:00\\\",\\\"end\\\":\\\"12:00\\\"},{\\\"day\\\":3,\\\"enabled\\\":true,\\\"start\\\":\\\"13:00\\\",\\\"end\\\":\\\"17:00\\\"}]}\")?);\n    let result = client.bookings().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
     "operationId": "getBundleItem",
     "mountTarget": "BundleItems",
     "methodName": "get",
@@ -774,6 +894,38 @@
     "mountTarget": "BundleItems",
     "methodName": "detach",
     "content": "use sellapp::Client;\nuse sellapp::resources::bundle_items::DetachParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = DetachParams::new(serde_json::from_str(\"{\\\"resources\\\":[1]}\")?);\n    let result = client.bundle_items().detach(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "previewVariantBuyerNotification",
+    "mountTarget": "VariantDeliverables",
+    "methodName": "preview",
+    "content": "use sellapp::Client;\nuse sellapp::resources::variant_deliverables::PreviewParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = PreviewParams::default();\n    let result = client.variant_deliverables().preview(\"1\", \"2\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "notifyVariantBuyers",
+    "mountTarget": "VariantDeliverables",
+    "methodName": "notify",
+    "content": "use sellapp::Client;\nuse sellapp::resources::variant_deliverables::NotifyParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = NotifyParams::default();\n    let mut request_options = sellapp::RequestOptions::default();\n    request_options.idempotency_key = Some(\"example-mutation-001\".to_string());\n    let result = client.variant_deliverables().notify_with_options(\"1\", \"2\", params, Some(&request_options)).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getVariantDeliverableConfiguration",
+    "mountTarget": "VariantDeliverables",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::variant_deliverables::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.variant_deliverables().get(\"string_example\", \"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replaceVariantDeliverableConfiguration",
+    "mountTarget": "VariantDeliverables",
+    "methodName": "replace",
+    "content": "use sellapp::Client;\nuse sellapp::resources::variant_deliverables::ReplaceParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceParams::new(serde_json::from_str(\"{\\\"types\\\":[\\\"MANUAL\\\"],\\\"data\\\":{\\\"comment\\\":\\\"Delivery is arranged by Launch Lab.\\\"}}\")?);\n    let result = client.variant_deliverables().replace(\"string_example\", \"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -854,6 +1006,14 @@
     "mountTarget": "PromotionsPhases",
     "methodName": "replace",
     "content": "use sellapp::Client;\nuse sellapp::resources::promotions_phases::ReplaceParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceParams::new(serde_json::from_str(\"{\\\"phases\\\":[{\\\"discount_type\\\":\\\"percentage\\\",\\\"discount_value\\\":\\\"20\\\",\\\"ends_at\\\":\\\"2026-08-04T00:00:00Z\\\",\\\"max_redemptions\\\":200,\\\"minimum_amount\\\":\\\"10\\\"},{\\\"discount_type\\\":\\\"fixed\\\",\\\"discount_value\\\":\\\"5\\\",\\\"ends_at\\\":null,\\\"max_redemptions\\\":null,\\\"minimum_amount\\\":\\\"25\\\"}]}\")?);\n    let result = client.promotions_phases().replace(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getPromotionUsage",
+    "mountTarget": "Promotions",
+    "methodName": "get_usage",
+    "content": "use sellapp::Client;\nuse sellapp::resources::promotions::GetUsageParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetUsageParams::default();\n    let result = client.promotions().get_usage(\"30\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -1138,6 +1298,222 @@
   {
     "language": "rust",
     "fileExtension": "rs",
+    "operationId": "listSupportReplyTemplates",
+    "mountTarget": "SupportReplyTemplates",
+    "methodName": "list",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reply_templates::ListParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ListParams::default();\n    let result = client.support_reply_templates().list(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createSupportReplyTemplate",
+    "mountTarget": "SupportReplyTemplates",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reply_templates::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"label\\\":\\\"Refund credited\\\",\\\"body\\\":\\\"Hi {customer_email}, we credited {refund_amount} to your {store_name} wallet for {product_title}. Your wallet balance is now {wallet_balance}.\\\",\\\"supports_auto_respond\\\":true}\")?);\n    let result = client.support_reply_templates().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getSupportReplyTemplate",
+    "mountTarget": "SupportReplyTemplates",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reply_templates::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.support_reply_templates().get(\"32\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replaceSupportReplyTemplate",
+    "mountTarget": "SupportReplyTemplates",
+    "methodName": "replace",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reply_templates::ReplaceParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceParams::new(serde_json::from_str(\"{\\\"is_active\\\":false,\\\"expected_updated_at\\\":\\\"2026-07-03T09:12:00.000000Z\\\"}\")?);\n    let result = client.support_reply_templates().replace(\"31\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "updateSupportReplyTemplate",
+    "mountTarget": "SupportReplyTemplates",
+    "methodName": "update",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reply_templates::UpdateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateParams::new(serde_json::from_str(\"{\\\"is_active\\\":false,\\\"expected_updated_at\\\":\\\"2026-07-03T09:12:00.000000Z\\\"}\")?);\n    let result = client.support_reply_templates().update(\"31\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "deleteSupportReplyTemplate",
+    "mountTarget": "SupportReplyTemplates",
+    "methodName": "delete",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reply_templates::DeleteParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = DeleteParams::default();\n    let result = client.support_reply_templates().delete(\"33\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "renderSupportReplyTemplate",
+    "mountTarget": "SupportReplyTemplates",
+    "methodName": "render",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reply_templates::RenderParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = RenderParams::new(serde_json::from_str(\"{\\\"ticket_id\\\":4821,\\\"invoice_id\\\":7001,\\\"refund_amount_cents\\\":999}\")?);\n    let result = client.support_reply_templates().render(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "reorderSupportReplyTemplates",
+    "mountTarget": "SupportReplyTemplates",
+    "methodName": "reorder",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reply_templates::ReorderParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReorderParams::new(serde_json::from_str(\"{\\\"ordered_template_ids\\\":[32,31]}\")?);\n    let result = client.support_reply_templates().reorder(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getSupportReplyTemplateOptions",
+    "mountTarget": "SupportReplyTemplates",
+    "methodName": "get_options",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reply_templates::GetOptionsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetOptionsParams::default();\n    let result = client.support_reply_templates().get_options(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "listSupportReasons",
+    "mountTarget": "SupportReasons",
+    "methodName": "list",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reasons::ListParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ListParams::default();\n    let result = client.support_reasons().list(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createSupportReason",
+    "mountTarget": "SupportReasons",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reasons::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"label\\\":\\\"Download link expired\\\",\\\"description\\\":\\\"The download link in the order email no longer works.\\\"}\")?);\n    let result = client.support_reasons().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getSupportReason",
+    "mountTarget": "SupportReasons",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reasons::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.support_reasons().get(\"14\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replaceSupportReason",
+    "mountTarget": "SupportReasons",
+    "methodName": "replace",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reasons::ReplaceParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceParams::new(serde_json::from_str(\"{\\\"description\\\":\\\"The download link in the order email no longer opens.\\\",\\\"expected_updated_at\\\":\\\"2026-07-03T09:10:00.000000Z\\\"}\")?);\n    let result = client.support_reasons().replace(\"14\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "updateSupportReason",
+    "mountTarget": "SupportReasons",
+    "methodName": "update",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reasons::UpdateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateParams::new(serde_json::from_str(\"{\\\"description\\\":\\\"The download link in the order email no longer opens.\\\",\\\"expected_updated_at\\\":\\\"2026-07-03T09:10:00.000000Z\\\"}\")?);\n    let result = client.support_reasons().update(\"14\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "deleteSupportReason",
+    "mountTarget": "SupportReasons",
+    "methodName": "delete",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reasons::DeleteParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = DeleteParams::default();\n    let result = client.support_reasons().delete(\"15\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getSupportReasonOptions",
+    "mountTarget": "SupportReasons",
+    "methodName": "get_options",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_reasons::GetOptionsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetOptionsParams::default();\n    let result = client.support_reasons().get_options(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "listSupportAutomationRules",
+    "mountTarget": "SupportAutomationRules",
+    "methodName": "list",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_automation_rules::ListParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ListParams::default();\n    let result = client.support_automation_rules().list(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createSupportAutomationRule",
+    "mountTarget": "SupportAutomationRules",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_automation_rules::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"name\\\":\\\"Expired download links\\\",\\\"response_template_id\\\":32,\\\"match_reason_source\\\":\\\"store\\\",\\\"match_reason_code\\\":\\\"download-link-expired\\\",\\\"match_product_ids\\\":[120],\\\"match_max_order_total_cents\\\":5000,\\\"max_prior_support_refund_count\\\":0,\\\"action_refund_kind\\\":\\\"partial\\\",\\\"action_refund_percent_basis\\\":5000,\\\"action_refund_cap_cents\\\":1000,\\\"action_close_outcome\\\":\\\"refunded_partial\\\"}\")?);\n    let result = client.support_automation_rules().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getSupportAutomationRule",
+    "mountTarget": "SupportAutomationRules",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_automation_rules::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.support_automation_rules().get(\"7\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replaceSupportAutomationRule",
+    "mountTarget": "SupportAutomationRules",
+    "methodName": "replace",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_automation_rules::ReplaceParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceParams::new(serde_json::from_str(\"{\\\"name\\\":\\\"Expired download links, first refund only\\\",\\\"clear\\\":[\\\"match_max_order_total_cents\\\"],\\\"expected_updated_at\\\":\\\"2026-07-03T09:20:00.000000Z\\\"}\")?);\n    let result = client.support_automation_rules().replace(\"7\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "updateSupportAutomationRule",
+    "mountTarget": "SupportAutomationRules",
+    "methodName": "update",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_automation_rules::UpdateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateParams::new(serde_json::from_str(\"{\\\"name\\\":\\\"Expired download links, first refund only\\\",\\\"clear\\\":[\\\"match_max_order_total_cents\\\"],\\\"expected_updated_at\\\":\\\"2026-07-03T09:20:00.000000Z\\\"}\")?);\n    let result = client.support_automation_rules().update(\"7\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "updateSupportAutomationRuleState",
+    "mountTarget": "SupportAutomationRules",
+    "methodName": "update_state",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_automation_rules::UpdateStateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateStateParams::new(serde_json::from_str(\"{\\\"state\\\":\\\"active\\\",\\\"expected_updated_at\\\":\\\"2026-07-03T09:20:00.000000Z\\\"}\")?);\n    let result = client.support_automation_rules().update_state(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "reorderSupportAutomationRules",
+    "mountTarget": "SupportAutomationRules",
+    "methodName": "reorder",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_automation_rules::ReorderParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReorderParams::new(serde_json::from_str(\"{\\\"ordered_rule_ids\\\":[7]}\")?);\n    let result = client.support_automation_rules().reorder(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "dryRunSupportAutomationRules",
+    "mountTarget": "SupportAutomationRules",
+    "methodName": "dry_run",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_automation_rules::DryRunParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = DryRunParams::new(serde_json::from_str(\"4821\")?);\n    let result = client.support_automation_rules().dry_run(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getSupportAutomationSettings",
+    "mountTarget": "SupportAutomationSettings",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_automation_settings::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.support_automation_settings().get(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replaceSupportAutomationSettings",
+    "mountTarget": "SupportAutomationSettings",
+    "methodName": "replace",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_automation_settings::ReplaceParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceParams::new(serde_json::from_str(\"{\\\"automation_enabled\\\":true,\\\"daily_refund_cap_cents\\\":5000,\\\"expected_automation_enabled\\\":false,\\\"expected_daily_refund_cap_cents\\\":null}\")?);\n    let result = client.support_automation_settings().replace(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "updateSupportAutomationSettings",
+    "mountTarget": "SupportAutomationSettings",
+    "methodName": "update",
+    "content": "use sellapp::Client;\nuse sellapp::resources::support_automation_settings::UpdateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateParams::new(serde_json::from_str(\"{\\\"automation_enabled\\\":true,\\\"daily_refund_cap_cents\\\":5000,\\\"expected_automation_enabled\\\":false,\\\"expected_daily_refund_cap_cents\\\":null}\")?);\n    let result = client.support_automation_settings().update(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
     "operationId": "listCustomers",
     "mountTarget": "Customers",
     "methodName": "list",
@@ -1221,7 +1597,7 @@
     "operationId": "searchOrders",
     "mountTarget": "Orders",
     "methodName": "search",
-    "content": "use sellapp::Client;\nuse sellapp::resources::orders::SearchParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = SearchParams::new(serde_json::from_str(\"{\\\"filters\\\":[{\\\"field\\\":\\\"transaction_id\\\",\\\"operator\\\":\\\"contains\\\",\\\"value\\\":\\\"pi_3Example\\\"},{\\\"field\\\":\\\"status\\\",\\\"operator\\\":\\\"in\\\",\\\"value\\\":[\\\"COMPLETED\\\"]}],\\\"sort\\\":[{\\\"field\\\":\\\"created_at\\\",\\\"direction\\\":\\\"desc\\\"}],\\\"pagination\\\":{\\\"page\\\":1,\\\"limit\\\":25}}\")?);\n    let result = client.orders().search(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::orders::SearchParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = SearchParams::new(serde_json::from_str(\"{\\\"filters\\\":[{\\\"field\\\":\\\"created_at\\\",\\\"operator\\\":\\\"gte\\\",\\\"value\\\":\\\"2026-07-01T00:00:00Z\\\"},{\\\"field\\\":\\\"created_at\\\",\\\"operator\\\":\\\"lte\\\",\\\"value\\\":\\\"2026-07-31T23:59:59Z\\\"},{\\\"field\\\":\\\"total\\\",\\\"operator\\\":\\\"gte\\\",\\\"value\\\":1000},{\\\"field\\\":\\\"currency\\\",\\\"operator\\\":\\\"eq\\\",\\\"value\\\":\\\"USD\\\"},{\\\"field\\\":\\\"status\\\",\\\"operator\\\":\\\"in\\\",\\\"value\\\":[\\\"COMPLETED\\\"]}],\\\"sort\\\":[{\\\"field\\\":\\\"created_at\\\",\\\"direction\\\":\\\"desc\\\"}],\\\"pagination\\\":{\\\"page\\\":1,\\\"limit\\\":25}}\")?);\n    let result = client.orders().search(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -1261,7 +1637,7 @@
     "operationId": "createOrderRefund",
     "mountTarget": "Orders",
     "methodName": "create_refund",
-    "content": "use sellapp::Client;\nuse sellapp::resources::orders::CreateRefundParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateRefundParams::new(serde_json::from_str(\"{\\\"amount\\\":\\\"5.00\\\"}\")?);\n    let mut request_options = sellapp::RequestOptions::default();\n    request_options.idempotency_key = Some(\"example-mutation-001\".to_string());\n    let result = client.orders().create_refund_with_options(\"9001\", params, Some(&request_options)).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::orders::CreateRefundParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateRefundParams::new(serde_json::from_str(\"{\\\"amount\\\":\\\"5.00\\\",\\\"expected_refunded_total_cents\\\":0}\")?);\n    let mut request_options = sellapp::RequestOptions::default();\n    request_options.idempotency_key = Some(\"example-mutation-001\".to_string());\n    let result = client.orders().create_refund_with_options(\"9001\", params, Some(&request_options)).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -1286,6 +1662,14 @@
     "mountTarget": "Orders",
     "methodName": "send_fulfillment_notifications",
     "content": "use sellapp::Client;\nuse sellapp::resources::orders::SendFulfillmentNotificationsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = SendFulfillmentNotificationsParams::new(serde_json::from_str(\"{\\\"email\\\":\\\"maya@example.com\\\",\\\"product_variant_ids\\\":[4321]}\")?);\n    let mut request_options = sellapp::RequestOptions::default();\n    request_options.idempotency_key = Some(\"example-mutation-001\".to_string());\n    let result = client.orders().send_fulfillment_notifications_with_options(\"9001\", params, Some(&request_options)).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "regenerateOrderTelegramInvite",
+    "mountTarget": "Orders",
+    "methodName": "regenerate_telegram_invite",
+    "content": "use sellapp::Client;\nuse sellapp::resources::orders::RegenerateTelegramInviteParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = RegenerateTelegramInviteParams::new(serde_json::from_str(\"{\\\"variant_id\\\":4321}\")?);\n    let mut request_options = sellapp::RequestOptions::default();\n    request_options.idempotency_key = Some(\"example-mutation-001\".to_string());\n    let result = client.orders().regenerate_telegram_invite_with_options(\"9001\", params, Some(&request_options)).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -1358,22 +1742,6 @@
     "mountTarget": "OrdersLineItems",
     "methodName": "get",
     "content": "use sellapp::Client;\nuse sellapp::resources::orders_line_items::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.orders_line_items().get(\"4001\", \"9001\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
-  },
-  {
-    "language": "rust",
-    "fileExtension": "rs",
-    "operationId": "getVariantDeliverableConfiguration",
-    "mountTarget": "VariantDeliverables",
-    "methodName": "get",
-    "content": "use sellapp::Client;\nuse sellapp::resources::variant_deliverables::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.variant_deliverables().get(\"string_example\", \"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
-  },
-  {
-    "language": "rust",
-    "fileExtension": "rs",
-    "operationId": "replaceVariantDeliverableConfiguration",
-    "mountTarget": "VariantDeliverables",
-    "methodName": "replace",
-    "content": "use sellapp::Client;\nuse sellapp::resources::variant_deliverables::ReplaceParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceParams::new(serde_json::from_str(\"{\\\"types\\\":[\\\"MANUAL\\\"],\\\"data\\\":{\\\"comment\\\":\\\"Delivery is arranged by Launch Lab.\\\"}}\")?);\n    let result = client.variant_deliverables().replace(\"string_example\", \"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -1542,6 +1910,14 @@
     "mountTarget": "AffiliateProgram",
     "methodName": "invite",
     "content": "use sellapp::Client;\nuse sellapp::resources::affiliate_program::InviteParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = InviteParams::new(serde_json::from_str(\"{\\\"email\\\":\\\"alex.morgan@example.com\\\"}\")?);\n    let result = client.affiliate_program().invite(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "resendAffiliateInvitation",
+    "mountTarget": "AffiliateProgram",
+    "methodName": "resend",
+    "content": "use sellapp::Client;\nuse sellapp::resources::affiliate_program::ResendParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ResendParams::default();\n    let result = client.affiliate_program().resend(\"77\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -1730,6 +2106,14 @@
   {
     "language": "rust",
     "fileExtension": "rs",
+    "operationId": "getUpsellOfferPerformance",
+    "mountTarget": "UpsellOffers",
+    "methodName": "get_performance",
+    "content": "use sellapp::Client;\nuse sellapp::resources::upsell_offers::GetPerformanceParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetPerformanceParams::default();\n    let result = client.upsell_offers().get_performance(\"71\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
     "operationId": "listCommunityConnections",
     "mountTarget": "CommunityConnections",
     "methodName": "list",
@@ -1778,6 +2162,62 @@
   {
     "language": "rust",
     "fileExtension": "rs",
+    "operationId": "listCommunityFailedGrantReasons",
+    "mountTarget": "CommunityConnections",
+    "methodName": "list_failed_grant_reasons",
+    "content": "use sellapp::Client;\nuse sellapp::resources::community_connections::ListFailedGrantReasonsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ListFailedGrantReasonsParams::default();\n    let result = client.community_connections().list_failed_grant_reasons(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getCommunityServer",
+    "mountTarget": "CommunityConnectionsServers",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::community_connections_servers::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.community_connections_servers().get(\"discord\", \"server_ship_room\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "removeCommunityServer",
+    "mountTarget": "CommunityConnectionsServers",
+    "methodName": "remove",
+    "content": "use sellapp::Client;\nuse sellapp::resources::community_connections_servers::RemoveParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = RemoveParams::new(serde_json::from_str(\"{\\\"affected_variant_ids\\\":[902]}\")?);\n    let result = client.community_connections_servers().remove(\"discord\", \"server_ship_room\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "syncDiscordRoles",
+    "mountTarget": "CommunityConnections",
+    "methodName": "sync_discord_roles",
+    "content": "use sellapp::Client;\nuse sellapp::resources::community_connections::SyncDiscordRolesParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = SyncDiscordRolesParams::new(serde_json::from_str(\"{}\")?);\n    let result = client.community_connections().sync_discord_roles(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "listSlackAvailableChannels",
+    "mountTarget": "CommunityConnectionsSlack",
+    "methodName": "list_channels",
+    "content": "use sellapp::Client;\nuse sellapp::resources::community_connections_slack::ListChannelsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ListChannelsParams::default();\n    let result = client.community_connections_slack().list_channels(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "addSlackChannel",
+    "mountTarget": "CommunityConnectionsSlack",
+    "methodName": "add_channel",
+    "content": "use sellapp::Client;\nuse sellapp::resources::community_connections_slack::AddChannelParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = AddChannelParams::new(serde_json::from_str(\"{\\\"channel_id\\\":\\\"C07LAUNCHVIP\\\"}\")?);\n    let result = client.community_connections_slack().add_channel(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replaceSlackWorkspaceInviteLink",
+    "mountTarget": "CommunityConnectionsSlack",
+    "methodName": "replace_invite_link",
+    "content": "use sellapp::Client;\nuse sellapp::resources::community_connections_slack::ReplaceInviteLinkParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceInviteLinkParams::new(serde_json::from_str(\"{\\\"invite_link\\\":\\\"https://join.slack.com/t/launch-lab/shared_invite/zt-2abc123\\\"}\")?);\n    let result = client.community_connections_slack().replace_invite_link(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
     "operationId": "getWalletSettings",
     "mountTarget": "WalletSettings",
     "methodName": "get",
@@ -1813,7 +2253,7 @@
     "operationId": "adjustCustomerWallet",
     "mountTarget": "Wallet",
     "methodName": "adjust",
-    "content": "use sellapp::Client;\nuse sellapp::resources::wallet::AdjustParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = AdjustParams::new(serde_json::from_str(\"{\\\"amount_cents\\\":2500,\\\"idempotency_key\\\":\\\"wallet-adjustment-01992a65\\\",\\\"note\\\":\\\"Launch-day account credit\\\"}\")?);\n    let result = client.wallet().adjust(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::wallet::AdjustParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = AdjustParams::new(serde_json::from_str(\"{\\\"amount_cents\\\":2500,\\\"idempotency_key\\\":\\\"wallet-adjustment-01992a65\\\",\\\"note\\\":\\\"Launch-day account credit\\\",\\\"expected_balance_cents\\\":0}\")?);\n    let result = client.wallet().adjust(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -1822,6 +2262,30 @@
     "mountTarget": "Wallet",
     "methodName": "update_status",
     "content": "use sellapp::Client;\nuse sellapp::resources::wallet::UpdateStatusParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateStatusParams::new(serde_json::from_str(\"{\\\"status\\\":\\\"frozen\\\"}\")?);\n    let result = client.wallet().update_status(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "reverseWalletTransaction",
+    "mountTarget": "WalletTransactions",
+    "methodName": "reverse",
+    "content": "use sellapp::Client;\nuse sellapp::resources::wallet_transactions::ReverseParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReverseParams::new(serde_json::from_str(\"{\\\"note\\\":\\\"Credit went to the wrong customer\\\",\\\"expected_balance_cents\\\":2500}\")?);\n    let result = client.wallet_transactions().reverse(\"42\", \"501\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "listStoreWalletTransactions",
+    "mountTarget": "WalletLedger",
+    "methodName": "list",
+    "content": "use sellapp::Client;\nuse sellapp::resources::wallet_ledger::ListParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ListParams::default();\n    let result = client.wallet_ledger().list(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getWalletOverview",
+    "mountTarget": "WalletOverview",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::wallet_overview::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.wallet_overview().get(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -1890,6 +2354,14 @@
   {
     "language": "rust",
     "fileExtension": "rs",
+    "operationId": "quoteCashbackRule",
+    "mountTarget": "CashbackRules",
+    "methodName": "quote",
+    "content": "use sellapp::Client;\nuse sellapp::resources::cashback_rules::QuoteParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = QuoteParams::default();\n    let result = client.cashback_rules().quote(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
     "operationId": "listWalletBonusTiers",
     "mountTarget": "WalletBonusTiers",
     "methodName": "list",
@@ -1938,10 +2410,26 @@
   {
     "language": "rust",
     "fileExtension": "rs",
+    "operationId": "quoteWalletBonusTier",
+    "mountTarget": "WalletBonusTiers",
+    "methodName": "quote",
+    "content": "use sellapp::Client;\nuse sellapp::resources::wallet_bonus_tiers::QuoteParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = QuoteParams::new(serde_json::from_str(\"20000\")?);\n    let result = client.wallet_bonus_tiers().quote(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
     "operationId": "listCourses",
     "mountTarget": "Courses",
     "methodName": "list",
     "content": "use sellapp::Client;\nuse sellapp::resources::courses::ListParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ListParams::default();\n    let result = client.courses().list(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createCourse",
+    "mountTarget": "Courses",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::courses::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"title\\\":\\\"Brand identity basics\\\",\\\"description\\\":\\\"<p>Design a logo, color palette, and type system for your next project.</p>\\\",\\\"category\\\":\\\"design\\\",\\\"level\\\":\\\"beginner\\\",\\\"language\\\":\\\"English\\\",\\\"what_you_learn\\\":[\\\"Sketch a logo concept.\\\",\\\"Choose a color palette.\\\"],\\\"certificate_enabled\\\":true,\\\"delivery_text\\\":\\\"Open your course from the link in your receipt.\\\"}\")?);\n    let result = client.courses().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -1974,6 +2462,14 @@
     "mountTarget": "Courses",
     "methodName": "update",
     "content": "use sellapp::Client;\nuse sellapp::resources::courses::UpdateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateParams::new(serde_json::from_str(\"{\\\"level\\\":\\\"beginner\\\",\\\"visibility\\\":\\\"HIDDEN\\\"}\")?);\n    let result = client.courses().update(\"string_example\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getCourseStudentSummary",
+    "mountTarget": "Courses",
+    "methodName": "get_student_summary",
+    "content": "use sellapp::Client;\nuse sellapp::resources::courses::GetStudentSummaryParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetStudentSummaryParams::new(\"2026-08-01\", \"2026-08-31\");\n    let result = client.courses().get_student_summary(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -2058,6 +2554,62 @@
   {
     "language": "rust",
     "fileExtension": "rs",
+    "operationId": "listCheckoutFieldTemplates",
+    "mountTarget": "CheckoutFieldTemplates",
+    "methodName": "list",
+    "content": "use sellapp::Client;\nuse sellapp::resources::checkout_field_templates::ListParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ListParams::default();\n    let result = client.checkout_field_templates().list(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "createCheckoutFieldTemplate",
+    "mountTarget": "CheckoutFieldTemplates",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::checkout_field_templates::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"name\\\":\\\"Discord access\\\",\\\"fields\\\":[{\\\"type\\\":\\\"text\\\",\\\"label\\\":\\\"Discord username\\\",\\\"key\\\":\\\"discord_username\\\",\\\"required\\\":true,\\\"placeholder\\\":\\\"name#0001\\\",\\\"description\\\":\\\"We add this account to the community after purchase.\\\"},{\\\"type\\\":\\\"radio\\\",\\\"label\\\":\\\"Experience level\\\",\\\"key\\\":\\\"experience_level\\\",\\\"required\\\":false,\\\"options\\\":[\\\"Beginner\\\",\\\"Intermediate\\\",\\\"Advanced\\\"],\\\"variant\\\":\\\"cards\\\",\\\"variant_options\\\":{\\\"vertical\\\":true,\\\"indicator\\\":true}}]}\")?);\n    let result = client.checkout_field_templates().create(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getCheckoutFieldTemplate",
+    "mountTarget": "CheckoutFieldTemplates",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::checkout_field_templates::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.checkout_field_templates().get(\"14\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replaceCheckoutFieldTemplate",
+    "mountTarget": "CheckoutFieldTemplates",
+    "methodName": "replace",
+    "content": "use sellapp::Client;\nuse sellapp::resources::checkout_field_templates::ReplaceParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceParams::new(serde_json::from_str(\"{\\\"name\\\":\\\"Discord onboarding\\\",\\\"expected_updated_at\\\":\\\"2026-09-04T09:00:00.000000Z\\\"}\")?);\n    let result = client.checkout_field_templates().replace(\"14\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "updateCheckoutFieldTemplate",
+    "mountTarget": "CheckoutFieldTemplates",
+    "methodName": "update",
+    "content": "use sellapp::Client;\nuse sellapp::resources::checkout_field_templates::UpdateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateParams::new(serde_json::from_str(\"{\\\"name\\\":\\\"Discord onboarding\\\",\\\"expected_updated_at\\\":\\\"2026-09-04T09:00:00.000000Z\\\"}\")?);\n    let result = client.checkout_field_templates().update(\"14\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "deleteCheckoutFieldTemplate",
+    "mountTarget": "CheckoutFieldTemplates",
+    "methodName": "delete",
+    "content": "use sellapp::Client;\nuse sellapp::resources::checkout_field_templates::DeleteParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = DeleteParams::new(serde_json::from_str(\"{\\\"expected_updated_at\\\":\\\"2026-09-04T09:00:00.000000Z\\\"}\")?);\n    let result = client.checkout_field_templates().delete(\"14\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "duplicateCheckoutFieldTemplate",
+    "mountTarget": "CheckoutFieldTemplates",
+    "methodName": "duplicate",
+    "content": "use sellapp::Client;\nuse sellapp::resources::checkout_field_templates::DuplicateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = DuplicateParams::new(serde_json::from_str(\"{\\\"name\\\":\\\"Discord access for courses\\\"}\")?);\n    let result = client.checkout_field_templates().duplicate(\"14\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
     "operationId": "listPaymentMethods",
     "mountTarget": "PaymentMethods",
     "methodName": "list",
@@ -2094,6 +2646,22 @@
     "mountTarget": "PaymentMethods",
     "methodName": "validate",
     "content": "use sellapp::Client;\nuse sellapp::resources::payment_methods::ValidateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ValidateParams::new(serde_json::from_str(\"{\\\"merchant_secure_key\\\":\\\"replace-with-nmi-secure-key\\\",\\\"merchant_tokenization_key\\\":\\\"replace-with-nmi-tokenization-key\\\",\\\"signing_key\\\":\\\"replace-with-nmi-signing-key\\\",\\\"currencies\\\":[\\\"USD\\\"]}\")?);\n    let result = client.payment_methods().validate(\"NMI\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getPaymentMethodModifier",
+    "mountTarget": "PaymentMethodsModifier",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::payment_methods_modifier::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.payment_methods_modifier().get(\"STRIPE\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replacePaymentMethodModifier",
+    "mountTarget": "PaymentMethodsModifier",
+    "methodName": "replace",
+    "content": "use sellapp::Client;\nuse sellapp::resources::payment_methods_modifier::ReplaceParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceParams::new(serde_json::from_str(\"{\\\"kind\\\":\\\"fee\\\",\\\"percentage\\\":\\\"3.00\\\",\\\"fixed_amount\\\":\\\"0.30\\\",\\\"condition\\\":\\\"below\\\",\\\"threshold\\\":\\\"20.00\\\"}\")?);\n    let result = client.payment_methods_modifier().replace(\"STRIPE\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -2202,6 +2770,190 @@
   {
     "language": "rust",
     "fileExtension": "rs",
+    "operationId": "getCheckoutSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "get_checkout",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::GetCheckoutParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetCheckoutParams::default();\n    let result = client.store_settings().get_checkout(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replaceCheckoutSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "replace_checkout",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::ReplaceCheckoutParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceCheckoutParams::new(serde_json::from_str(\"{\\\"shopping_cart_enabled\\\":true,\\\"customer_email_required\\\":true,\\\"allow_vpn_purchases\\\":true,\\\"blacklist_on_dispute\\\":true,\\\"minimum_spend\\\":\\\"5.00\\\",\\\"billing_descriptor\\\":\\\"LAUNCH LAB\\\",\\\"attempts_per_customer\\\":5,\\\"attempts_per_ip\\\":20,\\\"attempts_per_email\\\":null,\\\"attempts_per_fingerprint\\\":null,\\\"rate_limit_window_seconds\\\":3600,\\\"crypto\\\":{\\\"underpaid_percentage\\\":2,\\\"minimum_confirmations\\\":2}}\")?);\n    let result = client.store_settings().replace_checkout(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "updateCheckoutSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "update_checkout",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::UpdateCheckoutParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateCheckoutParams::new(serde_json::from_str(\"{\\\"minimum_spend\\\":\\\"10.00\\\",\\\"attempts_per_email\\\":10}\")?);\n    let result = client.store_settings().update_checkout(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getTaxSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "get_taxes",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::GetTaxesParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetTaxesParams::default();\n    let result = client.store_settings().get_taxes(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replaceTaxSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "replace_taxes",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::ReplaceTaxesParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceTaxesParams::new(serde_json::from_str(\"{\\\"vat_enabled\\\":true,\\\"vat_inclusive_pricing\\\":true,\\\"collect_billing_details\\\":false}\")?);\n    let result = client.store_settings().replace_taxes(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "updateTaxSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "update_taxes",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::UpdateTaxesParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateTaxesParams::new(serde_json::from_str(\"{\\\"vat_inclusive_pricing\\\":true}\")?);\n    let result = client.store_settings().update_taxes(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getCustomerEmailSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "get_customer_emails",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::GetCustomerEmailsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetCustomerEmailsParams::default();\n    let result = client.store_settings().get_customer_emails(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replaceCustomerEmailSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "replace_customer_emails",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::ReplaceCustomerEmailsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceCustomerEmailsParams::new(serde_json::from_str(\"{\\\"send_delivery_email\\\":true,\\\"send_payment_failure_email\\\":false}\")?);\n    let result = client.store_settings().replace_customer_emails(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "updateCustomerEmailSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "update_customer_emails",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::UpdateCustomerEmailsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateCustomerEmailsParams::new(serde_json::from_str(\"{\\\"send_payment_failure_email\\\":false}\")?);\n    let result = client.store_settings().update_customer_emails(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getStoreAlertSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "get_store_alerts",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::GetStoreAlertsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetStoreAlertsParams::default();\n    let result = client.store_settings().get_store_alerts(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replaceStoreAlertSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "replace_store_alerts",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::ReplaceStoreAlertsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceStoreAlertsParams::new(serde_json::from_str(\"{\\\"sale_emails_enabled\\\":false}\")?);\n    let result = client.store_settings().replace_store_alerts(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "updateStoreAlertSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "update_store_alerts",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::UpdateStoreAlertsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateStoreAlertsParams::new(serde_json::from_str(\"{\\\"sale_emails_enabled\\\":false}\")?);\n    let result = client.store_settings().update_store_alerts(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getPersonalizationSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "get_personalization",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::GetPersonalizationParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetPersonalizationParams::default();\n    let result = client.store_settings().get_personalization(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replacePersonalizationSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "replace_personalization",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::ReplacePersonalizationParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplacePersonalizationParams::new(serde_json::from_str(\"{\\\"support_email\\\":\\\"support@launch-lab.example.com\\\",\\\"trustpilot_email\\\":null,\\\"sender_name\\\":\\\"Launch Lab\\\",\\\"sender_email\\\":\\\"orders@launch-lab.example.com\\\",\\\"store_address\\\":\\\"651 N Broad St, Suite 206\\\",\\\"store_city\\\":\\\"Middletown\\\",\\\"store_state\\\":\\\"Delaware\\\",\\\"store_zip\\\":\\\"19709\\\",\\\"store_country\\\":\\\"United States\\\",\\\"store_tax\\\":\\\"EIN 98-7654321\\\",\\\"back_link_label\\\":\\\"Back to Launch Lab\\\",\\\"back_link_url\\\":\\\"https://launch-lab.example.com\\\"}\")?);\n    let result = client.store_settings().replace_personalization(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "updatePersonalizationSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "update_personalization",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::UpdatePersonalizationParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdatePersonalizationParams::new(serde_json::from_str(\"{\\\"back_link_label\\\":\\\"Return to the shop\\\",\\\"back_link_url\\\":\\\"https://launch-lab.example.com/shop\\\"}\")?);\n    let result = client.store_settings().update_personalization(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "replaceCryptoCheckoutSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "replace_crypto_checkout",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::ReplaceCryptoCheckoutParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReplaceCryptoCheckoutParams::new(serde_json::from_str(\"{\\\"underpaid_percentage\\\":1,\\\"minimum_confirmations\\\":3}\")?);\n    let result = client.store_settings().replace_crypto_checkout(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "updateCryptoCheckoutSettings",
+    "mountTarget": "StoreSettings",
+    "methodName": "update_crypto_checkout",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_settings::UpdateCryptoCheckoutParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateCryptoCheckoutParams::new(serde_json::from_str(\"{\\\"minimum_confirmations\\\":3}\")?);\n    let result = client.store_settings().update_crypto_checkout(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getSenderEmail",
+    "mountTarget": "StoreSenderEmail",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_sender_email::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.store_sender_email().get(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "setSenderEmail",
+    "mountTarget": "StoreSenderEmail",
+    "methodName": "set",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_sender_email::SetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = SetParams::new(serde_json::from_str(\"{\\\"email\\\":\\\"orders@launch-lab.example.com\\\"}\")?);\n    let result = client.store_sender_email().set(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "deleteSenderEmail",
+    "mountTarget": "StoreSenderEmail",
+    "methodName": "delete",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_sender_email::DeleteParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = DeleteParams::default();\n    let result = client.store_sender_email().delete(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "sendSenderEmailVerification",
+    "mountTarget": "StoreSenderEmail",
+    "methodName": "send_verification",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_sender_email::SendVerificationParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = SendVerificationParams::new(serde_json::from_str(\"{\\\"email\\\":\\\"orders@launch-lab.example.com\\\"}\")?);\n    let result = client.store_sender_email().send_verification(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getStoreIntegrations",
+    "mountTarget": "StoreIntegrations",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_integrations::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.store_integrations().get(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "disconnectGoogleCalendar",
+    "mountTarget": "StoreIntegrations",
+    "methodName": "disconnect_google_calendar",
+    "content": "use sellapp::Client;\nuse sellapp::resources::store_integrations::DisconnectGoogleCalendarParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = DisconnectGoogleCalendarParams::new(serde_json::from_str(\"7\")?);\n    let result = client.store_integrations().disconnect_google_calendar(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
     "operationId": "listNotificationChannels",
     "mountTarget": "StoreNotificationChannels",
     "methodName": "list",
@@ -2286,6 +3038,22 @@
     "mountTarget": "StoreCustomDomains",
     "methodName": "refresh",
     "content": "use sellapp::Client;\nuse sellapp::resources::store_custom_domains::RefreshParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = RefreshParams::default();\n    let result = client.store_custom_domains().refresh(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "listNotifications",
+    "mountTarget": "Notifications",
+    "methodName": "list",
+    "content": "use sellapp::Client;\nuse sellapp::resources::notifications::ListParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ListParams::default();\n    let result = client.notifications().list(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "markNotificationsSeen",
+    "mountTarget": "Notifications",
+    "methodName": "mark",
+    "content": "use sellapp::Client;\nuse sellapp::resources::notifications::MarkParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = MarkParams::new(serde_json::from_str(\"{\\\"notification_ids\\\":[9182]}\")?);\n    let result = client.notifications().mark(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -2402,6 +3170,46 @@
   {
     "language": "rust",
     "fileExtension": "rs",
+    "operationId": "getAffiliateProducts",
+    "mountTarget": "AffiliatesProducts",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::affiliates_products::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.affiliates_products().get(\"88\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "updateAffiliateProducts",
+    "mountTarget": "AffiliatesProducts",
+    "methodName": "update",
+    "content": "use sellapp::Client;\nuse sellapp::resources::affiliates_products::UpdateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateParams::new(serde_json::from_str(\"{\\\"enable_specific_products\\\":true,\\\"replace_products\\\":true,\\\"products\\\":[{\\\"id\\\":42,\\\"enabled\\\":true,\\\"commission\\\":{\\\"type\\\":\\\"percentage\\\",\\\"percentage\\\":\\\"25\\\"}},{\\\"id\\\":43,\\\"enabled\\\":true,\\\"commission\\\":{\\\"type\\\":\\\"fixed\\\",\\\"amount_usd_cents\\\":550}}]}\")?);\n    let result = client.affiliates_products().update(\"88\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getAffiliateCoupon",
+    "mountTarget": "AffiliatesCoupon",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::affiliates_coupon::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.affiliates_coupon().get(\"88\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "saveAffiliateCoupon",
+    "mountTarget": "AffiliatesCoupon",
+    "methodName": "save",
+    "content": "use sellapp::Client;\nuse sellapp::resources::affiliates_coupon::SaveParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = SaveParams::new(serde_json::from_str(\"{\\\"code\\\":\\\"ALEX15\\\",\\\"type\\\":\\\"PERCENTAGE\\\",\\\"discount\\\":\\\"15\\\",\\\"store_wide\\\":true,\\\"maximum_discount_amount\\\":\\\"20\\\"}\")?);\n    let result = client.affiliates_coupon().save(\"88\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "disableAffiliateCoupon",
+    "mountTarget": "AffiliatesCoupon",
+    "methodName": "disable",
+    "content": "use sellapp::Client;\nuse sellapp::resources::affiliates_coupon::DisableParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = DisableParams::default();\n    let result = client.affiliates_coupon().disable(\"88\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
     "operationId": "listAffiliateReferrals",
     "mountTarget": "AffiliateReferrals",
     "methodName": "list",
@@ -2470,6 +3278,14 @@
     "mountTarget": "AffiliatePayouts",
     "methodName": "update",
     "content": "use sellapp::Client;\nuse sellapp::resources::affiliate_payouts::UpdateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateParams::new(serde_json::from_str(\"{\\\"status\\\":\\\"paid\\\"}\")?);\n    let result = client.affiliate_payouts().update(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "markAffiliatePayoutsPaid",
+    "mountTarget": "AffiliatePayouts",
+    "methodName": "mark_paid",
+    "content": "use sellapp::Client;\nuse sellapp::resources::affiliate_payouts::MarkPaidParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = MarkPaidParams::new(serde_json::from_str(\"{\\\"payout_ids\\\":[91,92],\\\"expected_total_usd_cents\\\":4250}\")?);\n    let result = client.affiliate_payouts().mark_paid(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -3250,6 +4066,14 @@
   {
     "language": "rust",
     "fileExtension": "rs",
+    "operationId": "v2GetCouponUsage",
+    "mountTarget": "Coupons",
+    "methodName": "v2_get_coupon_usage",
+    "content": "use sellapp::Client;\nuse sellapp::resources::coupons::V2GetCouponUsageParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = V2GetCouponUsageParams::default();\n    let result = client.coupons().v_2_get_coupon_usage(\"1\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
     "operationId": "v2ListFeedback",
     "mountTarget": "Feedback",
     "methodName": "v2_list_feedback",
@@ -3421,7 +4245,7 @@
     "operationId": "updateTicket",
     "mountTarget": "Tickets",
     "methodName": "update",
-    "content": "use sellapp::Client;\nuse sellapp::resources::tickets::UpdateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateParams::new(serde_json::from_str(\"{\\\"status\\\":\\\"CLOSED\\\",\\\"archived\\\":true}\")?);\n    let result = client.tickets().update(\"42\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+    "content": "use sellapp::Client;\nuse sellapp::resources::tickets::UpdateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = UpdateParams::new(serde_json::from_str(\"{\\\"status\\\":\\\"CLOSED\\\",\\\"outcome\\\":\\\"delivered\\\",\\\"archived\\\":true}\")?);\n    let result = client.tickets().update(\"42\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",
@@ -3454,6 +4278,62 @@
     "mountTarget": "TicketsMessages",
     "methodName": "v2_get_ticket_message",
     "content": "use sellapp::Client;\nuse sellapp::resources::tickets_messages::V2GetTicketMessageParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = V2GetTicketMessageParams::default();\n    let result = client.tickets_messages().v_2_get_ticket_message(\"1\", \"2\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "batchUpdateTickets",
+    "mountTarget": "Tickets",
+    "methodName": "batch_update",
+    "content": "use sellapp::Client;\nuse sellapp::resources::tickets::BatchUpdateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = BatchUpdateParams::new(serde_json::from_str(\"{\\\"action\\\":\\\"close\\\",\\\"outcome\\\":\\\"delivered\\\",\\\"resources\\\":[311,313]}\")?);\n    let result = client.tickets().batch_update(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "v2GetTicketContext",
+    "mountTarget": "Tickets",
+    "methodName": "get_context",
+    "content": "use sellapp::Client;\nuse sellapp::resources::tickets::GetContextParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetContextParams::default();\n    let result = client.tickets().get_context(\"312\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "v2ListTicketWalletRefundOptions",
+    "mountTarget": "TicketsWalletRefunds",
+    "methodName": "list_options",
+    "content": "use sellapp::Client;\nuse sellapp::resources::tickets_wallet_refunds::ListOptionsParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ListOptionsParams::default();\n    let result = client.tickets_wallet_refunds().list_options(\"312\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "v2ListTicketWalletRefunds",
+    "mountTarget": "TicketsWalletRefunds",
+    "methodName": "list",
+    "content": "use sellapp::Client;\nuse sellapp::resources::tickets_wallet_refunds::ListParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ListParams::default();\n    let result = client.tickets_wallet_refunds().list(\"312\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "v2RefundTicketToWallet",
+    "mountTarget": "TicketsWalletRefunds",
+    "methodName": "create",
+    "content": "use sellapp::Client;\nuse sellapp::resources::tickets_wallet_refunds::CreateParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = CreateParams::new(serde_json::from_str(\"{\\\"invoice_id\\\":5120,\\\"amount_cents\\\":500,\\\"expected_refundable_cents\\\":1999,\\\"customer_note\\\":\\\"We added $5.00 to your store wallet for the trouble with your download link.\\\"}\")?);\n    let mut request_options = sellapp::RequestOptions::default();\n    request_options.idempotency_key = Some(\"example-mutation-001\".to_string());\n    let result = client.tickets_wallet_refunds().create_with_options(\"312\", params, Some(&request_options)).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "v2ReverseTicketWalletRefund",
+    "mountTarget": "TicketsWalletRefunds",
+    "methodName": "reverse",
+    "content": "use sellapp::Client;\nuse sellapp::resources::tickets_wallet_refunds::ReverseParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = ReverseParams::new(serde_json::from_str(\"{\\\"reason\\\":\\\"Issued on the wrong ticket.\\\"}\")?);\n    let result = client.tickets_wallet_refunds().reverse(\"312\", \"7001\", params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
+  },
+  {
+    "language": "rust",
+    "fileExtension": "rs",
+    "operationId": "getSupportAnalytics",
+    "mountTarget": "TicketsAnalytics",
+    "methodName": "get",
+    "content": "use sellapp::Client;\nuse sellapp::resources::tickets_analytics::GetParams;\n\n#[tokio::main]\nasync fn main() -> Result<(), Box<dyn std::error::Error>> {\n    let client = Client::new(std::env::var(\"SELLAPP_API_KEY\")?, std::env::var(\"SELLAPP_STORE\")?).with_base_url(std::env::var(\"SELLAPP_API_BASE_URL\")?);\n    let mut params = GetParams::default();\n    let result = client.tickets_analytics().get(params).await?;\n    println!(\"{result:?}\");\n    Ok(())\n}\n"
   },
   {
     "language": "rust",

@@ -1,0 +1,6 @@
+{
+  "wallet_enabled": false,
+  "expiration_days": 0,
+  "min_topup_cents": 0,
+  "max_topup_cents": 0
+}

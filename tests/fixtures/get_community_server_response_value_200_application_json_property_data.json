@@ -1,0 +1,15 @@
+{
+  "platform": "discord",
+  "id": "test_id",
+  "name": "test_name",
+  "type": "test_type",
+  "is_last": false,
+  "affected_variants": [
+    {
+      "product_id": 0,
+      "product": "test_product",
+      "variant_id": 0,
+      "variant": "test_variant"
+    }
+  ]
+}

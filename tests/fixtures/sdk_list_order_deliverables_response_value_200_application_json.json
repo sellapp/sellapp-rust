@@ -5,6 +5,7 @@
       "line_item_id": 0,
       "type": "test_type",
       "status": "pending",
+      "delivered_product_id": 0,
       "product_variant_id": 0,
       "quantity": 0,
       "deliverable": {

@@ -128,6 +128,28 @@
     "sourceFile": "src/resources/charges.rs"
   },
   {
+    "operationId": "getChargeSummary",
+    "resource": "charges",
+    "method": "get_summary",
+    "nativeSignature": "pub async fn get_summary(\n        &self,\n        params: GetSummaryParams,\n    ) -> Result<SdkGetChargeSummaryResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get_summary",
+        "params": [
+          {
+            "name": "params",
+            "type": "GetSummaryParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetChargeSummaryResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/charges.rs"
+  },
+  {
     "operationId": "listGroups",
     "resource": "groups",
     "method": "list",
@@ -1298,6 +1320,202 @@
     "sourceFile": "src/resources/products.rs"
   },
   {
+    "operationId": "publishProduct",
+    "resource": "products",
+    "method": "publish",
+    "nativeSignature": "pub async fn publish(\n        &self,\n        product: &str,\n        params: PublishParams,\n    ) -> Result<SdkPublishProductResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "publish",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "PublishParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkPublishProductResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/products.rs"
+  },
+  {
+    "operationId": "duplicateProduct",
+    "resource": "products",
+    "method": "duplicate",
+    "nativeSignature": "pub async fn duplicate(\n        &self,\n        product: &str,\n        params: DuplicateParams,\n    ) -> Result<SdkDuplicateProductResponseValue201ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "duplicate",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "DuplicateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkDuplicateProductResponseValue201ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/products.rs"
+  },
+  {
+    "operationId": "moveProduct",
+    "resource": "products",
+    "method": "move_",
+    "nativeSignature": "pub async fn move_(\n        &self,\n        product: &str,\n        params: MoveParams,\n    ) -> Result<SdkMoveProductResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "move_",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "MoveParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkMoveProductResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/products.rs"
+  },
+  {
+    "operationId": "getProductFeaturedVariant",
+    "resource": "products_featured_variant",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        product: &str,\n        params: GetParams,\n    ) -> Result<SdkGetProductFeaturedVariantResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetProductFeaturedVariantResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/products_featured_variant.rs"
+  },
+  {
+    "operationId": "replaceProductFeaturedVariant",
+    "resource": "products_featured_variant",
+    "method": "replace",
+    "nativeSignature": "pub async fn replace(\n        &self,\n        product: &str,\n        params: ReplaceParams,\n    ) -> Result<SdkReplaceProductFeaturedVariantResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ReplaceParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplaceProductFeaturedVariantResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/products_featured_variant.rs"
+  },
+  {
+    "operationId": "listProductSimilarProducts",
+    "resource": "products_similar_products",
+    "method": "list",
+    "nativeSignature": "pub async fn list(\n        &self,\n        product: &str,\n        params: ListParams,\n    ) -> Result<SdkListProductSimilarProductsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "list",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ListParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkListProductSimilarProductsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/products_similar_products.rs"
+  },
+  {
+    "operationId": "replaceProductSimilarProducts",
+    "resource": "products_similar_products",
+    "method": "replace",
+    "nativeSignature": "pub async fn replace(\n        &self,\n        product: &str,\n        params: ReplaceParams,\n    ) -> Result<SdkReplaceProductSimilarProductsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ReplaceParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplaceProductSimilarProductsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/products_similar_products.rs"
+  },
+  {
     "operationId": "listProductVariants",
     "resource": "product_variants",
     "method": "list",
@@ -1602,6 +1820,102 @@
     "sourceFile": "src/resources/product_variants.rs"
   },
   {
+    "operationId": "publishProductVariant",
+    "resource": "product_variants",
+    "method": "publish",
+    "nativeSignature": "pub async fn publish(\n        &self,\n        product: &str,\n        variant: &str,\n        params: PublishParams,\n    ) -> Result<SdkPublishProductVariantResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "publish",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "variant",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "PublishParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkPublishProductVariantResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/product_variants.rs"
+  },
+  {
+    "operationId": "duplicateProductVariant",
+    "resource": "product_variants",
+    "method": "duplicate",
+    "nativeSignature": "pub async fn duplicate(\n        &self,\n        product: &str,\n        variant: &str,\n        params: DuplicateParams,\n    ) -> Result<SdkDuplicateProductVariantResponseValue201ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "duplicate",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "variant",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "DuplicateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkDuplicateProductVariantResponseValue201ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/product_variants.rs"
+  },
+  {
+    "operationId": "reorderProductVariants",
+    "resource": "product_variants",
+    "method": "reorder",
+    "nativeSignature": "pub async fn reorder(\n        &self,\n        product: &str,\n        params: ReorderParams,\n    ) -> Result<SdkReorderProductVariantsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "reorder",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ReorderParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReorderProductVariantsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/product_variants.rs"
+  },
+  {
     "operationId": "replaceProductVariantPricing",
     "resource": "product_variants_pricing",
     "method": "replace",
@@ -1872,6 +2186,108 @@
       }
     ],
     "sourceFile": "src/resources/product_variants_booking.rs"
+  },
+  {
+    "operationId": "getVariantSubscriptionSettings",
+    "resource": "product_variants_subscription_settings",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        product: &str,\n        variant: &str,\n        params: GetParams,\n    ) -> Result<SdkGetVariantSubscriptionSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "variant",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetVariantSubscriptionSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/product_variants_subscription_settings.rs"
+  },
+  {
+    "operationId": "updateVariantSubscriptionSettings",
+    "resource": "product_variants_subscription_settings",
+    "method": "update",
+    "nativeSignature": "pub async fn update(\n        &self,\n        product: &str,\n        variant: &str,\n        params: UpdateParams,\n    ) -> Result<SdkUpdateVariantSubscriptionSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "update",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "variant",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "UpdateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkUpdateVariantSubscriptionSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/product_variants_subscription_settings.rs"
+  },
+  {
+    "operationId": "replaceVariantCommunityAccess",
+    "resource": "product_variants_community_access",
+    "method": "replace",
+    "nativeSignature": "pub async fn replace(\n        &self,\n        product: &str,\n        variant: &str,\n        params: ReplaceParams,\n    ) -> Result<SdkReplaceVariantCommunityAccessResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "variant",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ReplaceParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplaceVariantCommunityAccessResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/product_variants_community_access.rs"
   },
   {
     "operationId": "cancelSubscription",
@@ -2506,6 +2922,28 @@
     "sourceFile": "src/resources/bookings.rs"
   },
   {
+    "operationId": "createBookingProduct",
+    "resource": "bookings",
+    "method": "create",
+    "nativeSignature": "pub async fn create(\n        &self,\n        params: CreateParams,\n    ) -> Result<SdkCreateBookingProductResponseValue201ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "create",
+        "params": [
+          {
+            "name": "params",
+            "type": "CreateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkCreateBookingProductResponseValue201ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/bookings.rs"
+  },
+  {
     "operationId": "listBookingDateOverrides",
     "resource": "bookings_calendar_events",
     "method": "list",
@@ -2666,6 +3104,142 @@
       }
     ],
     "sourceFile": "src/resources/bundle_items.rs"
+  },
+  {
+    "operationId": "previewVariantBuyerNotification",
+    "resource": "variant_deliverables",
+    "method": "preview",
+    "nativeSignature": "pub async fn preview(\n        &self,\n        product: &str,\n        variant: &str,\n        params: PreviewParams,\n    ) -> Result<SdkPreviewVariantBuyerNotificationResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "preview",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "variant",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "PreviewParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkPreviewVariantBuyerNotificationResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/variant_deliverables.rs"
+  },
+  {
+    "operationId": "notifyVariantBuyers",
+    "resource": "variant_deliverables",
+    "method": "notify",
+    "nativeSignature": "pub async fn notify(\n        &self,\n        product: &str,\n        variant: &str,\n        params: NotifyParams,\n    ) -> Result<SdkNotifyVariantBuyersResponseValue202ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "notify",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "variant",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "NotifyParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkNotifyVariantBuyersResponseValue202ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/variant_deliverables.rs"
+  },
+  {
+    "operationId": "getVariantDeliverableConfiguration",
+    "resource": "variant_deliverables",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        product: &str,\n        variant: &str,\n        params: GetParams,\n    ) -> Result<SdkGetVariantDeliverableConfigurationResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "variant",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetVariantDeliverableConfigurationResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/variant_deliverables.rs"
+  },
+  {
+    "operationId": "replaceVariantDeliverableConfiguration",
+    "resource": "variant_deliverables",
+    "method": "replace",
+    "nativeSignature": "pub async fn replace(\n        &self,\n        product: &str,\n        variant: &str,\n        params: ReplaceParams,\n    ) -> Result<SdkReplaceVariantDeliverableConfigurationResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace",
+        "params": [
+          {
+            "name": "product",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "variant",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ReplaceParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplaceVariantDeliverableConfigurationResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/variant_deliverables.rs"
   },
   {
     "operationId": "listPromotions",
@@ -2868,6 +3442,34 @@
           }
         ],
         "returnType": "SdkRestorePromotionResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/promotions.rs"
+  },
+  {
+    "operationId": "getPromotionUsage",
+    "resource": "promotions",
+    "method": "get_usage",
+    "nativeSignature": "pub async fn get_usage(\n        &self,\n        promotion: &str,\n        params: GetUsageParams,\n    ) -> Result<SdkGetPromotionUsageResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get_usage",
+        "params": [
+          {
+            "name": "promotion",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetUsageParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetPromotionUsageResponseValue200ApplicationJson",
         "async": true
       }
     ],
@@ -3868,6 +4470,678 @@
     "sourceFile": "src/resources/webhook_channels.rs"
   },
   {
+    "operationId": "listSupportReplyTemplates",
+    "resource": "support_reply_templates",
+    "method": "list",
+    "nativeSignature": "pub async fn list(\n        &self,\n        params: ListParams,\n    ) -> Result<SdkListSupportReplyTemplatesResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "list",
+        "params": [
+          {
+            "name": "params",
+            "type": "ListParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkListSupportReplyTemplatesResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reply_templates.rs"
+  },
+  {
+    "operationId": "createSupportReplyTemplate",
+    "resource": "support_reply_templates",
+    "method": "create",
+    "nativeSignature": "pub async fn create(\n        &self,\n        params: CreateParams,\n    ) -> Result<SdkCreateSupportReplyTemplateResponseValue201ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "create",
+        "params": [
+          {
+            "name": "params",
+            "type": "CreateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkCreateSupportReplyTemplateResponseValue201ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reply_templates.rs"
+  },
+  {
+    "operationId": "getSupportReplyTemplate",
+    "resource": "support_reply_templates",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        support_reply_template: &str,\n        params: GetParams,\n    ) -> Result<SdkGetSupportReplyTemplateResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "support_reply_template",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetSupportReplyTemplateResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reply_templates.rs"
+  },
+  {
+    "operationId": "replaceSupportReplyTemplate",
+    "resource": "support_reply_templates",
+    "method": "replace",
+    "nativeSignature": "pub async fn replace(\n        &self,\n        support_reply_template: &str,\n        params: ReplaceParams,\n    ) -> Result<SdkReplaceSupportReplyTemplateResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace",
+        "params": [
+          {
+            "name": "support_reply_template",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ReplaceParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplaceSupportReplyTemplateResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reply_templates.rs"
+  },
+  {
+    "operationId": "updateSupportReplyTemplate",
+    "resource": "support_reply_templates",
+    "method": "update",
+    "nativeSignature": "pub async fn update(\n        &self,\n        support_reply_template: &str,\n        params: UpdateParams,\n    ) -> Result<SdkUpdateSupportReplyTemplateResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "update",
+        "params": [
+          {
+            "name": "support_reply_template",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "UpdateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkUpdateSupportReplyTemplateResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reply_templates.rs"
+  },
+  {
+    "operationId": "deleteSupportReplyTemplate",
+    "resource": "support_reply_templates",
+    "method": "delete",
+    "nativeSignature": "pub async fn delete(\n        &self,\n        support_reply_template: &str,\n        params: DeleteParams,\n    ) -> Result<SdkDeleteSupportReplyTemplateResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "delete",
+        "params": [
+          {
+            "name": "support_reply_template",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "DeleteParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkDeleteSupportReplyTemplateResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reply_templates.rs"
+  },
+  {
+    "operationId": "renderSupportReplyTemplate",
+    "resource": "support_reply_templates",
+    "method": "render",
+    "nativeSignature": "pub async fn render(\n        &self,\n        support_reply_template: &str,\n        params: RenderParams,\n    ) -> Result<SdkRenderSupportReplyTemplateResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "render",
+        "params": [
+          {
+            "name": "support_reply_template",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "RenderParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkRenderSupportReplyTemplateResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reply_templates.rs"
+  },
+  {
+    "operationId": "reorderSupportReplyTemplates",
+    "resource": "support_reply_templates",
+    "method": "reorder",
+    "nativeSignature": "pub async fn reorder(\n        &self,\n        params: ReorderParams,\n    ) -> Result<SdkReorderSupportReplyTemplatesResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "reorder",
+        "params": [
+          {
+            "name": "params",
+            "type": "ReorderParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReorderSupportReplyTemplatesResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reply_templates.rs"
+  },
+  {
+    "operationId": "getSupportReplyTemplateOptions",
+    "resource": "support_reply_templates",
+    "method": "get_options",
+    "nativeSignature": "pub async fn get_options(\n        &self,\n        params: GetOptionsParams,\n    ) -> Result<SdkGetSupportReplyTemplateOptionsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get_options",
+        "params": [
+          {
+            "name": "params",
+            "type": "GetOptionsParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetSupportReplyTemplateOptionsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reply_templates.rs"
+  },
+  {
+    "operationId": "listSupportReasons",
+    "resource": "support_reasons",
+    "method": "list",
+    "nativeSignature": "pub async fn list(\n        &self,\n        params: ListParams,\n    ) -> Result<SdkListSupportReasonsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "list",
+        "params": [
+          {
+            "name": "params",
+            "type": "ListParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkListSupportReasonsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reasons.rs"
+  },
+  {
+    "operationId": "createSupportReason",
+    "resource": "support_reasons",
+    "method": "create",
+    "nativeSignature": "pub async fn create(\n        &self,\n        params: CreateParams,\n    ) -> Result<SdkCreateSupportReasonResponseValue201ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "create",
+        "params": [
+          {
+            "name": "params",
+            "type": "CreateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkCreateSupportReasonResponseValue201ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reasons.rs"
+  },
+  {
+    "operationId": "getSupportReason",
+    "resource": "support_reasons",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        support_reason: &str,\n        params: GetParams,\n    ) -> Result<SdkGetSupportReasonResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "support_reason",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetSupportReasonResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reasons.rs"
+  },
+  {
+    "operationId": "replaceSupportReason",
+    "resource": "support_reasons",
+    "method": "replace",
+    "nativeSignature": "pub async fn replace(\n        &self,\n        support_reason: &str,\n        params: ReplaceParams,\n    ) -> Result<SdkReplaceSupportReasonResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace",
+        "params": [
+          {
+            "name": "support_reason",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ReplaceParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplaceSupportReasonResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reasons.rs"
+  },
+  {
+    "operationId": "updateSupportReason",
+    "resource": "support_reasons",
+    "method": "update",
+    "nativeSignature": "pub async fn update(\n        &self,\n        support_reason: &str,\n        params: UpdateParams,\n    ) -> Result<SdkUpdateSupportReasonResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "update",
+        "params": [
+          {
+            "name": "support_reason",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "UpdateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkUpdateSupportReasonResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reasons.rs"
+  },
+  {
+    "operationId": "deleteSupportReason",
+    "resource": "support_reasons",
+    "method": "delete",
+    "nativeSignature": "pub async fn delete(\n        &self,\n        support_reason: &str,\n        params: DeleteParams,\n    ) -> Result<SdkDeleteSupportReasonResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "delete",
+        "params": [
+          {
+            "name": "support_reason",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "DeleteParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkDeleteSupportReasonResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reasons.rs"
+  },
+  {
+    "operationId": "getSupportReasonOptions",
+    "resource": "support_reasons",
+    "method": "get_options",
+    "nativeSignature": "pub async fn get_options(\n        &self,\n        params: GetOptionsParams,\n    ) -> Result<SdkGetSupportReasonOptionsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get_options",
+        "params": [
+          {
+            "name": "params",
+            "type": "GetOptionsParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetSupportReasonOptionsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_reasons.rs"
+  },
+  {
+    "operationId": "listSupportAutomationRules",
+    "resource": "support_automation_rules",
+    "method": "list",
+    "nativeSignature": "pub async fn list(\n        &self,\n        params: ListParams,\n    ) -> Result<SdkListSupportAutomationRulesResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "list",
+        "params": [
+          {
+            "name": "params",
+            "type": "ListParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkListSupportAutomationRulesResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_automation_rules.rs"
+  },
+  {
+    "operationId": "createSupportAutomationRule",
+    "resource": "support_automation_rules",
+    "method": "create",
+    "nativeSignature": "pub async fn create(\n        &self,\n        params: CreateParams,\n    ) -> Result<SdkCreateSupportAutomationRuleResponseValue201ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "create",
+        "params": [
+          {
+            "name": "params",
+            "type": "CreateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkCreateSupportAutomationRuleResponseValue201ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_automation_rules.rs"
+  },
+  {
+    "operationId": "getSupportAutomationRule",
+    "resource": "support_automation_rules",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        support_automation_rule: &str,\n        params: GetParams,\n    ) -> Result<SdkGetSupportAutomationRuleResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "support_automation_rule",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetSupportAutomationRuleResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_automation_rules.rs"
+  },
+  {
+    "operationId": "replaceSupportAutomationRule",
+    "resource": "support_automation_rules",
+    "method": "replace",
+    "nativeSignature": "pub async fn replace(\n        &self,\n        support_automation_rule: &str,\n        params: ReplaceParams,\n    ) -> Result<SdkReplaceSupportAutomationRuleResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace",
+        "params": [
+          {
+            "name": "support_automation_rule",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ReplaceParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplaceSupportAutomationRuleResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_automation_rules.rs"
+  },
+  {
+    "operationId": "updateSupportAutomationRule",
+    "resource": "support_automation_rules",
+    "method": "update",
+    "nativeSignature": "pub async fn update(\n        &self,\n        support_automation_rule: &str,\n        params: UpdateParams,\n    ) -> Result<SdkUpdateSupportAutomationRuleResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "update",
+        "params": [
+          {
+            "name": "support_automation_rule",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "UpdateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkUpdateSupportAutomationRuleResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_automation_rules.rs"
+  },
+  {
+    "operationId": "updateSupportAutomationRuleState",
+    "resource": "support_automation_rules",
+    "method": "update_state",
+    "nativeSignature": "pub async fn update_state(\n        &self,\n        support_automation_rule: &str,\n        params: UpdateStateParams,\n    ) -> Result<SdkUpdateSupportAutomationRuleStateResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "update_state",
+        "params": [
+          {
+            "name": "support_automation_rule",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "UpdateStateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkUpdateSupportAutomationRuleStateResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_automation_rules.rs"
+  },
+  {
+    "operationId": "reorderSupportAutomationRules",
+    "resource": "support_automation_rules",
+    "method": "reorder",
+    "nativeSignature": "pub async fn reorder(\n        &self,\n        params: ReorderParams,\n    ) -> Result<SdkReorderSupportAutomationRulesResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "reorder",
+        "params": [
+          {
+            "name": "params",
+            "type": "ReorderParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReorderSupportAutomationRulesResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_automation_rules.rs"
+  },
+  {
+    "operationId": "dryRunSupportAutomationRules",
+    "resource": "support_automation_rules",
+    "method": "dry_run",
+    "nativeSignature": "pub async fn dry_run(\n        &self,\n        params: DryRunParams,\n    ) -> Result<SdkDryRunSupportAutomationRulesResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "dry_run",
+        "params": [
+          {
+            "name": "params",
+            "type": "DryRunParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkDryRunSupportAutomationRulesResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_automation_rules.rs"
+  },
+  {
+    "operationId": "getSupportAutomationSettings",
+    "resource": "support_automation_settings",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        params: GetParams,\n    ) -> Result<SdkGetSupportAutomationSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetSupportAutomationSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_automation_settings.rs"
+  },
+  {
+    "operationId": "replaceSupportAutomationSettings",
+    "resource": "support_automation_settings",
+    "method": "replace",
+    "nativeSignature": "pub async fn replace(\n        &self,\n        params: ReplaceParams,\n    ) -> Result<SdkReplaceSupportAutomationSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace",
+        "params": [
+          {
+            "name": "params",
+            "type": "ReplaceParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplaceSupportAutomationSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_automation_settings.rs"
+  },
+  {
+    "operationId": "updateSupportAutomationSettings",
+    "resource": "support_automation_settings",
+    "method": "update",
+    "nativeSignature": "pub async fn update(\n        &self,\n        params: UpdateParams,\n    ) -> Result<SdkUpdateSupportAutomationSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "update",
+        "params": [
+          {
+            "name": "params",
+            "type": "UpdateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkUpdateSupportAutomationSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/support_automation_settings.rs"
+  },
+  {
     "operationId": "listCustomers",
     "resource": "customers",
     "method": "list",
@@ -4364,6 +5638,34 @@
     "sourceFile": "src/resources/orders.rs"
   },
   {
+    "operationId": "regenerateOrderTelegramInvite",
+    "resource": "orders",
+    "method": "regenerate_telegram_invite",
+    "nativeSignature": "pub async fn regenerate_telegram_invite(\n        &self,\n        order: &str,\n        params: RegenerateTelegramInviteParams,\n    ) -> Result<SdkRegenerateOrderTelegramInviteResponseValue201ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "regenerate_telegram_invite",
+        "params": [
+          {
+            "name": "order",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "RegenerateTelegramInviteParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkRegenerateOrderTelegramInviteResponseValue201ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/orders.rs"
+  },
+  {
     "operationId": "listOrderDeliverables",
     "resource": "orders",
     "method": "list_deliverables",
@@ -4602,74 +5904,6 @@
       }
     ],
     "sourceFile": "src/resources/orders_line_items.rs"
-  },
-  {
-    "operationId": "getVariantDeliverableConfiguration",
-    "resource": "variant_deliverables",
-    "method": "get",
-    "nativeSignature": "pub async fn get(\n        &self,\n        product: &str,\n        variant: &str,\n        params: GetParams,\n    ) -> Result<SdkGetVariantDeliverableConfigurationResponseValue200ApplicationJson, Error>",
-    "signatures": [
-      {
-        "name": "get",
-        "params": [
-          {
-            "name": "product",
-            "type": "&str",
-            "optional": false,
-            "passingStyle": "positional"
-          },
-          {
-            "name": "variant",
-            "type": "&str",
-            "optional": false,
-            "passingStyle": "positional"
-          },
-          {
-            "name": "params",
-            "type": "GetParams",
-            "optional": false,
-            "passingStyle": "positional"
-          }
-        ],
-        "returnType": "SdkGetVariantDeliverableConfigurationResponseValue200ApplicationJson",
-        "async": true
-      }
-    ],
-    "sourceFile": "src/resources/variant_deliverables.rs"
-  },
-  {
-    "operationId": "replaceVariantDeliverableConfiguration",
-    "resource": "variant_deliverables",
-    "method": "replace",
-    "nativeSignature": "pub async fn replace(\n        &self,\n        product: &str,\n        variant: &str,\n        params: ReplaceParams,\n    ) -> Result<SdkReplaceVariantDeliverableConfigurationResponseValue200ApplicationJson, Error>",
-    "signatures": [
-      {
-        "name": "replace",
-        "params": [
-          {
-            "name": "product",
-            "type": "&str",
-            "optional": false,
-            "passingStyle": "positional"
-          },
-          {
-            "name": "variant",
-            "type": "&str",
-            "optional": false,
-            "passingStyle": "positional"
-          },
-          {
-            "name": "params",
-            "type": "ReplaceParams",
-            "optional": false,
-            "passingStyle": "positional"
-          }
-        ],
-        "returnType": "SdkReplaceVariantDeliverableConfigurationResponseValue200ApplicationJson",
-        "async": true
-      }
-    ],
-    "sourceFile": "src/resources/variant_deliverables.rs"
   },
   {
     "operationId": "listVariantDeliverableFiles",
@@ -5392,6 +6626,34 @@
     "sourceFile": "src/resources/affiliate_program.rs"
   },
   {
+    "operationId": "resendAffiliateInvitation",
+    "resource": "affiliate_program",
+    "method": "resend",
+    "nativeSignature": "pub async fn resend(\n        &self,\n        invitation: &str,\n        params: ResendParams,\n    ) -> Result<SdkResendAffiliateInvitationResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "resend",
+        "params": [
+          {
+            "name": "invitation",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ResendParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkResendAffiliateInvitationResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/affiliate_program.rs"
+  },
+  {
     "operationId": "listRewardRules",
     "resource": "reward_rules",
     "method": "list",
@@ -5964,6 +7226,34 @@
     "sourceFile": "src/resources/upsell_offers.rs"
   },
   {
+    "operationId": "getUpsellOfferPerformance",
+    "resource": "upsell_offers",
+    "method": "get_performance",
+    "nativeSignature": "pub async fn get_performance(\n        &self,\n        upsell_offer: &str,\n        params: GetPerformanceParams,\n    ) -> Result<SdkGetUpsellOfferPerformanceResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get_performance",
+        "params": [
+          {
+            "name": "upsell_offer",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetPerformanceParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetUpsellOfferPerformanceResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/upsell_offers.rs"
+  },
+  {
     "operationId": "listCommunityConnections",
     "resource": "community_connections",
     "method": "list",
@@ -6126,6 +7416,184 @@
     "sourceFile": "src/resources/community_connections.rs"
   },
   {
+    "operationId": "listCommunityFailedGrantReasons",
+    "resource": "community_connections",
+    "method": "list_failed_grant_reasons",
+    "nativeSignature": "pub async fn list_failed_grant_reasons(\n        &self,\n        params: ListFailedGrantReasonsParams,\n    ) -> Result<SdkListCommunityFailedGrantReasonsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "list_failed_grant_reasons",
+        "params": [
+          {
+            "name": "params",
+            "type": "ListFailedGrantReasonsParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkListCommunityFailedGrantReasonsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/community_connections.rs"
+  },
+  {
+    "operationId": "syncDiscordRoles",
+    "resource": "community_connections",
+    "method": "sync_discord_roles",
+    "nativeSignature": "pub async fn sync_discord_roles(\n        &self,\n        params: SyncDiscordRolesParams,\n    ) -> Result<SdkSyncDiscordRolesResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "sync_discord_roles",
+        "params": [
+          {
+            "name": "params",
+            "type": "SyncDiscordRolesParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkSyncDiscordRolesResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/community_connections.rs"
+  },
+  {
+    "operationId": "getCommunityServer",
+    "resource": "community_connections_servers",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        platform: &str,\n        server: &str,\n        params: GetParams,\n    ) -> Result<SdkGetCommunityServerResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "platform",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "server",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetCommunityServerResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/community_connections_servers.rs"
+  },
+  {
+    "operationId": "removeCommunityServer",
+    "resource": "community_connections_servers",
+    "method": "remove",
+    "nativeSignature": "pub async fn remove(\n        &self,\n        platform: &str,\n        server: &str,\n        params: RemoveParams,\n    ) -> Result<SdkRemoveCommunityServerResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "remove",
+        "params": [
+          {
+            "name": "platform",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "server",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "RemoveParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkRemoveCommunityServerResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/community_connections_servers.rs"
+  },
+  {
+    "operationId": "listSlackAvailableChannels",
+    "resource": "community_connections_slack",
+    "method": "list_channels",
+    "nativeSignature": "pub async fn list_channels(\n        &self,\n        params: ListChannelsParams,\n    ) -> Result<SdkListSlackAvailableChannelsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "list_channels",
+        "params": [
+          {
+            "name": "params",
+            "type": "ListChannelsParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkListSlackAvailableChannelsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/community_connections_slack.rs"
+  },
+  {
+    "operationId": "addSlackChannel",
+    "resource": "community_connections_slack",
+    "method": "add_channel",
+    "nativeSignature": "pub async fn add_channel(\n        &self,\n        params: AddChannelParams,\n    ) -> Result<SdkAddSlackChannelResponseValue201ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "add_channel",
+        "params": [
+          {
+            "name": "params",
+            "type": "AddChannelParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkAddSlackChannelResponseValue201ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/community_connections_slack.rs"
+  },
+  {
+    "operationId": "replaceSlackWorkspaceInviteLink",
+    "resource": "community_connections_slack",
+    "method": "replace_invite_link",
+    "nativeSignature": "pub async fn replace_invite_link(\n        &self,\n        params: ReplaceInviteLinkParams,\n    ) -> Result<SdkReplaceSlackWorkspaceInviteLinkResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace_invite_link",
+        "params": [
+          {
+            "name": "params",
+            "type": "ReplaceInviteLinkParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplaceSlackWorkspaceInviteLinkResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/community_connections_slack.rs"
+  },
+  {
     "operationId": "getWalletSettings",
     "resource": "wallet_settings",
     "method": "get",
@@ -6276,6 +7744,40 @@
     "sourceFile": "src/resources/wallet.rs"
   },
   {
+    "operationId": "reverseWalletTransaction",
+    "resource": "wallet_transactions",
+    "method": "reverse",
+    "nativeSignature": "pub async fn reverse(\n        &self,\n        customer: &str,\n        transaction: &str,\n        params: ReverseParams,\n    ) -> Result<SdkReverseWalletTransactionResponseValue201ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "reverse",
+        "params": [
+          {
+            "name": "customer",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "transaction",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ReverseParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReverseWalletTransactionResponseValue201ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/wallet_transactions.rs"
+  },
+  {
     "operationId": "listWalletTransactions",
     "resource": "wallet_transactions",
     "method": "list",
@@ -6302,6 +7804,50 @@
       }
     ],
     "sourceFile": "src/resources/wallet_transactions.rs"
+  },
+  {
+    "operationId": "listStoreWalletTransactions",
+    "resource": "wallet_ledger",
+    "method": "list",
+    "nativeSignature": "pub async fn list(\n        &self,\n        params: ListParams,\n    ) -> Result<SdkListStoreWalletTransactionsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "list",
+        "params": [
+          {
+            "name": "params",
+            "type": "ListParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkListStoreWalletTransactionsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/wallet_ledger.rs"
+  },
+  {
+    "operationId": "getWalletOverview",
+    "resource": "wallet_overview",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        params: GetParams,\n    ) -> Result<SdkGetWalletOverviewResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetWalletOverviewResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/wallet_overview.rs"
   },
   {
     "operationId": "createWalletTopUp",
@@ -6488,6 +8034,28 @@
     "sourceFile": "src/resources/cashback_rules.rs"
   },
   {
+    "operationId": "quoteCashbackRule",
+    "resource": "cashback_rules",
+    "method": "quote",
+    "nativeSignature": "pub async fn quote(\n        &self,\n        params: QuoteParams,\n    ) -> Result<SdkQuoteCashbackRuleResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "quote",
+        "params": [
+          {
+            "name": "params",
+            "type": "QuoteParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkQuoteCashbackRuleResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/cashback_rules.rs"
+  },
+  {
     "operationId": "listWalletBonusTiers",
     "resource": "wallet_bonus_tiers",
     "method": "list",
@@ -6644,6 +8212,28 @@
     "sourceFile": "src/resources/wallet_bonus_tiers.rs"
   },
   {
+    "operationId": "quoteWalletBonusTier",
+    "resource": "wallet_bonus_tiers",
+    "method": "quote",
+    "nativeSignature": "pub async fn quote(\n        &self,\n        params: QuoteParams,\n    ) -> Result<SdkQuoteWalletBonusTierResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "quote",
+        "params": [
+          {
+            "name": "params",
+            "type": "QuoteParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkQuoteWalletBonusTierResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/wallet_bonus_tiers.rs"
+  },
+  {
     "operationId": "listCourses",
     "resource": "courses",
     "method": "list",
@@ -6660,6 +8250,28 @@
           }
         ],
         "returnType": "SdkListCoursesResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/courses.rs"
+  },
+  {
+    "operationId": "createCourse",
+    "resource": "courses",
+    "method": "create",
+    "nativeSignature": "pub async fn create(\n        &self,\n        params: CreateParams,\n    ) -> Result<SdkCreateCourseResponseValue201ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "create",
+        "params": [
+          {
+            "name": "params",
+            "type": "CreateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkCreateCourseResponseValue201ApplicationJson",
         "async": true
       }
     ],
@@ -6766,6 +8378,28 @@
           }
         ],
         "returnType": "SdkUpdateCourseResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/courses.rs"
+  },
+  {
+    "operationId": "getCourseStudentSummary",
+    "resource": "courses",
+    "method": "get_student_summary",
+    "nativeSignature": "pub async fn get_student_summary(\n        &self,\n        params: GetStudentSummaryParams,\n    ) -> Result<SdkGetCourseStudentSummaryResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get_student_summary",
+        "params": [
+          {
+            "name": "params",
+            "type": "GetStudentSummaryParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetCourseStudentSummaryResponseValue200ApplicationJson",
         "async": true
       }
     ],
@@ -7094,6 +8728,190 @@
     "sourceFile": "src/resources/courses_lessons.rs"
   },
   {
+    "operationId": "listCheckoutFieldTemplates",
+    "resource": "checkout_field_templates",
+    "method": "list",
+    "nativeSignature": "pub async fn list(\n        &self,\n        params: ListParams,\n    ) -> Result<SdkListCheckoutFieldTemplatesResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "list",
+        "params": [
+          {
+            "name": "params",
+            "type": "ListParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkListCheckoutFieldTemplatesResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/checkout_field_templates.rs"
+  },
+  {
+    "operationId": "createCheckoutFieldTemplate",
+    "resource": "checkout_field_templates",
+    "method": "create",
+    "nativeSignature": "pub async fn create(\n        &self,\n        params: CreateParams,\n    ) -> Result<SdkCreateCheckoutFieldTemplateResponseValue201ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "create",
+        "params": [
+          {
+            "name": "params",
+            "type": "CreateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkCreateCheckoutFieldTemplateResponseValue201ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/checkout_field_templates.rs"
+  },
+  {
+    "operationId": "getCheckoutFieldTemplate",
+    "resource": "checkout_field_templates",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        checkout_field_template: &str,\n        params: GetParams,\n    ) -> Result<SdkGetCheckoutFieldTemplateResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "checkout_field_template",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetCheckoutFieldTemplateResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/checkout_field_templates.rs"
+  },
+  {
+    "operationId": "replaceCheckoutFieldTemplate",
+    "resource": "checkout_field_templates",
+    "method": "replace",
+    "nativeSignature": "pub async fn replace(\n        &self,\n        checkout_field_template: &str,\n        params: ReplaceParams,\n    ) -> Result<SdkReplaceCheckoutFieldTemplateResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace",
+        "params": [
+          {
+            "name": "checkout_field_template",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ReplaceParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplaceCheckoutFieldTemplateResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/checkout_field_templates.rs"
+  },
+  {
+    "operationId": "updateCheckoutFieldTemplate",
+    "resource": "checkout_field_templates",
+    "method": "update",
+    "nativeSignature": "pub async fn update(\n        &self,\n        checkout_field_template: &str,\n        params: UpdateParams,\n    ) -> Result<SdkUpdateCheckoutFieldTemplateResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "update",
+        "params": [
+          {
+            "name": "checkout_field_template",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "UpdateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkUpdateCheckoutFieldTemplateResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/checkout_field_templates.rs"
+  },
+  {
+    "operationId": "deleteCheckoutFieldTemplate",
+    "resource": "checkout_field_templates",
+    "method": "delete",
+    "nativeSignature": "pub async fn delete(\n        &self,\n        checkout_field_template: &str,\n        params: DeleteParams,\n    ) -> Result<SdkDeleteCheckoutFieldTemplateResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "delete",
+        "params": [
+          {
+            "name": "checkout_field_template",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "DeleteParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkDeleteCheckoutFieldTemplateResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/checkout_field_templates.rs"
+  },
+  {
+    "operationId": "duplicateCheckoutFieldTemplate",
+    "resource": "checkout_field_templates",
+    "method": "duplicate",
+    "nativeSignature": "pub async fn duplicate(\n        &self,\n        checkout_field_template: &str,\n        params: DuplicateParams,\n    ) -> Result<SdkDuplicateCheckoutFieldTemplateResponseValue201ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "duplicate",
+        "params": [
+          {
+            "name": "checkout_field_template",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "DuplicateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkDuplicateCheckoutFieldTemplateResponseValue201ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/checkout_field_templates.rs"
+  },
+  {
     "operationId": "listPaymentMethods",
     "resource": "payment_methods",
     "method": "list",
@@ -7226,6 +9044,62 @@
       }
     ],
     "sourceFile": "src/resources/payment_methods.rs"
+  },
+  {
+    "operationId": "getPaymentMethodModifier",
+    "resource": "payment_methods_modifier",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        payment_method: &str,\n        params: GetParams,\n    ) -> Result<SdkGetPaymentMethodModifierResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "payment_method",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetPaymentMethodModifierResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/payment_methods_modifier.rs"
+  },
+  {
+    "operationId": "replacePaymentMethodModifier",
+    "resource": "payment_methods_modifier",
+    "method": "replace",
+    "nativeSignature": "pub async fn replace(\n        &self,\n        payment_method: &str,\n        params: ReplaceParams,\n    ) -> Result<SdkReplacePaymentMethodModifierResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace",
+        "params": [
+          {
+            "name": "payment_method",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ReplaceParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplacePaymentMethodModifierResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/payment_methods_modifier.rs"
   },
   {
     "operationId": "listCustomPaymentMethods",
@@ -7538,6 +9412,512 @@
     "sourceFile": "src/resources/store_settings.rs"
   },
   {
+    "operationId": "getCheckoutSettings",
+    "resource": "store_settings",
+    "method": "get_checkout",
+    "nativeSignature": "pub async fn get_checkout(\n        &self,\n        params: GetCheckoutParams,\n    ) -> Result<SdkGetCheckoutSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get_checkout",
+        "params": [
+          {
+            "name": "params",
+            "type": "GetCheckoutParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetCheckoutSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "replaceCheckoutSettings",
+    "resource": "store_settings",
+    "method": "replace_checkout",
+    "nativeSignature": "pub async fn replace_checkout(\n        &self,\n        params: ReplaceCheckoutParams,\n    ) -> Result<SdkReplaceCheckoutSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace_checkout",
+        "params": [
+          {
+            "name": "params",
+            "type": "ReplaceCheckoutParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplaceCheckoutSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "updateCheckoutSettings",
+    "resource": "store_settings",
+    "method": "update_checkout",
+    "nativeSignature": "pub async fn update_checkout(\n        &self,\n        params: UpdateCheckoutParams,\n    ) -> Result<SdkUpdateCheckoutSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "update_checkout",
+        "params": [
+          {
+            "name": "params",
+            "type": "UpdateCheckoutParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkUpdateCheckoutSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "getTaxSettings",
+    "resource": "store_settings",
+    "method": "get_taxes",
+    "nativeSignature": "pub async fn get_taxes(\n        &self,\n        params: GetTaxesParams,\n    ) -> Result<SdkGetTaxSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get_taxes",
+        "params": [
+          {
+            "name": "params",
+            "type": "GetTaxesParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetTaxSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "replaceTaxSettings",
+    "resource": "store_settings",
+    "method": "replace_taxes",
+    "nativeSignature": "pub async fn replace_taxes(\n        &self,\n        params: ReplaceTaxesParams,\n    ) -> Result<SdkReplaceTaxSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace_taxes",
+        "params": [
+          {
+            "name": "params",
+            "type": "ReplaceTaxesParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplaceTaxSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "updateTaxSettings",
+    "resource": "store_settings",
+    "method": "update_taxes",
+    "nativeSignature": "pub async fn update_taxes(\n        &self,\n        params: UpdateTaxesParams,\n    ) -> Result<SdkUpdateTaxSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "update_taxes",
+        "params": [
+          {
+            "name": "params",
+            "type": "UpdateTaxesParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkUpdateTaxSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "getCustomerEmailSettings",
+    "resource": "store_settings",
+    "method": "get_customer_emails",
+    "nativeSignature": "pub async fn get_customer_emails(\n        &self,\n        params: GetCustomerEmailsParams,\n    ) -> Result<SdkGetCustomerEmailSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get_customer_emails",
+        "params": [
+          {
+            "name": "params",
+            "type": "GetCustomerEmailsParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetCustomerEmailSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "replaceCustomerEmailSettings",
+    "resource": "store_settings",
+    "method": "replace_customer_emails",
+    "nativeSignature": "pub async fn replace_customer_emails(\n        &self,\n        params: ReplaceCustomerEmailsParams,\n    ) -> Result<SdkReplaceCustomerEmailSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace_customer_emails",
+        "params": [
+          {
+            "name": "params",
+            "type": "ReplaceCustomerEmailsParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplaceCustomerEmailSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "updateCustomerEmailSettings",
+    "resource": "store_settings",
+    "method": "update_customer_emails",
+    "nativeSignature": "pub async fn update_customer_emails(\n        &self,\n        params: UpdateCustomerEmailsParams,\n    ) -> Result<SdkUpdateCustomerEmailSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "update_customer_emails",
+        "params": [
+          {
+            "name": "params",
+            "type": "UpdateCustomerEmailsParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkUpdateCustomerEmailSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "getStoreAlertSettings",
+    "resource": "store_settings",
+    "method": "get_store_alerts",
+    "nativeSignature": "pub async fn get_store_alerts(\n        &self,\n        params: GetStoreAlertsParams,\n    ) -> Result<SdkGetStoreAlertSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get_store_alerts",
+        "params": [
+          {
+            "name": "params",
+            "type": "GetStoreAlertsParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetStoreAlertSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "replaceStoreAlertSettings",
+    "resource": "store_settings",
+    "method": "replace_store_alerts",
+    "nativeSignature": "pub async fn replace_store_alerts(\n        &self,\n        params: ReplaceStoreAlertsParams,\n    ) -> Result<SdkReplaceStoreAlertSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace_store_alerts",
+        "params": [
+          {
+            "name": "params",
+            "type": "ReplaceStoreAlertsParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplaceStoreAlertSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "updateStoreAlertSettings",
+    "resource": "store_settings",
+    "method": "update_store_alerts",
+    "nativeSignature": "pub async fn update_store_alerts(\n        &self,\n        params: UpdateStoreAlertsParams,\n    ) -> Result<SdkUpdateStoreAlertSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "update_store_alerts",
+        "params": [
+          {
+            "name": "params",
+            "type": "UpdateStoreAlertsParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkUpdateStoreAlertSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "getPersonalizationSettings",
+    "resource": "store_settings",
+    "method": "get_personalization",
+    "nativeSignature": "pub async fn get_personalization(\n        &self,\n        params: GetPersonalizationParams,\n    ) -> Result<SdkGetPersonalizationSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get_personalization",
+        "params": [
+          {
+            "name": "params",
+            "type": "GetPersonalizationParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetPersonalizationSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "replacePersonalizationSettings",
+    "resource": "store_settings",
+    "method": "replace_personalization",
+    "nativeSignature": "pub async fn replace_personalization(\n        &self,\n        params: ReplacePersonalizationParams,\n    ) -> Result<SdkReplacePersonalizationSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace_personalization",
+        "params": [
+          {
+            "name": "params",
+            "type": "ReplacePersonalizationParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplacePersonalizationSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "updatePersonalizationSettings",
+    "resource": "store_settings",
+    "method": "update_personalization",
+    "nativeSignature": "pub async fn update_personalization(\n        &self,\n        params: UpdatePersonalizationParams,\n    ) -> Result<SdkUpdatePersonalizationSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "update_personalization",
+        "params": [
+          {
+            "name": "params",
+            "type": "UpdatePersonalizationParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkUpdatePersonalizationSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "replaceCryptoCheckoutSettings",
+    "resource": "store_settings",
+    "method": "replace_crypto_checkout",
+    "nativeSignature": "pub async fn replace_crypto_checkout(\n        &self,\n        params: ReplaceCryptoCheckoutParams,\n    ) -> Result<SdkReplaceCryptoCheckoutSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "replace_crypto_checkout",
+        "params": [
+          {
+            "name": "params",
+            "type": "ReplaceCryptoCheckoutParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkReplaceCryptoCheckoutSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "updateCryptoCheckoutSettings",
+    "resource": "store_settings",
+    "method": "update_crypto_checkout",
+    "nativeSignature": "pub async fn update_crypto_checkout(\n        &self,\n        params: UpdateCryptoCheckoutParams,\n    ) -> Result<SdkUpdateCryptoCheckoutSettingsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "update_crypto_checkout",
+        "params": [
+          {
+            "name": "params",
+            "type": "UpdateCryptoCheckoutParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkUpdateCryptoCheckoutSettingsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_settings.rs"
+  },
+  {
+    "operationId": "getSenderEmail",
+    "resource": "store_sender_email",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        params: GetParams,\n    ) -> Result<SdkGetSenderEmailResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetSenderEmailResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_sender_email.rs"
+  },
+  {
+    "operationId": "setSenderEmail",
+    "resource": "store_sender_email",
+    "method": "set",
+    "nativeSignature": "pub async fn set(\n        &self,\n        params: SetParams,\n    ) -> Result<SdkSetSenderEmailResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "set",
+        "params": [
+          {
+            "name": "params",
+            "type": "SetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkSetSenderEmailResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_sender_email.rs"
+  },
+  {
+    "operationId": "deleteSenderEmail",
+    "resource": "store_sender_email",
+    "method": "delete",
+    "nativeSignature": "pub async fn delete(\n        &self,\n        params: DeleteParams,\n    ) -> Result<SdkDeleteSenderEmailResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "delete",
+        "params": [
+          {
+            "name": "params",
+            "type": "DeleteParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkDeleteSenderEmailResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_sender_email.rs"
+  },
+  {
+    "operationId": "sendSenderEmailVerification",
+    "resource": "store_sender_email",
+    "method": "send_verification",
+    "nativeSignature": "pub async fn send_verification(\n        &self,\n        params: SendVerificationParams,\n    ) -> Result<SdkSendSenderEmailVerificationResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "send_verification",
+        "params": [
+          {
+            "name": "params",
+            "type": "SendVerificationParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkSendSenderEmailVerificationResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_sender_email.rs"
+  },
+  {
+    "operationId": "getStoreIntegrations",
+    "resource": "store_integrations",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        params: GetParams,\n    ) -> Result<SdkGetStoreIntegrationsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetStoreIntegrationsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_integrations.rs"
+  },
+  {
+    "operationId": "disconnectGoogleCalendar",
+    "resource": "store_integrations",
+    "method": "disconnect_google_calendar",
+    "nativeSignature": "pub async fn disconnect_google_calendar(\n        &self,\n        params: DisconnectGoogleCalendarParams,\n    ) -> Result<SdkDisconnectGoogleCalendarResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "disconnect_google_calendar",
+        "params": [
+          {
+            "name": "params",
+            "type": "DisconnectGoogleCalendarParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkDisconnectGoogleCalendarResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/store_integrations.rs"
+  },
+  {
     "operationId": "listNotificationChannels",
     "resource": "store_notification_channels",
     "method": "list",
@@ -7820,6 +10200,50 @@
       }
     ],
     "sourceFile": "src/resources/store_custom_domains.rs"
+  },
+  {
+    "operationId": "listNotifications",
+    "resource": "notifications",
+    "method": "list",
+    "nativeSignature": "pub async fn list(\n        &self,\n        params: ListParams,\n    ) -> Result<SdkListNotificationsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "list",
+        "params": [
+          {
+            "name": "params",
+            "type": "ListParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkListNotificationsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/notifications.rs"
+  },
+  {
+    "operationId": "markNotificationsSeen",
+    "resource": "notifications",
+    "method": "mark",
+    "nativeSignature": "pub async fn mark(\n        &self,\n        params: MarkParams,\n    ) -> Result<SdkMarkNotificationsSeenResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "mark",
+        "params": [
+          {
+            "name": "params",
+            "type": "MarkParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkMarkNotificationsSeenResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/notifications.rs"
   },
   {
     "operationId": "listCreditsProducts",
@@ -8190,6 +10614,146 @@
     "sourceFile": "src/resources/affiliates.rs"
   },
   {
+    "operationId": "getAffiliateProducts",
+    "resource": "affiliates_products",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        affiliate: &str,\n        params: GetParams,\n    ) -> Result<SdkGetAffiliateProductsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "affiliate",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetAffiliateProductsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/affiliates_products.rs"
+  },
+  {
+    "operationId": "updateAffiliateProducts",
+    "resource": "affiliates_products",
+    "method": "update",
+    "nativeSignature": "pub async fn update(\n        &self,\n        affiliate: &str,\n        params: UpdateParams,\n    ) -> Result<SdkUpdateAffiliateProductsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "update",
+        "params": [
+          {
+            "name": "affiliate",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "UpdateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkUpdateAffiliateProductsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/affiliates_products.rs"
+  },
+  {
+    "operationId": "getAffiliateCoupon",
+    "resource": "affiliates_coupon",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        affiliate: &str,\n        params: GetParams,\n    ) -> Result<SdkGetAffiliateCouponResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "affiliate",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetAffiliateCouponResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/affiliates_coupon.rs"
+  },
+  {
+    "operationId": "saveAffiliateCoupon",
+    "resource": "affiliates_coupon",
+    "method": "save",
+    "nativeSignature": "pub async fn save(\n        &self,\n        affiliate: &str,\n        params: SaveParams,\n    ) -> Result<SdkSaveAffiliateCouponResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "save",
+        "params": [
+          {
+            "name": "affiliate",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "SaveParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkSaveAffiliateCouponResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/affiliates_coupon.rs"
+  },
+  {
+    "operationId": "disableAffiliateCoupon",
+    "resource": "affiliates_coupon",
+    "method": "disable",
+    "nativeSignature": "pub async fn disable(\n        &self,\n        affiliate: &str,\n        params: DisableParams,\n    ) -> Result<SdkDisableAffiliateCouponResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "disable",
+        "params": [
+          {
+            "name": "affiliate",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "DisableParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkDisableAffiliateCouponResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/affiliates_coupon.rs"
+  },
+  {
     "operationId": "listAffiliateReferrals",
     "resource": "affiliate_referrals",
     "method": "list",
@@ -8418,6 +10982,28 @@
           }
         ],
         "returnType": "SdkUpdateAffiliatePayoutStatusResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/affiliate_payouts.rs"
+  },
+  {
+    "operationId": "markAffiliatePayoutsPaid",
+    "resource": "affiliate_payouts",
+    "method": "mark_paid",
+    "nativeSignature": "pub async fn mark_paid(\n        &self,\n        params: MarkPaidParams,\n    ) -> Result<SdkMarkAffiliatePayoutsPaidResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "mark_paid",
+        "params": [
+          {
+            "name": "params",
+            "type": "MarkPaidParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkMarkAffiliatePayoutsPaidResponseValue200ApplicationJson",
         "async": true
       }
     ],
@@ -10160,6 +12746,34 @@
     "sourceFile": "src/resources/coupons.rs"
   },
   {
+    "operationId": "v2GetCouponUsage",
+    "resource": "coupons",
+    "method": "v_2_get_coupon_usage",
+    "nativeSignature": "pub async fn v_2_get_coupon_usage(\n        &self,\n        coupon: &str,\n        params: V2GetCouponUsageParams,\n    ) -> Result<SdkV2GetCouponUsageResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "v_2_get_coupon_usage",
+        "params": [
+          {
+            "name": "coupon",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "V2GetCouponUsageParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkV2GetCouponUsageResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/coupons.rs"
+  },
+  {
     "operationId": "listFeedback",
     "resource": "feedback",
     "method": "list",
@@ -11180,6 +13794,56 @@
     "sourceFile": "src/resources/tickets.rs"
   },
   {
+    "operationId": "batchUpdateTickets",
+    "resource": "tickets",
+    "method": "batch_update",
+    "nativeSignature": "pub async fn batch_update(\n        &self,\n        params: BatchUpdateParams,\n    ) -> Result<SdkBatchUpdateTicketsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "batch_update",
+        "params": [
+          {
+            "name": "params",
+            "type": "BatchUpdateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkBatchUpdateTicketsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/tickets.rs"
+  },
+  {
+    "operationId": "v2GetTicketContext",
+    "resource": "tickets",
+    "method": "get_context",
+    "nativeSignature": "pub async fn get_context(\n        &self,\n        ticket: &str,\n        params: GetContextParams,\n    ) -> Result<SdkV2GetTicketContextResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get_context",
+        "params": [
+          {
+            "name": "ticket",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "GetContextParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkV2GetTicketContextResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/tickets.rs"
+  },
+  {
     "operationId": "listTicketMessages",
     "resource": "tickets_messages",
     "method": "list",
@@ -11408,6 +14072,146 @@
       }
     ],
     "sourceFile": "src/resources/tickets_messages.rs"
+  },
+  {
+    "operationId": "v2ListTicketWalletRefundOptions",
+    "resource": "tickets_wallet_refunds",
+    "method": "list_options",
+    "nativeSignature": "pub async fn list_options(\n        &self,\n        ticket: &str,\n        params: ListOptionsParams,\n    ) -> Result<SdkV2ListTicketWalletRefundOptionsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "list_options",
+        "params": [
+          {
+            "name": "ticket",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ListOptionsParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkV2ListTicketWalletRefundOptionsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/tickets_wallet_refunds.rs"
+  },
+  {
+    "operationId": "v2ListTicketWalletRefunds",
+    "resource": "tickets_wallet_refunds",
+    "method": "list",
+    "nativeSignature": "pub async fn list(\n        &self,\n        ticket: &str,\n        params: ListParams,\n    ) -> Result<SdkV2ListTicketWalletRefundsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "list",
+        "params": [
+          {
+            "name": "ticket",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ListParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkV2ListTicketWalletRefundsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/tickets_wallet_refunds.rs"
+  },
+  {
+    "operationId": "v2RefundTicketToWallet",
+    "resource": "tickets_wallet_refunds",
+    "method": "create",
+    "nativeSignature": "pub async fn create(\n        &self,\n        ticket: &str,\n        params: CreateParams,\n    ) -> Result<SdkV2RefundTicketToWalletResponseValue201ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "create",
+        "params": [
+          {
+            "name": "ticket",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "CreateParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkV2RefundTicketToWalletResponseValue201ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/tickets_wallet_refunds.rs"
+  },
+  {
+    "operationId": "v2ReverseTicketWalletRefund",
+    "resource": "tickets_wallet_refunds",
+    "method": "reverse",
+    "nativeSignature": "pub async fn reverse(\n        &self,\n        ticket: &str,\n        wallet_refund: &str,\n        params: ReverseParams,\n    ) -> Result<SdkV2ReverseTicketWalletRefundResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "reverse",
+        "params": [
+          {
+            "name": "ticket",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "wallet_refund",
+            "type": "&str",
+            "optional": false,
+            "passingStyle": "positional"
+          },
+          {
+            "name": "params",
+            "type": "ReverseParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkV2ReverseTicketWalletRefundResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/tickets_wallet_refunds.rs"
+  },
+  {
+    "operationId": "getSupportAnalytics",
+    "resource": "tickets_analytics",
+    "method": "get",
+    "nativeSignature": "pub async fn get(\n        &self,\n        params: GetParams,\n    ) -> Result<SdkGetSupportAnalyticsResponseValue200ApplicationJson, Error>",
+    "signatures": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "params",
+            "type": "GetParams",
+            "optional": false,
+            "passingStyle": "positional"
+          }
+        ],
+        "returnType": "SdkGetSupportAnalyticsResponseValue200ApplicationJson",
+        "async": true
+      }
+    ],
+    "sourceFile": "src/resources/tickets_analytics.rs"
   },
   {
     "operationId": "getOAuthAuthorizationServerMetadata",

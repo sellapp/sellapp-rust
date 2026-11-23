@@ -266,6 +266,30 @@ impl SendFulfillmentNotificationsParams {
     }
 }
 
+#[derive(Debug, Clone, Serialize)]
+pub struct RegenerateTelegramInviteParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkRegenerateOrderTelegramInviteRequestApplicationJson,
+}
+
+impl RegenerateTelegramInviteParams {
+    /// Construct a new `RegenerateTelegramInviteParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkRegenerateOrderTelegramInviteRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Default, Serialize)]
 pub struct ListDeliverablesParams {
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
@@ -408,7 +432,7 @@ impl<'a> OrdersApi<'a> {
 
     /// Search orders
     ///
-    /// Find orders using the same filters as the list endpoint. Requires the invoice token ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Find your store's orders by transaction, customer, product, delivery, payment, status, currency, placement time, or total, newest first unless `sort` says otherwise. Every filter must match. Combine a `gte` and an `lte` filter on `created_at` or `total` for a range; a `gte` value above the `lte` value returns `422` on `filters`. An unknown field, an operator the field does not take, or a value of the wrong type returns `422` on its position, such as `filters.0.operator`. Requires the invoice token ability. Read-only and safe to repeat. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn search(
         &self,
         params: SearchParams,
@@ -501,7 +525,7 @@ impl<'a> OrdersApi<'a> {
 
     /// Update order status
     ///
-    /// Change order lifecycle state. COMPLETED finalizes fulfillment of an already paid/partial/disputing order; it does not capture a pending payment. VOIDED can schedule provider side effects. REVIEW and DISPUTING have state restrictions. Send expected_status to prevent overwriting a changed state; an invalid transition, stale status, or busy lifecycle lock returns 422. Requires the invoice ability or orders:write OAuth scope and current store permission. Idempotency-Key is required. Reuse the same key and identical request after a lost response; changed input or an in-progress request returns 409. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Change order lifecycle state. COMPLETED finalizes fulfillment of an already paid/partial/disputing order; it does not capture a pending payment. VOIDED can schedule provider side effects. REVIEW and DISPUTING have state restrictions. Send expected_status to prevent overwriting a changed state; an invalid transition, stale status, or busy lifecycle lock returns 422. To record a payment the store received outside SellApp, send `status: COMPLETED` with `payment_received: true` and `expected_status` set to the status you last read; this is the dashboard's manual completion. A `PENDING`, `REVIEW`, or `VOIDED` order then becomes `PAID` and delivery to the customer starts; a `PAID` or `PARTIAL` order has its delivery finished and becomes `COMPLETED`. An order can be marked paid by hand only when its total is at most 100000 minor units of its currency ($1,000.00 in USD), unless it is a custom payment method order in `REVIEW`. A larger order, or an order in any other status, returns `422` on `status`; a status that changed since you read it returns `422` on `expected_status`. Without `payment_received`, a `PENDING` order cannot be completed. Requires the `invoice` API-key ability or the `orders:write` OAuth scope, and current store permission. `Idempotency-Key` is required. Reuse the same key and identical request after a lost response; changed input or an in-progress request returns `409`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn update_status(
         &self,
         order: &str,
@@ -551,7 +575,7 @@ impl<'a> OrdersApi<'a> {
 
     /// Create order checkout
     ///
-    /// Start or reuse checkout for a PENDING order. A new payment session returns 201; if the order already has one, that session is returned with 200. An order that costs nothing, or that the customer wallet covers in full, is marked as paid and returns 200 with a null payment.checkout_url. A free trial sold through Stripe, PayPal, or Razorpay is the exception: the customer still has to authorise the subscription with that provider, so checkout returns its payment.checkout_url and the order stays PENDING until they do. An unpaid order that sold a trial stops being payable after 72 hours, or on those three providers once the trial it sold is about to end; checkout then returns 422 on order.checkout, the order stays PENDING, and the customer has to start a new checkout. An order that is no longer PENDING also returns 422 on order.checkout. Other failures can mark the order FAILED and release wallet reservations. Do not infer payment from a checkout URL or browser return. The optional expected_status field is validated but is not a checkout concurrency precondition. Requires the invoice ability or orders:write OAuth scope and current store permission. Idempotency-Key is required. Reuse the same key and identical request after a lost response; changed input or an in-progress request returns 409. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Start or reuse checkout for a PENDING order. A new payment session returns 201; if the order already has one, that session is returned with 200. An order that costs nothing, or that the customer wallet covers in full, is marked as paid and returns 200 with a null payment.checkout_url. A free trial sold through Stripe, PayPal, or Razorpay is the exception: the customer still has to authorise the subscription with that provider, so checkout returns its payment.checkout_url and the order stays PENDING until they do. An unpaid order that sold a trial stops being payable after 72 hours, or on those three providers once the trial it sold is about to end; checkout then returns 422 on order.checkout, the order stays PENDING, and the customer has to start a new checkout. An order that is no longer PENDING also returns 422 on order.checkout. Other failures can mark the order FAILED and release wallet reservations. Do not infer payment from a checkout URL or browser return. The optional expected_status field is validated but is not a checkout concurrency precondition. Requires the `invoice` API-key ability or the `orders:write` OAuth scope, and current store permission. `Idempotency-Key` is required. Reuse the same key and identical request after a lost response; changed input or an in-progress request returns `409`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn create_checkout(
         &self,
         order: &str,
@@ -601,7 +625,7 @@ impl<'a> OrdersApi<'a> {
 
     /// Issue replacements
     ///
-    /// Create a replacement order and begin fulfillment for selected purchased variants. Supply a variant ID, an array of variant IDs, or a map of variant IDs to replacement quantities (null means original quantity). Variants must belong to this order; replacement quantities cannot exceed purchased quantity or available stock. Already replaced deliveries cannot be replaced again. The returned ID belongs to the new replacement order. Requires the invoice ability or orders:write OAuth scope and current store permission. Idempotency-Key is required. Reuse the same key and identical request after a lost response; changed input or an in-progress request returns 409. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Create a replacement order and begin fulfillment for selected purchased variants. Supply a variant ID, an array of variant IDs, or a map of variant IDs to replacement quantities (null means original quantity). Variants must belong to this order; replacement quantities cannot exceed purchased quantity or available stock. Already replaced deliveries cannot be replaced again. The returned ID belongs to the new replacement order. Requires the `invoice` API-key ability or the `orders:write` OAuth scope, and current store permission. `Idempotency-Key` is required. Reuse the same key and identical request after a lost response; changed input or an in-progress request returns `409`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn create_replacement(
         &self,
         order: &str,
@@ -652,7 +676,7 @@ impl<'a> OrdersApi<'a> {
 
     /// Refund an order
     ///
-    /// Request a real refund for a completed, nonsubscription order with refundable balance and a supported provider. amount is a decimal string in the order currency: "5.00" means $5.00 in USD, not 500 cents. Omitting amount, sending null, or an empty string requests the FULL remaining balance. Do not send amount_cents: it is not a request field. Inspect refund.status (pending/effective/failed/cancelled); a 200 response does not guarantee money has reached the customer. Retrieve refund state before retrying an uncertain provider outcome. Requires the invoice ability or orders:write OAuth scope and current store permission. Idempotency-Key is required. Reuse the same key and identical request after a lost response; changed input or an in-progress request returns 409. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Request a real refund for a completed, nonsubscription order with refundable balance and a supported provider. amount is a decimal string in the order's `totals.refund_currency`: "5.00" means $5.00 in USD, not 500 cents. Omitting amount, sending null, or an empty string requests the FULL remaining balance. Do not send amount_cents: it is not a request field. Inspect refund.status (pending/effective/failed/cancelled); a 200 response does not guarantee money has reached the customer. Retrieve refund state before retrying an uncertain provider outcome. Send the order's `totals.refunded_total_cents` unchanged as `expected_refunded_total_cents` so that a retry under a new Idempotency-Key, or a refund someone else made meanwhile, is refused instead of refunding twice: the refund goes out only while the order's refunded total still equals it. A changed total returns `422` on `expected_refunded_total_cents`; read the order again before deciding whether to refund. An invalid `amount` returns `422` on `amount`; other refusals return `422` on `refund`, including, when you send `expected_refunded_total_cents`, a refund still pending on the order. Requires the `invoice` API-key ability or the `orders:write` OAuth scope, and current store permission. `Idempotency-Key` is required. Reuse the same key and identical request after a lost response; changed input or an in-progress request returns `409`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn create_refund(
         &self,
         order: &str,
@@ -702,7 +726,7 @@ impl<'a> OrdersApi<'a> {
 
     /// Retry fulfillment
     ///
-    /// Reset fulfillment effects for a PAID or PARTIAL order and retry delivery. The optional email overrides the recipient. meta.effects_reset counts reset effects; it does not prove fulfillment finished. Other order states and a busy lifecycle lock return 422. Requires the invoice ability or orders:write OAuth scope and current store permission. Idempotency-Key is required. Reuse the same key and identical request after a lost response; changed input or an in-progress request returns 409. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Reset fulfillment effects for a PAID or PARTIAL order and retry delivery. The optional email overrides the recipient. meta.effects_reset counts reset effects; it does not prove fulfillment finished. Other order states and a busy lifecycle lock return 422. Requires the `invoice` API-key ability or the `orders:write` OAuth scope, and current store permission. `Idempotency-Key` is required. Reuse the same key and identical request after a lost response; changed input or an in-progress request returns `409`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn retry_fulfillment(
         &self,
         order: &str,
@@ -753,7 +777,7 @@ impl<'a> OrdersApi<'a> {
 
     /// Retry dynamic delivery
     ///
-    /// Queue another dynamic delivery attempt for one delivered product of a COMPLETED order. The delivered product, line item and currently dynamic variant must all belong to this order and store, with a configured webhook. 202 and meta.queued acknowledge the retry request, not successful external delivery. Requires the invoice ability or orders:write OAuth scope and current store permission. Idempotency-Key is required. Reuse the same key and identical request after a lost response; changed input or an in-progress request returns 409. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Queue another dynamic delivery attempt for one delivered product of a COMPLETED order. The delivered product, line item and currently dynamic variant must all belong to this order and store, with a configured webhook. 202 and meta.queued acknowledge the retry request, not successful external delivery. Requires the `invoice` API-key ability or the `orders:write` OAuth scope, and current store permission. `Idempotency-Key` is required. Reuse the same key and identical request after a lost response; changed input or an in-progress request returns `409`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn retry_dynamic_delivery(
         &self,
         order: &str,
@@ -806,7 +830,7 @@ impl<'a> OrdersApi<'a> {
 
     /// Send fulfillment notifications
     ///
-    /// Send delivery notifications for each selected purchased variant. Omit product_variant_ids to select all variants. A supplied list must contain distinct positive IDs belonging to this order and store. Noncompleted orders or a missing recipient return meta.notifications_sent=0. The count records notifications requested, not email delivery confirmation. Requires the invoice ability or orders:write OAuth scope and current store permission. Idempotency-Key is required. Reuse the same key and identical request after a lost response; changed input or an in-progress request returns 409. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Send delivery notifications for each selected purchased variant. Omit product_variant_ids to select all variants. A supplied list must contain distinct positive IDs belonging to this order and store. Noncompleted orders or a missing recipient return meta.notifications_sent=0. The count records notifications requested, not email delivery confirmation. Requires the `invoice` API-key ability or the `orders:write` OAuth scope, and current store permission. `Idempotency-Key` is required. Reuse the same key and identical request after a lost response; changed input or an in-progress request returns `409`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn send_fulfillment_notifications(
         &self,
         order: &str,
@@ -857,9 +881,62 @@ impl<'a> OrdersApi<'a> {
             .await
     }
 
+    /// Create a Telegram invite link
+    ///
+    /// Create a new Telegram invite link for a customer whose order granted access to a Telegram group or channel, for example after their first link expired or was used. Each link admits one person and expires 24 hours after it is created. SellApp saves the link on the order but does not send it: pass `invite_link` to the customer yourself. Send `variant_id` to choose the product when the order grants Telegram access for several; omit it when only one does. At most three links per product of an order are created in 24 hours, and a failed attempt does not count; a fourth returns `422` on `telegram_invite`, as do Telegram refusals such as an unhealthy bot connection or missing invite data. An order that is no longer paid, for example one refunded, disputed or voided, returns `422` on `telegram_invite` with `This order no longer grants Telegram access.` and creates no link. An order without granted Telegram access returns `422` on `order`; a product without it, or a missing `variant_id` when several products qualify, returns `422` on `variant_id`. Requires the `invoice` API-key ability or the `orders:write` OAuth scope, and current store permission. `Idempotency-Key` is required. Reuse the same key and identical request after a lost response; changed input or an in-progress request returns `409`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn regenerate_telegram_invite(
+        &self,
+        order: &str,
+        params: RegenerateTelegramInviteParams,
+    ) -> Result<SdkRegenerateOrderTelegramInviteResponseValue201ApplicationJson, Error> {
+        self.regenerate_telegram_invite_with_options(order, params, None)
+            .await
+    }
+
+    /// Variant of [`Self::regenerate_telegram_invite`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn regenerate_telegram_invite_with_options(
+        &self,
+        order: &str,
+        params: RegenerateTelegramInviteParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkRegenerateOrderTelegramInviteResponseValue201ApplicationJson, Error> {
+        self.regenerate_telegram_invite_raw(order, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn regenerate_telegram_invite_raw(
+        &self,
+        order: &str,
+        params: RegenerateTelegramInviteParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<
+        crate::RawResponse<SdkRegenerateOrderTelegramInviteResponseValue201ApplicationJson>,
+        Error,
+    > {
+        let order = crate::client::path_segment(order);
+        let path = format!("/v2/orders/{order}/telegram-invites");
+        let method = http::Method::POST;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = true;
+        merged.operation_id = Some("regenerateOrderTelegramInvite".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "POST /v2/orders/{order}/telegram-invites",
+            )
+            .await
+    }
+
     /// List order deliverables
     ///
-    /// List seller-visible fulfillment records, expanding purchased bundle snapshots into their component variants. File download links expire after one hour. This payload includes line-item and variant IDs but does not expose the delivered_product_id required for dynamic delivery retries. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// List seller-visible fulfillment records, expanding purchased bundle snapshots into their component variants. File download links expire after one hour. A delivered record carries `delivered_product_id`, which `POST /v2/orders/{order}/dynamic-delivery-retries` takes to retry a dynamic delivery. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn list_deliverables(
         &self,
         order: &str,

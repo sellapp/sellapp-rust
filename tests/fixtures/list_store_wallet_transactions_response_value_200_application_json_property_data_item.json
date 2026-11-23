@@ -1,0 +1,10 @@
+{
+  "id": 0,
+  "wallet_id": 0,
+  "type": "TOP_UP",
+  "amount_cents": 0,
+  "balance_after_cents": 0,
+  "customer_id": 0,
+  "customer_email": "test_customer_email",
+  "reversed_by_entry_id": 0
+}

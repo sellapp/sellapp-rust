@@ -1060,3 +1060,344 @@ async fn community_connections_disconnect_unprocessable() {
     };
     assert_eq!(api.status, 422);
 }
+
+#[tokio::test]
+async fn community_connections_list_failed_grant_reasons_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/community-connections/failed-grant-reasons"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!("fixtures/sdk_list_community_failed_grant_reasons_response_value_200_application_json.json")))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .community_connections()
+        .list_failed_grant_reasons(
+            sellapp::resources::community_connections::ListFailedGrantReasonsParams::default(),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn community_connections_list_failed_grant_reasons_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher(
+            "/v2/community-connections/failed-grant-reasons",
+        ))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .community_connections()
+        .list_failed_grant_reasons(
+            sellapp::resources::community_connections::ListFailedGrantReasonsParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn community_connections_list_failed_grant_reasons_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher(
+            "/v2/community-connections/failed-grant-reasons",
+        ))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .community_connections()
+        .list_failed_grant_reasons(
+            sellapp::resources::community_connections::ListFailedGrantReasonsParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn community_connections_list_failed_grant_reasons_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher(
+            "/v2/community-connections/failed-grant-reasons",
+        ))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .community_connections()
+        .list_failed_grant_reasons(
+            sellapp::resources::community_connections::ListFailedGrantReasonsParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn community_connections_list_failed_grant_reasons_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher(
+            "/v2/community-connections/failed-grant-reasons",
+        ))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .community_connections()
+        .list_failed_grant_reasons(
+            sellapp::resources::community_connections::ListFailedGrantReasonsParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn community_connections_sync_discord_roles_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/community-connections/discord/sync-roles"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_sync_discord_roles_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .community_connections()
+        .sync_discord_roles(
+            sellapp::resources::community_connections::SyncDiscordRolesParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_sync_discord_roles_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkSyncDiscordRolesRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn community_connections_sync_discord_roles_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/community-connections/discord/sync-roles"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .community_connections()
+        .sync_discord_roles(
+            sellapp::resources::community_connections::SyncDiscordRolesParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_sync_discord_roles_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkSyncDiscordRolesRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn community_connections_sync_discord_roles_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/community-connections/discord/sync-roles"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .community_connections()
+        .sync_discord_roles(
+            sellapp::resources::community_connections::SyncDiscordRolesParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_sync_discord_roles_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkSyncDiscordRolesRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn community_connections_sync_discord_roles_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/community-connections/discord/sync-roles"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .community_connections()
+        .sync_discord_roles(
+            sellapp::resources::community_connections::SyncDiscordRolesParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_sync_discord_roles_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkSyncDiscordRolesRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn community_connections_sync_discord_roles_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/community-connections/discord/sync-roles"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .community_connections()
+        .sync_discord_roles(
+            sellapp::resources::community_connections::SyncDiscordRolesParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_sync_discord_roles_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkSyncDiscordRolesRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn community_connections_sync_discord_roles_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/community-connections/discord/sync-roles"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .community_connections()
+        .sync_discord_roles(
+            sellapp::resources::community_connections::SyncDiscordRolesParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_sync_discord_roles_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkSyncDiscordRolesRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn community_connections_sync_discord_roles_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/community-connections/discord/sync-roles"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .community_connections()
+        .sync_discord_roles(
+            sellapp::resources::community_connections::SyncDiscordRolesParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_sync_discord_roles_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkSyncDiscordRolesRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}

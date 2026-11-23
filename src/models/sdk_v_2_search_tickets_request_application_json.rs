@@ -16,6 +16,27 @@ pub struct SdkV2SearchTicketsRequestApplicationJson {
     pub search: Option<V2SearchTicketsRequestApplicationJsonPropertySearch>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub includes: Option<Vec<V2SearchTicketsRequestApplicationJsonPropertyIncludesItem>>,
+    /// `store`: the latest message is from the customer, so the ticket waits on you. `customer`: the latest message is yours. A ticket without messages matches neither.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub waiting_on: Option<Option<WaitingOn>>,
+    /// A ticket reason by its label (as tickets show it in `reason`), its key such as `platform:refund_request`, or its code; case does not matter. A reason the store does not have returns `422` on `reason`, listing the store's reasons.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub reason: Option<Option<String>>,
+    /// Part of the customer's email, case-insensitive. `%` and `_` match those characters literally.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub customer_email: Option<Option<String>>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

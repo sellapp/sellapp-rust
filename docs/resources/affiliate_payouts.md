@@ -230,3 +230,58 @@ Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API r
 
 [Response access, transport controls, pagination, and typed errors](../usage.md)
 
+## mark_paid
+
+Mark affiliate payouts paid
+
+[API reference](https://sell.app/docs/api/affiliates/mark-payouts-paid) · Effect: **consequential**
+
+```rust
+pub async fn mark_paid(
+        &self,
+        params: MarkPaidParams,
+    ) -> Result<SdkMarkAffiliatePayoutsPaidResponseValue200ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| params | `MarkPaidParams` | Yes |
+
+Returns: `SdkMarkAffiliatePayoutsPaidResponseValue200ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::affiliate_payouts::MarkPaidParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = MarkPaidParams::new(serde_json::from_str("{\"payout_ids\":[91,92],\"expected_total_usd_cents\":4250}")?);
+    let result = client.affiliate_payouts().mark_paid(params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 200, 400, 401, 403, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+

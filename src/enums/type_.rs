@@ -7,8 +7,17 @@ use std::str::FromStr;
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[non_exhaustive]
 pub enum Type {
-    Product,
-    Order,
+    TopUp,
+    TopUpBonus,
+    Cashback,
+    CashbackClawback,
+    TopUpClawback,
+    Reward,
+    Refund,
+    PurchaseDebit,
+    ManualAdjustment,
+    Reversal,
+    Expiration,
     Null,
     /// Wire value not recognized by this SDK version. The original
     /// string is preserved verbatim. SellApp may add new enum values
@@ -23,8 +32,17 @@ impl Type {
     #[allow(deprecated)]
     pub fn as_str(&self) -> &str {
         match self {
-            Self::Product => "product",
-            Self::Order => "order",
+            Self::TopUp => "TOP_UP",
+            Self::TopUpBonus => "TOP_UP_BONUS",
+            Self::Cashback => "CASHBACK",
+            Self::CashbackClawback => "CASHBACK_CLAWBACK",
+            Self::TopUpClawback => "TOP_UP_CLAWBACK",
+            Self::Reward => "REWARD",
+            Self::Refund => "REFUND",
+            Self::PurchaseDebit => "PURCHASE_DEBIT",
+            Self::ManualAdjustment => "MANUAL_ADJUSTMENT",
+            Self::Reversal => "REVERSAL",
+            Self::Expiration => "EXPIRATION",
             Self::Null => "null",
             Self::Unknown(s) => s.as_str(),
         }
@@ -53,8 +71,17 @@ impl FromStr for Type {
     #[allow(deprecated)]
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(match s {
-            "product" => Self::Product,
-            "order" => Self::Order,
+            "TOP_UP" => Self::TopUp,
+            "TOP_UP_BONUS" => Self::TopUpBonus,
+            "CASHBACK" => Self::Cashback,
+            "CASHBACK_CLAWBACK" => Self::CashbackClawback,
+            "TOP_UP_CLAWBACK" => Self::TopUpClawback,
+            "REWARD" => Self::Reward,
+            "REFUND" => Self::Refund,
+            "PURCHASE_DEBIT" => Self::PurchaseDebit,
+            "MANUAL_ADJUSTMENT" => Self::ManualAdjustment,
+            "REVERSAL" => Self::Reversal,
+            "EXPIRATION" => Self::Expiration,
             "null" => Self::Null,
             other => Self::Unknown(other.to_string()),
         })

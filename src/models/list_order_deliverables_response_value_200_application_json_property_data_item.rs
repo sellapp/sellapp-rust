@@ -13,6 +13,8 @@ pub struct ListOrderDeliverablesResponseValue200ApplicationJsonPropertyDataItem 
     #[serde(rename = "type")]
     pub type_: String,
     pub status: ListOrderDeliverablesResponseValue200ApplicationJsonPropertyDataItemStatus,
+    /// The delivery record for this item, or null while `status` is `pending`. Send it to `POST /v2/orders/{order}/dynamic-delivery-retries` to retry a dynamic delivery.
+    pub delivered_product_id: Option<i64>,
     pub product_variant_id: Option<i64>,
     pub quantity: i64,
     pub deliverable: ListOrderDeliverablesResponseValue200ApplicationJsonPropertyDataItemPropertyDeliverable,

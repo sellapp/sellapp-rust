@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 #[serde(remote = "Self")]
 pub struct SdkIssueReplacementForCompletedInvoiceRequestApplicationJson {
     pub product_variants:
-        IssueReplacementForCompletedInvoiceRequestApplicationJsonPropertyProductVariants,
+        SdkIssueReplacementForCompletedInvoiceRequestApplicationJsonProductVariantsOneOf,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

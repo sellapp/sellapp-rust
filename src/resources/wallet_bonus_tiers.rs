@@ -109,10 +109,33 @@ pub struct RestoreParams {
     pub x_store: Option<String>,
 }
 
+#[derive(Debug, Clone, Serialize)]
+pub struct QuoteParams {
+    /// The top-up amount to quote, in integer USD cents.
+    ///
+    /// Required.
+    pub top_up_cents: i64,
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+impl QuoteParams {
+    /// Construct a new `QuoteParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(top_up_cents: i64) -> Self {
+        Self {
+            top_up_cents,
+            x_store: Default::default(),
+        }
+    }
+}
+
 impl<'a> WalletBonusTiersApi<'a> {
     /// List wallet bonus tiers
     ///
-    /// List current and archived store records. Requires the `wallet` or `wallet:write` API ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// List current and archived store records. Requires the `wallet` or `wallet:write` API-key ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn list(
         &self,
         params: ListParams,
@@ -157,7 +180,7 @@ impl<'a> WalletBonusTiersApi<'a> {
 
     /// Create a wallet bonus tier
     ///
-    /// Create a wallet bonus tier. Requires the `wallet:write` API ability and the store wallet permission. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Create a wallet bonus tier. Requires the `wallet:write` API-key ability and the wallet permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn create(
         &self,
         params: CreateParams,
@@ -203,7 +226,7 @@ impl<'a> WalletBonusTiersApi<'a> {
 
     /// Update a wallet bonus tier
     ///
-    /// Update a wallet bonus tier. Requires the `wallet:write` API ability and the store wallet permission. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Update a wallet bonus tier. Requires the `wallet:write` API-key ability and the wallet permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn replace(
         &self,
         bonus_tier: &str,
@@ -253,7 +276,7 @@ impl<'a> WalletBonusTiersApi<'a> {
 
     /// Update a wallet bonus tier
     ///
-    /// Update a wallet bonus tier. Requires the `wallet:write` API ability and the store wallet permission. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Update a wallet bonus tier. Requires the `wallet:write` API-key ability and the wallet permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn update(
         &self,
         bonus_tier: &str,
@@ -303,7 +326,7 @@ impl<'a> WalletBonusTiersApi<'a> {
 
     /// Archive a wallet bonus tier
     ///
-    /// Archive a wallet bonus tier. Requires the `wallet:write` API ability and the store wallet permission. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Archive a wallet bonus tier. Requires the `wallet:write` API-key ability and the wallet permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn archive(
         &self,
         bonus_tier: &str,
@@ -352,7 +375,7 @@ impl<'a> WalletBonusTiersApi<'a> {
 
     /// Restore a wallet bonus tier
     ///
-    /// Restore a wallet bonus tier. Requires the `wallet:write` API ability and the store wallet permission. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Restore a wallet bonus tier. Requires the `wallet:write` API-key ability and the wallet permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn restore(
         &self,
         bonus_tier: &str,
@@ -395,6 +418,51 @@ impl<'a> WalletBonusTiersApi<'a> {
                 &params,
                 options,
                 "POST /v2/wallet-bonus-tiers/{bonusTier}/restore",
+            )
+            .await
+    }
+
+    /// Quote a wallet bonus tier
+    ///
+    /// See which bonus tier a top-up of a given amount would earn right now, and how much bonus it would add, without creating anything. Amounts are integer USD cents: `top_up_cents=20000` asks about a $200.00 top-up. Requires the `wallet` or `wallet:write` API-key ability and the wallet permission in your team role. A missing amount, `0`, or an amount above 999999999999 returns `422` on `top_up_cents`. Only your store's active tiers are considered. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn quote(
+        &self,
+        params: QuoteParams,
+    ) -> Result<SdkQuoteWalletBonusTierResponseValue200ApplicationJson, Error> {
+        self.quote_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::quote`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn quote_with_options(
+        &self,
+        params: QuoteParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkQuoteWalletBonusTierResponseValue200ApplicationJson, Error> {
+        self.quote_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn quote_raw(
+        &self,
+        params: QuoteParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkQuoteWalletBonusTierResponseValue200ApplicationJson>, Error>
+    {
+        let path = "/v2/wallet-bonus-tiers/quote".to_string();
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("quoteWalletBonusTier".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/wallet-bonus-tiers/quote",
             )
             .await
     }

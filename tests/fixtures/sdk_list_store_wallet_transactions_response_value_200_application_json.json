@@ -1,0 +1,58 @@
+{
+  "data": [
+    {
+      "id": 0,
+      "wallet_id": 0,
+      "type": "TOP_UP",
+      "amount_cents": 0,
+      "balance_after_cents": 0,
+      "customer_id": 0,
+      "customer_email": "test_customer_email",
+      "reversed_by_entry_id": 0
+    }
+  ],
+  "links": {
+    "first": "https://sell.app/api/v1/blacklists?page=1",
+    "last": "https://sell.app/api/v1/blacklists?page=4",
+    "prev": "test_prev",
+    "next": "https://sell.app/api/v1/blacklists?page=2"
+  },
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 4,
+    "links": [
+      {
+        "url": "test_url",
+        "label": "test_label",
+        "active": false
+      }
+    ],
+    "path": "https://sell.app/api/v1/blacklists",
+    "per_page": 15,
+    "to": 15,
+    "total": 57,
+    "period": {
+      "range": "7d",
+      "label": "test_label",
+      "start_at": "2023-01-01T00:00:00.000Z",
+      "end_at": "2023-01-01T00:00:00.000Z",
+      "currency": "USD"
+    },
+    "filters": {
+      "type": "TOP_UP",
+      "type_label": "test_type_label",
+      "customer": {
+        "id": 0,
+        "email": "test@example.com"
+      },
+      "wallet_id": 0
+    },
+    "summary": {
+      "entries_count": 0,
+      "net_amount_cents": 0,
+      "credits_cents": 0,
+      "debits_cents": 0
+    }
+  }
+}

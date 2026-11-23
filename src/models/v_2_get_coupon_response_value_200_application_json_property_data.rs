@@ -23,7 +23,7 @@ pub struct V2GetCouponResponseValue200ApplicationJsonPropertyData {
     pub updated_at: String,
     pub store_id: i64,
     pub deleted_at: Option<String>,
-    /// The maximum decimal discount in the store currency's major unit for percentage coupons. This field is managed from the dashboard and is read-only in the v1 Coupons API.
+    /// The most this percentage coupon takes off one order, as a decimal amount in the major unit of the order's currency, or null when the discount is not capped. Always null on an `AMOUNT` coupon.
     pub maximum_discount_amount: Option<String>,
     /// `one_time` when the coupon discounts one-time purchases, or `subscriptions` when it discounts the first payments of a subscription plan.
     pub applies_to: V2GetCouponResponseValue200ApplicationJsonPropertyDataAppliesTo,

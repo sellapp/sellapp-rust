@@ -9,8 +9,7 @@ use serde::{Deserialize, Serialize};
 #[serde(remote = "Self")]
 pub struct V2GetTicketResponseValue200ApplicationJsonPropertyDataPropertyCustomer {
     /// The customer identifier recorded on the ticket. Existing records can contain a numeric ID or an opaque string; null means no identifier was recorded. Treat this value as opaque, not as a store customer resource ID.
-    pub id:
-        Option<V2ListTicketsResponseValue200ApplicationJsonPropertyDataItemPropertyCustomerIdOneOf>,
+    pub id: Option<ListCheckoutFieldTemplatesResponseValue200ApplicationJsonPropertyDataItemPropertyFieldsItemPropertyDateOptionsStartDayOneOf>,
     pub email: String,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]

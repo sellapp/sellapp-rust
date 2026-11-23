@@ -202,6 +202,35 @@ impl RestoreParams {
     }
 }
 
+#[derive(Debug, Clone, Serialize)]
+pub struct GetUsageParams {
+    /// Set to `true` to also find a deleted promotion.
+    ///
+    /// Defaults to `false`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub with_trashed: Option<bool>,
+    /// Set to `true` to find only a deleted promotion. Ignored when `with_trashed` is `true`.
+    ///
+    /// Defaults to `false`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub only_trashed: Option<bool>,
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+impl Default for GetUsageParams {
+    #[allow(deprecated)]
+    fn default() -> Self {
+        Self {
+            with_trashed: Some(false),
+            only_trashed: Some(false),
+            x_store: Default::default(),
+        }
+    }
+}
+
 impl<'a> PromotionsApi<'a> {
     /// List promotions
     ///
@@ -576,6 +605,55 @@ impl<'a> PromotionsApi<'a> {
                 Some(&params.body),
                 options,
                 "POST /v2/promotions/{promotion}/restore",
+            )
+            .await
+    }
+
+    /// Retrieve promotion usage
+    ///
+    /// Count the completed orders that used a promotion, across all of its phases and its whole life, and list the newest of them. Only orders whose status is `COMPLETED` count; pending and refunded orders do not. A promotion from another store returns `404`, and so does a deleted one unless you send `with_trashed=true`. Requires the `promotion` API-key ability and the promotion permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn get_usage(
+        &self,
+        promotion: &str,
+        params: GetUsageParams,
+    ) -> Result<SdkGetPromotionUsageResponseValue200ApplicationJson, Error> {
+        self.get_usage_with_options(promotion, params, None).await
+    }
+
+    /// Variant of [`Self::get_usage`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn get_usage_with_options(
+        &self,
+        promotion: &str,
+        params: GetUsageParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkGetPromotionUsageResponseValue200ApplicationJson, Error> {
+        self.get_usage_raw(promotion, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn get_usage_raw(
+        &self,
+        promotion: &str,
+        params: GetUsageParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkGetPromotionUsageResponseValue200ApplicationJson>, Error>
+    {
+        let promotion = crate::client::path_segment(promotion);
+        let path = format!("/v2/promotions/{promotion}/usage");
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("getPromotionUsage".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/promotions/{promotion}/usage",
             )
             .await
     }

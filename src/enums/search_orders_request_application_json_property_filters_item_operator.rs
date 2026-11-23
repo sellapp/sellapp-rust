@@ -10,6 +10,8 @@ pub enum SearchOrdersRequestApplicationJsonPropertyFiltersItemOperator {
     Eq,
     Contains,
     In,
+    Gte,
+    Lte,
     /// Wire value not recognized by this SDK version. The original
     /// string is preserved verbatim. SellApp may add new enum values
     /// server-side; matching on this variant lets callers handle
@@ -26,6 +28,8 @@ impl SearchOrdersRequestApplicationJsonPropertyFiltersItemOperator {
             Self::Eq => "eq",
             Self::Contains => "contains",
             Self::In => "in",
+            Self::Gte => "gte",
+            Self::Lte => "lte",
             Self::Unknown(s) => s.as_str(),
         }
     }
@@ -56,6 +60,8 @@ impl FromStr for SearchOrdersRequestApplicationJsonPropertyFiltersItemOperator {
             "eq" => Self::Eq,
             "contains" => Self::Contains,
             "in" => Self::In,
+            "gte" => Self::Gte,
+            "lte" => Self::Lte,
             other => Self::Unknown(other.to_string()),
         })
     }

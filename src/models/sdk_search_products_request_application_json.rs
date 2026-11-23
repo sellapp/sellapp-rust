@@ -8,14 +8,54 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct SdkSearchProductsRequestApplicationJson {
+    /// Not supported for products: no field can be filtered this way, so any entry returns `422` on `filters`. Use the price, stock, visibility, and sales fields instead.
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub filters: Option<Vec<SearchProductsRequestApplicationJsonPropertyFiltersItem>>,
+    /// Not supported for products: any entry returns `422` on `sort`.
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub sort: Option<Vec<SearchProductsRequestApplicationJsonPropertySortItem>>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub search: Option<SearchProductsRequestApplicationJsonPropertySearch>,
+    /// Only `variants` is accepted, and variants are always included.
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub includes: Option<Vec<SearchProductsRequestApplicationJsonPropertyIncludesItem>>,
+    /// Only products whose every priced variant costs at least this much, in integer minor units of that variant's own currency: `999` means $9.99 for a USD variant. Draft variants count. A product without a priced variant never matches a price filter. Must not be greater than `max_price`.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub min_price: Option<Option<i64>>,
+    /// Only products whose every priced variant costs at most this much, in integer minor units of that variant's own currency: `2500` means $25.00 for a USD variant. Draft variants count. A product without a priced variant never matches a price filter.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub max_price: Option<Option<i64>>,
+    /// Filter by stock, draft variants included. `in_stock`: at least one variant can be bought (unlimited stock, or at least its minimum purchase quantity left). `sold_out`: no variant can be bought. `any_variant_sold_out`: at least one variant with a stock count is sold out. `limited`: at least one variant has a stock count. `unlimited`: no variant has a stock count.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub stock: Option<Option<Stock>>,
+    /// Only products with one of these visibilities. A single string such as `"HIDDEN"` is also accepted.
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub visibility: Option<Vec<SdkSearchProductsRequestApplicationJsonVisibility>>,
+    /// `true` for products with at least one completed sale, `false` for products without one. Only purchase line items with status `COMPLETED` count, so pending or refunded ones do not.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub has_sales: Option<Option<bool>>,
+    /// Include draft products alongside published products.
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub with_drafts: Option<bool>,
+    /// Return only draft products.
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub only_drafts: Option<bool>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

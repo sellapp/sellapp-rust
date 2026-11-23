@@ -124,6 +124,16 @@ pub struct GetParams {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SearchParams {
+    /// Number of items to return per page.
+    ///
+    /// Defaults to `15`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// Page number to return.
+    ///
+    /// Defaults to `1`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page: Option<i64>,
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
@@ -140,6 +150,8 @@ impl SearchParams {
     #[allow(deprecated)]
     pub fn new(body: SdkSearchProductsWithinGroupRequestApplicationJson) -> Self {
         Self {
+            limit: Some(15),
+            page: Some(1),
             x_store: Default::default(),
             body,
         }
@@ -401,7 +413,7 @@ impl<'a> GroupsProductsApi<'a> {
 
     /// Search products within group
     ///
-    /// Search the products in a group using JSON body filters, search terms, includes, and sort instructions. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Search the products in a group using JSON body filters, search terms, includes, and sort instructions, 15 per page by default. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn search(
         &self,
         group: &str,

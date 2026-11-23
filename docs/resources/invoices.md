@@ -594,7 +594,7 @@ use sellapp::resources::invoices::CreateRefundParams;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
-    let mut params = CreateRefundParams::new(serde_json::from_str("{\"amount\":\"12.50\"}")?);
+    let mut params = CreateRefundParams::new(serde_json::from_str("{\"amount\":\"12.50\",\"expected_refunded_total_cents\":0}")?);
     let result = client.invoices().create_refund("1", params).await?;
     println!("{result:?}");
     Ok(())

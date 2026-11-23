@@ -5,7 +5,7 @@ use super::*;
 #[allow(unused_imports)]
 use crate::enums::*;
 use serde::{Deserialize, Serialize};
-/// A seller-configured outbound webhook destination. IDs are stable UUIDs and are not reused when another channel is deleted.
+/// A seller-configured outbound webhook destination. IDs are stable UUIDs and are not reused when another channel is deleted. List and search results also report how deliveries to the destination are going.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct ListWebhookChannelsResponseValue200ApplicationJsonPropertyDataItem {
@@ -20,6 +20,10 @@ pub struct ListWebhookChannelsResponseValue200ApplicationJsonPropertyDataItem {
         Vec<ListWebhookChannelsResponseValue200ApplicationJsonPropertyDataItemAllowedNotifications>,
     /// Whether the store has an outbound webhook signing secret. The stored secret is never returned.
     pub signing_secret_configured: bool,
+    pub health: ListWebhookChannelsResponseValue200ApplicationJsonPropertyDataItemPropertyHealth,
+    pub last_delivery: Option<
+        ListWebhookChannelsResponseValue200ApplicationJsonPropertyDataItemPropertyLastDelivery,
+    >,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

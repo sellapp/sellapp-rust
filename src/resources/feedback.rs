@@ -83,6 +83,11 @@ pub struct V2ListFeedbackParams {
     /// Defaults to `1`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page: Option<i64>,
+    /// `replied`: feedback with a non-empty seller reply. `unreplied`: feedback without one. `all` (default): both. Any other value returns `422`.
+    ///
+    /// Defaults to `all`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reply_state: Option<FeedbackReplyState>,
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
@@ -95,6 +100,7 @@ impl Default for V2ListFeedbackParams {
         Self {
             limit: Some(15),
             page: Some(1),
+            reply_state: Some(FeedbackReplyState::All),
             x_store: Default::default(),
         }
     }
@@ -102,6 +108,16 @@ impl Default for V2ListFeedbackParams {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct V2SearchFeedbackParams {
+    /// Number of items to return per page.
+    ///
+    /// Defaults to `15`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// Page number to return.
+    ///
+    /// Defaults to `1`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page: Option<i64>,
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
@@ -118,6 +134,8 @@ impl V2SearchFeedbackParams {
     #[allow(deprecated)]
     pub fn new(body: SdkV2SearchFeedbackRequestApplicationJson) -> Self {
         Self {
+            limit: Some(15),
+            page: Some(1),
             x_store: Default::default(),
             body,
         }
@@ -360,7 +378,7 @@ impl<'a> FeedbackApi<'a> {
 
     /// List all feedback
     ///
-    /// List customer feedback for your store, 15 entries per page by default. This v2 route is store-scoped. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// List customer feedback for your store, 15 entries per page by default. This v2 route is store-scoped. Use `reply_state` to list only feedback you have or have not replied to. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn v_2_list_feedback(
         &self,
         params: V2ListFeedbackParams,
@@ -398,7 +416,7 @@ impl<'a> FeedbackApi<'a> {
 
     /// Search feedback
     ///
-    /// Search feedback using JSON body filters, search terms, includes, and sort instructions. This v2 route is store-scoped. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Search feedback using JSON body filters, search terms, includes, and sort instructions. This v2 route is store-scoped. Use `reply_state` to find only feedback you have or have not replied to. Page through results with `limit` (1 to 100, default 15; a larger value returns `422`) and `page`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn v_2_search_feedback(
         &self,
         params: V2SearchFeedbackParams,

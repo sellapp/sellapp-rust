@@ -1385,3 +1385,3101 @@ async fn store_settings_update_marketing_unprocessable() {
     };
     assert_eq!(api.status, 422);
 }
+
+#[tokio::test]
+async fn store_settings_get_checkout_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_get_checkout_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .get_checkout(sellapp::resources::store_settings::GetCheckoutParams::default())
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_get_checkout_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_checkout(sellapp::resources::store_settings::GetCheckoutParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_get_checkout_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_checkout(sellapp::resources::store_settings::GetCheckoutParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_get_checkout_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_checkout(sellapp::resources::store_settings::GetCheckoutParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_get_checkout_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_checkout(sellapp::resources::store_settings::GetCheckoutParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_replace_checkout_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_replace_checkout_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .replace_checkout(
+            sellapp::resources::store_settings::ReplaceCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_replace_checkout_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_checkout(
+            sellapp::resources::store_settings::ReplaceCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_replace_checkout_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_checkout(
+            sellapp::resources::store_settings::ReplaceCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_replace_checkout_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_checkout(
+            sellapp::resources::store_settings::ReplaceCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_replace_checkout_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_checkout(
+            sellapp::resources::store_settings::ReplaceCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_replace_checkout_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_checkout(
+            sellapp::resources::store_settings::ReplaceCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn store_settings_replace_checkout_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_checkout(
+            sellapp::resources::store_settings::ReplaceCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn store_settings_update_checkout_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_update_checkout_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .update_checkout(
+            sellapp::resources::store_settings::UpdateCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_update_checkout_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_checkout(
+            sellapp::resources::store_settings::UpdateCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_update_checkout_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_checkout(
+            sellapp::resources::store_settings::UpdateCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_update_checkout_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_checkout(
+            sellapp::resources::store_settings::UpdateCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_update_checkout_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_checkout(
+            sellapp::resources::store_settings::UpdateCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_update_checkout_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_checkout(
+            sellapp::resources::store_settings::UpdateCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn store_settings_update_checkout_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/checkout"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_checkout(
+            sellapp::resources::store_settings::UpdateCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn store_settings_get_taxes_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_get_tax_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .get_taxes(sellapp::resources::store_settings::GetTaxesParams::default())
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_get_taxes_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_taxes(sellapp::resources::store_settings::GetTaxesParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_get_taxes_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_taxes(sellapp::resources::store_settings::GetTaxesParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_get_taxes_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_taxes(sellapp::resources::store_settings::GetTaxesParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_get_taxes_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_taxes(sellapp::resources::store_settings::GetTaxesParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_replace_taxes_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_replace_tax_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .replace_taxes(sellapp::resources::store_settings::ReplaceTaxesParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_replace_tax_settings_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkReplaceTaxSettingsRequestApplicationJson"),
+        ))
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_replace_taxes_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_taxes(sellapp::resources::store_settings::ReplaceTaxesParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_replace_tax_settings_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkReplaceTaxSettingsRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_replace_taxes_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_taxes(sellapp::resources::store_settings::ReplaceTaxesParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_replace_tax_settings_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkReplaceTaxSettingsRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_replace_taxes_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_taxes(sellapp::resources::store_settings::ReplaceTaxesParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_replace_tax_settings_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkReplaceTaxSettingsRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_replace_taxes_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_taxes(sellapp::resources::store_settings::ReplaceTaxesParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_replace_tax_settings_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkReplaceTaxSettingsRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_replace_taxes_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_taxes(sellapp::resources::store_settings::ReplaceTaxesParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_replace_tax_settings_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkReplaceTaxSettingsRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn store_settings_replace_taxes_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_taxes(sellapp::resources::store_settings::ReplaceTaxesParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_replace_tax_settings_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkReplaceTaxSettingsRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn store_settings_update_taxes_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_update_tax_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .update_taxes(sellapp::resources::store_settings::UpdateTaxesParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_update_tax_settings_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkUpdateTaxSettingsRequestApplicationJson"),
+        ))
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_update_taxes_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_taxes(sellapp::resources::store_settings::UpdateTaxesParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_update_tax_settings_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkUpdateTaxSettingsRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_update_taxes_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_taxes(sellapp::resources::store_settings::UpdateTaxesParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_update_tax_settings_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkUpdateTaxSettingsRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_update_taxes_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_taxes(sellapp::resources::store_settings::UpdateTaxesParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_update_tax_settings_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkUpdateTaxSettingsRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_update_taxes_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_taxes(sellapp::resources::store_settings::UpdateTaxesParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_update_tax_settings_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkUpdateTaxSettingsRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_update_taxes_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_taxes(sellapp::resources::store_settings::UpdateTaxesParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_update_tax_settings_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkUpdateTaxSettingsRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn store_settings_update_taxes_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/taxes"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_taxes(sellapp::resources::store_settings::UpdateTaxesParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_update_tax_settings_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkUpdateTaxSettingsRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn store_settings_get_customer_emails_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_get_customer_email_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .get_customer_emails(sellapp::resources::store_settings::GetCustomerEmailsParams::default())
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_get_customer_emails_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_customer_emails(sellapp::resources::store_settings::GetCustomerEmailsParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_get_customer_emails_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_customer_emails(sellapp::resources::store_settings::GetCustomerEmailsParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_get_customer_emails_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_customer_emails(sellapp::resources::store_settings::GetCustomerEmailsParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_get_customer_emails_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_customer_emails(sellapp::resources::store_settings::GetCustomerEmailsParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_replace_customer_emails_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_replace_customer_email_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .replace_customer_emails(
+            sellapp::resources::store_settings::ReplaceCustomerEmailsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_customer_email_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCustomerEmailSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_replace_customer_emails_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_customer_emails(
+            sellapp::resources::store_settings::ReplaceCustomerEmailsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_customer_email_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCustomerEmailSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_replace_customer_emails_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_customer_emails(
+            sellapp::resources::store_settings::ReplaceCustomerEmailsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_customer_email_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCustomerEmailSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_replace_customer_emails_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_customer_emails(
+            sellapp::resources::store_settings::ReplaceCustomerEmailsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_customer_email_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCustomerEmailSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_replace_customer_emails_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_customer_emails(
+            sellapp::resources::store_settings::ReplaceCustomerEmailsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_customer_email_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCustomerEmailSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_replace_customer_emails_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_customer_emails(
+            sellapp::resources::store_settings::ReplaceCustomerEmailsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_customer_email_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCustomerEmailSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn store_settings_replace_customer_emails_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_customer_emails(
+            sellapp::resources::store_settings::ReplaceCustomerEmailsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_customer_email_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCustomerEmailSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn store_settings_update_customer_emails_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_update_customer_email_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .update_customer_emails(
+            sellapp::resources::store_settings::UpdateCustomerEmailsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_customer_email_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCustomerEmailSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_update_customer_emails_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_customer_emails(
+            sellapp::resources::store_settings::UpdateCustomerEmailsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_customer_email_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCustomerEmailSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_update_customer_emails_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_customer_emails(
+            sellapp::resources::store_settings::UpdateCustomerEmailsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_customer_email_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCustomerEmailSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_update_customer_emails_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_customer_emails(
+            sellapp::resources::store_settings::UpdateCustomerEmailsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_customer_email_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCustomerEmailSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_update_customer_emails_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_customer_emails(
+            sellapp::resources::store_settings::UpdateCustomerEmailsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_customer_email_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCustomerEmailSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_update_customer_emails_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_customer_emails(
+            sellapp::resources::store_settings::UpdateCustomerEmailsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_customer_email_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCustomerEmailSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn store_settings_update_customer_emails_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/customer-emails"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_customer_emails(
+            sellapp::resources::store_settings::UpdateCustomerEmailsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_customer_email_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCustomerEmailSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn store_settings_get_store_alerts_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_get_store_alert_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .get_store_alerts(sellapp::resources::store_settings::GetStoreAlertsParams::default())
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_get_store_alerts_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_store_alerts(sellapp::resources::store_settings::GetStoreAlertsParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_get_store_alerts_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_store_alerts(sellapp::resources::store_settings::GetStoreAlertsParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_get_store_alerts_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_store_alerts(sellapp::resources::store_settings::GetStoreAlertsParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_get_store_alerts_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_store_alerts(sellapp::resources::store_settings::GetStoreAlertsParams::default())
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_replace_store_alerts_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_replace_store_alert_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .replace_store_alerts(
+            sellapp::resources::store_settings::ReplaceStoreAlertsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_store_alert_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceStoreAlertSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_replace_store_alerts_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_store_alerts(
+            sellapp::resources::store_settings::ReplaceStoreAlertsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_store_alert_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceStoreAlertSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_replace_store_alerts_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_store_alerts(
+            sellapp::resources::store_settings::ReplaceStoreAlertsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_store_alert_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceStoreAlertSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_replace_store_alerts_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_store_alerts(
+            sellapp::resources::store_settings::ReplaceStoreAlertsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_store_alert_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceStoreAlertSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_replace_store_alerts_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_store_alerts(
+            sellapp::resources::store_settings::ReplaceStoreAlertsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_store_alert_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceStoreAlertSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_replace_store_alerts_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_store_alerts(
+            sellapp::resources::store_settings::ReplaceStoreAlertsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_store_alert_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceStoreAlertSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn store_settings_replace_store_alerts_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_store_alerts(
+            sellapp::resources::store_settings::ReplaceStoreAlertsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_store_alert_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceStoreAlertSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn store_settings_update_store_alerts_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_update_store_alert_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .update_store_alerts(
+            sellapp::resources::store_settings::UpdateStoreAlertsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_store_alert_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateStoreAlertSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_update_store_alerts_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_store_alerts(
+            sellapp::resources::store_settings::UpdateStoreAlertsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_store_alert_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateStoreAlertSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_update_store_alerts_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_store_alerts(
+            sellapp::resources::store_settings::UpdateStoreAlertsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_store_alert_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateStoreAlertSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_update_store_alerts_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_store_alerts(
+            sellapp::resources::store_settings::UpdateStoreAlertsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_store_alert_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateStoreAlertSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_update_store_alerts_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_store_alerts(
+            sellapp::resources::store_settings::UpdateStoreAlertsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_store_alert_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateStoreAlertSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_update_store_alerts_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_store_alerts(
+            sellapp::resources::store_settings::UpdateStoreAlertsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_store_alert_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateStoreAlertSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn store_settings_update_store_alerts_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/store-alerts"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_store_alerts(
+            sellapp::resources::store_settings::UpdateStoreAlertsParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_store_alert_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateStoreAlertSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn store_settings_get_personalization_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_get_personalization_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .get_personalization(
+            sellapp::resources::store_settings::GetPersonalizationParams::default(),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_get_personalization_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_personalization(
+            sellapp::resources::store_settings::GetPersonalizationParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_get_personalization_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_personalization(
+            sellapp::resources::store_settings::GetPersonalizationParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_get_personalization_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_personalization(
+            sellapp::resources::store_settings::GetPersonalizationParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_get_personalization_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("GET"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .get_personalization(
+            sellapp::resources::store_settings::GetPersonalizationParams::default(),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_replace_personalization_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_replace_personalization_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .replace_personalization(
+            sellapp::resources::store_settings::ReplacePersonalizationParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_personalization_settings_request_application_json.json"
+                ))
+                .expect(
+                    "parse fixture for SdkReplacePersonalizationSettingsRequestApplicationJson",
+                ),
+            ),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_replace_personalization_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_personalization(
+            sellapp::resources::store_settings::ReplacePersonalizationParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_personalization_settings_request_application_json.json"
+                ))
+                .expect(
+                    "parse fixture for SdkReplacePersonalizationSettingsRequestApplicationJson",
+                ),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_replace_personalization_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_personalization(
+            sellapp::resources::store_settings::ReplacePersonalizationParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_personalization_settings_request_application_json.json"
+                ))
+                .expect(
+                    "parse fixture for SdkReplacePersonalizationSettingsRequestApplicationJson",
+                ),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_replace_personalization_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_personalization(
+            sellapp::resources::store_settings::ReplacePersonalizationParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_personalization_settings_request_application_json.json"
+                ))
+                .expect(
+                    "parse fixture for SdkReplacePersonalizationSettingsRequestApplicationJson",
+                ),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_replace_personalization_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_personalization(
+            sellapp::resources::store_settings::ReplacePersonalizationParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_personalization_settings_request_application_json.json"
+                ))
+                .expect(
+                    "parse fixture for SdkReplacePersonalizationSettingsRequestApplicationJson",
+                ),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_replace_personalization_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_personalization(
+            sellapp::resources::store_settings::ReplacePersonalizationParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_personalization_settings_request_application_json.json"
+                ))
+                .expect(
+                    "parse fixture for SdkReplacePersonalizationSettingsRequestApplicationJson",
+                ),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn store_settings_replace_personalization_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_personalization(
+            sellapp::resources::store_settings::ReplacePersonalizationParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_personalization_settings_request_application_json.json"
+                ))
+                .expect(
+                    "parse fixture for SdkReplacePersonalizationSettingsRequestApplicationJson",
+                ),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn store_settings_update_personalization_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_update_personalization_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .update_personalization(
+            sellapp::resources::store_settings::UpdatePersonalizationParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_personalization_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdatePersonalizationSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_update_personalization_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_personalization(
+            sellapp::resources::store_settings::UpdatePersonalizationParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_personalization_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdatePersonalizationSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_update_personalization_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_personalization(
+            sellapp::resources::store_settings::UpdatePersonalizationParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_personalization_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdatePersonalizationSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_update_personalization_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_personalization(
+            sellapp::resources::store_settings::UpdatePersonalizationParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_personalization_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdatePersonalizationSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_update_personalization_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_personalization(
+            sellapp::resources::store_settings::UpdatePersonalizationParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_personalization_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdatePersonalizationSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_update_personalization_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_personalization(
+            sellapp::resources::store_settings::UpdatePersonalizationParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_personalization_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdatePersonalizationSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn store_settings_update_personalization_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/personalization"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_personalization(
+            sellapp::resources::store_settings::UpdatePersonalizationParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_personalization_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdatePersonalizationSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn store_settings_replace_crypto_checkout_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/checkout/crypto"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_replace_crypto_checkout_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .replace_crypto_checkout(
+            sellapp::resources::store_settings::ReplaceCryptoCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_crypto_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCryptoCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_replace_crypto_checkout_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/checkout/crypto"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_crypto_checkout(
+            sellapp::resources::store_settings::ReplaceCryptoCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_crypto_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCryptoCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_replace_crypto_checkout_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/checkout/crypto"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_crypto_checkout(
+            sellapp::resources::store_settings::ReplaceCryptoCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_crypto_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCryptoCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_replace_crypto_checkout_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/checkout/crypto"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_crypto_checkout(
+            sellapp::resources::store_settings::ReplaceCryptoCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_crypto_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCryptoCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_replace_crypto_checkout_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/checkout/crypto"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_crypto_checkout(
+            sellapp::resources::store_settings::ReplaceCryptoCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_crypto_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCryptoCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_replace_crypto_checkout_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/checkout/crypto"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_crypto_checkout(
+            sellapp::resources::store_settings::ReplaceCryptoCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_crypto_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCryptoCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn store_settings_replace_crypto_checkout_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("PUT"))
+        .and(path_matcher("/v2/store/settings/checkout/crypto"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .replace_crypto_checkout(
+            sellapp::resources::store_settings::ReplaceCryptoCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_replace_crypto_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkReplaceCryptoCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}
+
+#[tokio::test]
+async fn store_settings_update_crypto_checkout_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/checkout/crypto"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_update_crypto_checkout_settings_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .store_settings()
+        .update_crypto_checkout(
+            sellapp::resources::store_settings::UpdateCryptoCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_crypto_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCryptoCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn store_settings_update_crypto_checkout_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/checkout/crypto"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_crypto_checkout(
+            sellapp::resources::store_settings::UpdateCryptoCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_crypto_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCryptoCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn store_settings_update_crypto_checkout_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/checkout/crypto"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_crypto_checkout(
+            sellapp::resources::store_settings::UpdateCryptoCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_crypto_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCryptoCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn store_settings_update_crypto_checkout_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/checkout/crypto"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_crypto_checkout(
+            sellapp::resources::store_settings::UpdateCryptoCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_crypto_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCryptoCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn store_settings_update_crypto_checkout_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/checkout/crypto"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_crypto_checkout(
+            sellapp::resources::store_settings::UpdateCryptoCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_crypto_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCryptoCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn store_settings_update_crypto_checkout_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/checkout/crypto"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_crypto_checkout(
+            sellapp::resources::store_settings::UpdateCryptoCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_crypto_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCryptoCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn store_settings_update_crypto_checkout_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("PATCH"))
+        .and(path_matcher("/v2/store/settings/checkout/crypto"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .store_settings()
+        .update_crypto_checkout(
+            sellapp::resources::store_settings::UpdateCryptoCheckoutParams::new(
+                serde_json::from_str(include_str!(
+                    "fixtures/sdk_update_crypto_checkout_settings_request_application_json.json"
+                ))
+                .expect("parse fixture for SdkUpdateCryptoCheckoutSettingsRequestApplicationJson"),
+            ),
+        )
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}

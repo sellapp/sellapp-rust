@@ -345,8 +345,120 @@ use sellapp::resources::tickets::UpdateParams;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
-    let mut params = UpdateParams::new(serde_json::from_str("{\"status\":\"CLOSED\",\"archived\":true}")?);
+    let mut params = UpdateParams::new(serde_json::from_str("{\"status\":\"CLOSED\",\"outcome\":\"delivered\",\"archived\":true}")?);
     let result = client.tickets().update("42", params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
+## batch_update
+
+Update several tickets
+
+[API reference](https://sell.app/docs/api/tickets/update-several-tickets) · Effect: **consequential**
+
+```rust
+pub async fn batch_update(
+        &self,
+        params: BatchUpdateParams,
+    ) -> Result<SdkBatchUpdateTicketsResponseValue200ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| params | `BatchUpdateParams` | Yes |
+
+Returns: `SdkBatchUpdateTicketsResponseValue200ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::tickets::BatchUpdateParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = BatchUpdateParams::new(serde_json::from_str("{\"action\":\"close\",\"outcome\":\"delivered\",\"resources\":[311,313]}")?);
+    let result = client.tickets().batch_update(params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 200, 400, 401, 403, 404, 409, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
+## get_context
+
+Retrieve a ticket's customer and refund context
+
+[API reference](https://sell.app/docs/api/tickets/retrieve-ticket-context) · Effect: **read**
+
+```rust
+pub async fn get_context(
+        &self,
+        ticket: &str,
+        params: GetContextParams,
+    ) -> Result<SdkV2GetTicketContextResponseValue200ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| ticket | `&str` | Yes |
+| params | `GetContextParams` | Yes |
+
+Returns: `SdkV2GetTicketContextResponseValue200ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::tickets::GetContextParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = GetContextParams::default();
+    let result = client.tickets().get_context("312", params).await?;
     println!("{result:?}");
     Ok(())
 }

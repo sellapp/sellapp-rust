@@ -367,7 +367,7 @@ use sellapp::resources::products::SearchParams;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
-    let mut params = SearchParams::new(serde_json::from_str("{\"filters\":[{\"field\":\"id\",\"operator\":\"=\",\"value\":1}],\"sort\":[{\"field\":\"created_at\",\"direction\":\"desc\"}]}")?);
+    let mut params = SearchParams::new(serde_json::from_str("{\"search\":{\"value\":\"launch\"},\"max_price\":2500,\"stock\":\"in_stock\",\"visibility\":[\"PUBLIC\"],\"has_sales\":true}")?);
     let result = client.products().search(params).await?;
     println!("{result:?}");
     Ok(())
@@ -558,6 +558,177 @@ Supported credential alternatives (each object is one alternative):
 ```
 
 Documented HTTP responses: 200, 400, 401, 403, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
+## publish
+
+Publish a product
+
+[API reference](https://sell.app/docs/api/products/publish-a-product) · Effect: **consequential**
+
+```rust
+pub async fn publish(
+        &self,
+        product: &str,
+        params: PublishParams,
+    ) -> Result<SdkPublishProductResponseValue200ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| product | `&str` | Yes |
+| params | `PublishParams` | Yes |
+
+Returns: `SdkPublishProductResponseValue200ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::products::PublishParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = PublishParams::new(serde_json::from_str("{\"variant_ids\":[2]}")?);
+    let result = client.products().publish("1", params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
+## duplicate
+
+Duplicate a product
+
+[API reference](https://sell.app/docs/api/products/duplicate-a-product) · Effect: **write**
+
+```rust
+pub async fn duplicate(
+        &self,
+        product: &str,
+        params: DuplicateParams,
+    ) -> Result<SdkDuplicateProductResponseValue201ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| product | `&str` | Yes |
+| params | `DuplicateParams` | Yes |
+
+Returns: `SdkDuplicateProductResponseValue201ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::products::DuplicateParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = DuplicateParams::default();
+    let result = client.products().duplicate("1", params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 201, 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
+## move_
+
+Move a product
+
+[API reference](https://sell.app/docs/api/products/move-a-product) · Effect: **write**
+
+```rust
+pub async fn move_(
+        &self,
+        product: &str,
+        params: MoveParams,
+    ) -> Result<SdkMoveProductResponseValue200ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| product | `&str` | Yes |
+| params | `MoveParams` | Yes |
+
+Returns: `SdkMoveProductResponseValue200ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::products::MoveParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = MoveParams::new(serde_json::from_str("{\"position\":1,\"expected_position\":3}")?);
+    let result = client.products().move_("1", params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
 
 [Response access, transport controls, pagination, and typed errors](../usage.md)
 

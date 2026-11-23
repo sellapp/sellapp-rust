@@ -65,8 +65,22 @@ pub struct SdkUpdateCourseRequestApplicationJson {
     pub delivery_text: Option<Option<String>>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub visibility: Option<CatalogVisibility>,
+    /// The `updated_at` you last read. If the course changed since, the request returns `422` on `expected_updated_at` and changes nothing. It is checked even when the request changes nothing else.
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub expected_updated_at: Option<String>,
+    /// The course name customers see.
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub title: Option<String>,
+    /// The last part of the course's storefront URL: lowercase letters and numbers in words joined by single hyphens, such as `design-foundations`. It must be unused by every other product in the store, or the request returns `422` on `slug`.
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub slug: Option<String>,
+    /// The course description as HTML, at least 5 characters long and at most 2000 characters of visible text. `null` keeps the current description. To clear the description of a draft course, send an empty element such as `<p></p>`; a published course must keep one, so clearing it returns `422` on `description`.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub description: Option<Option<String>>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

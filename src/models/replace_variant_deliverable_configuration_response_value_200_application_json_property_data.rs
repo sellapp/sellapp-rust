@@ -8,8 +8,10 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct ReplaceVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyData {
-    pub types: Vec<ReplaceVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataTypes>,
-    pub data: ReplaceVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataPropertyData,
+    pub types:
+        Vec<ReplaceVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataTypes>,
+    pub data:
+        ReplaceVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataDataOneOf,
     /// Whether a dynamic delivery endpoint is configured. The endpoint itself is never returned.
     pub webhook_configured: bool,
     /// The current variant snapshot token. Pass this value as expected_updated_at when replacing the configuration to reject stale updates.

@@ -1,0 +1,5 @@
+{
+  "vat_enabled": false,
+  "vat_inclusive_pricing": false,
+  "collect_billing_details": false
+}

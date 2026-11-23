@@ -1,0 +1,40 @@
+{
+  "data": {
+    "range": "7d",
+    "start_at": "2023-01-01T00:00:00.000Z",
+    "end_at": "2023-01-01T00:00:00.000Z",
+    "currency": "USD",
+    "summary": {
+      "tickets_received": 0,
+      "tickets_resolved": 0,
+      "auto_closures": 0,
+      "manual_closures": 0,
+      "support_wallet_credit_cents": 0,
+      "auto_wallet_credit_cents": 0,
+      "warning_count": 0
+    },
+    "rules": [
+      {
+        "rule_id": 0,
+        "rule_name": "test_rule_name",
+        "matches": 0,
+        "closures": 0,
+        "wallet_credit_cents": 0,
+        "warning_count": 0
+      }
+    ],
+    "recent_activity": [
+      {
+        "id": 0,
+        "event": "test_event",
+        "ticket_id": 0,
+        "rule_id": 0,
+        "actor_type": "test_actor_type",
+        "wallet_credit_cents": 0,
+        "wallet_credit_reversed": false,
+        "reason": "test_reason",
+        "created_at": "2023-01-01T00:00:00.000Z"
+      }
+    ]
+  }
+}

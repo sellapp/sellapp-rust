@@ -1,0 +1,9 @@
+{
+  "connected": false,
+  "available": false,
+  "connection_id": 0,
+  "account": "test_account",
+  "calendar": "test_calendar",
+  "health": "healthy",
+  "connected_at": "2023-01-01T00:00:00.000Z"
+}

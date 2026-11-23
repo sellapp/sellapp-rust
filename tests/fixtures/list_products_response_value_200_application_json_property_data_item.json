@@ -50,5 +50,9 @@
       "title": "test_title"
     }
   ],
-  "url": "test_url"
+  "url": "test_url",
+  "price_range": "test_price_range",
+  "stock": 0,
+  "sales": 0,
+  "sold_out": false
 }

@@ -14,6 +14,22 @@ pub struct VariantDeliverablesApi<'a> {
 }
 
 #[derive(Debug, Clone, Default, Serialize)]
+pub struct PreviewParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct NotifyParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+#[derive(Debug, Clone, Default, Serialize)]
 pub struct GetParams {
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -46,6 +62,118 @@ impl ReplaceParams {
 }
 
 impl<'a> VariantDeliverablesApi<'a> {
+    /// Preview variant buyer notification
+    ///
+    /// See who would be emailed if you told this variant's buyers about new downloadable files, without sending anything. Use it before `POST` on the same path to check the numbers. Works for any variant, drafts included. Requires the `listing` API-key ability and the `listing` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn preview(
+        &self,
+        product: &str,
+        variant: &str,
+        params: PreviewParams,
+    ) -> Result<SdkPreviewVariantBuyerNotificationResponseValue200ApplicationJson, Error> {
+        self.preview_with_options(product, variant, params, None)
+            .await
+    }
+
+    /// Variant of [`Self::preview`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn preview_with_options(
+        &self,
+        product: &str,
+        variant: &str,
+        params: PreviewParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkPreviewVariantBuyerNotificationResponseValue200ApplicationJson, Error> {
+        self.preview_raw(product, variant, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn preview_raw(
+        &self,
+        product: &str,
+        variant: &str,
+        params: PreviewParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<
+        crate::RawResponse<SdkPreviewVariantBuyerNotificationResponseValue200ApplicationJson>,
+        Error,
+    > {
+        let product = crate::client::path_segment(product);
+        let variant = crate::client::path_segment(variant);
+        let path =
+            format!("/v2/products/{product}/variants/{variant}/deliverable/buyer-notification");
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("previewVariantBuyerNotification".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/products/{product}/variants/{variant}/deliverable/buyer-notification",
+            )
+            .await
+    }
+
+    /// Notify variant buyers
+    ///
+    /// Email your customers that this variant has new content: every completed order that delivered its downloadable files gets one email. The emails are queued, so `202` means they were queued, not delivered. It sends only for a published variant with at least one file, at least one such order, and no upload in progress. The buyers of one variant can be emailed this way at most once an hour, whichever API key or team member sends it, and each team member can send at most 3 times a minute per variant. Requires the `listing` API-key ability and the `listing` permission in your team role. Send an `Idempotency-Key` header; requests without one return `400`. A retry with the same key and an empty body returns the first response with `Idempotent-Replayed: true` and sends nothing new. Use a new key for every send you intend, including a new attempt after a `422`. The same key while the first request is still running returns `409`. Every refusal is `422` on `variant`: a draft variant, a variant without files, a variant nobody has bought, an upload still in progress, the hourly limit (the message says how many minutes are left), the per-minute limit, or another send for the same variant at the same moment. Check `GET` on the same path first to see the numbers. A variant of another product returns `404`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn notify(
+        &self,
+        product: &str,
+        variant: &str,
+        params: NotifyParams,
+    ) -> Result<SdkNotifyVariantBuyersResponseValue202ApplicationJson, Error> {
+        self.notify_with_options(product, variant, params, None)
+            .await
+    }
+
+    /// Variant of [`Self::notify`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn notify_with_options(
+        &self,
+        product: &str,
+        variant: &str,
+        params: NotifyParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkNotifyVariantBuyersResponseValue202ApplicationJson, Error> {
+        self.notify_raw(product, variant, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn notify_raw(
+        &self,
+        product: &str,
+        variant: &str,
+        params: NotifyParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkNotifyVariantBuyersResponseValue202ApplicationJson>, Error>
+    {
+        let product = crate::client::path_segment(product);
+        let variant = crate::client::path_segment(variant);
+        let path =
+            format!("/v2/products/{product}/variants/{variant}/deliverable/buyer-notification");
+        let method = http::Method::POST;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = true;
+        merged.operation_id = Some("notifyVariantBuyers".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "POST /v2/products/{product}/variants/{variant}/deliverable/buyer-notification",
+            )
+            .await
+    }
+
     /// Retrieve variant deliverable configuration
     ///
     /// Retrieve variant deliverable configuration. Requires the listing Sanctum ability. Returns delivery types and safe configuration for a variant in the authenticated store. Dynamic endpoint URLs and inventory data are not returned. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.

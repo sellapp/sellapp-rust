@@ -1,0 +1,76 @@
+{
+  "data": {
+    "period": {
+      "range": "7d",
+      "label": "test_label",
+      "start_at": "2023-01-01T00:00:00.000Z",
+      "end_at": "2023-01-01T00:00:00.000Z",
+      "currency": "USD"
+    },
+    "settings": {
+      "wallet_enabled": false,
+      "expiration_days": 0,
+      "min_topup_cents": 0,
+      "max_topup_cents": 0
+    },
+    "health": {
+      "liability_cents": 0,
+      "available_cents": 0,
+      "held_cents": 0,
+      "held_count": 0,
+      "wallets_with_balance": 0,
+      "total_wallets": 0,
+      "frozen_wallets": 0,
+      "expiring_soon_cents": 0,
+      "expiring_soon_days": 1
+    },
+    "activity": {
+      "topups_cents": 0,
+      "customer_spend_cents": 0
+    },
+    "incentive_spend": {
+      "period": "7d",
+      "total_cents": 0,
+      "bonus_cents": 0,
+      "cashback_cents": 0,
+      "reward_cents": 0,
+      "recovered_cents": 0
+    },
+    "active_rules": {
+      "cashback_rules_count": 0,
+      "bonus_tiers_count": 0,
+      "wallet_credit_reward_rules_count": 0
+    },
+    "top_wallets": [
+      {
+        "id": 0,
+        "customer_id": 0,
+        "customer_email": "test_customer_email",
+        "status": "active",
+        "balance_cents": 0,
+        "available_cents": 0,
+        "held_cents": 0,
+        "last_activity_at": "2023-01-01T00:00:00.000Z"
+      }
+    ],
+    "recent_activity": [
+      {
+        "id": 0,
+        "wallet_id": 0,
+        "customer_id": 0,
+        "customer_email": "test_customer_email",
+        "type": "TOP_UP",
+        "type_label": "test_type_label",
+        "amount_cents": 0,
+        "balance_after_cents": 0,
+        "currency_at_source": "test_currency_at_source",
+        "note": "test_note",
+        "reverses_entry_id": 0,
+        "reversed_by_entry_id": 0,
+        "expires_at": "2023-01-01T00:00:00.000Z",
+        "expired_at": "2023-01-01T00:00:00.000Z",
+        "created_at": "2023-01-01T00:00:00.000Z"
+      }
+    ]
+  }
+}

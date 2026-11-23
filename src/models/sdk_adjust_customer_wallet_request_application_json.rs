@@ -8,11 +8,15 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct SdkAdjustCustomerWalletRequestApplicationJson {
-    /// The signed adjustment amount in cents. Must not be zero.
+    /// The signed change in integer USD cents: positive adds money, negative takes it away. Must not be zero.
     pub amount_cents: i64,
-    /// Required body key, at most 128 characters. Keep the customer, amount, staff actor and trimmed note unchanged when retrying this intended adjustment.
+    /// Your key for this one adjustment, in printable ASCII characters and unique across all stores. Reuse it only to retry the same customer, amount, and note as the same staff member.
     pub idempotency_key: String,
+    /// Why the balance changed, with at least one character that is not a space. Leading and trailing spaces are removed. Saved on the entry and shown in the wallet history.
     pub note: String,
+    /// Optional. The wallet balance in integer USD cents that you read before deciding on this change. If the balance is different now, nothing is written and the request returns `422` on `expected_balance_cents`. Use `0` for a customer who has no wallet yet.
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub expected_balance_cents: Option<i64>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

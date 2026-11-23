@@ -5,6 +5,7 @@ use super::*;
 #[allow(unused_imports)]
 use crate::enums::*;
 use serde::{Deserialize, Serialize};
+/// Matches products whose title contains `value`.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct SearchProductsRequestApplicationJsonPropertySearch {
@@ -14,8 +15,6 @@ pub struct SearchProductsRequestApplicationJsonPropertySearch {
         deserialize_with = "crate::runtime_schema::present_nullable"
     )]
     pub value: Option<Option<String>>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub case_sensitive: Option<bool>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

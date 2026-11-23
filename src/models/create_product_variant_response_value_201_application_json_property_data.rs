@@ -30,6 +30,8 @@ pub struct CreateProductVariantResponseValue201ApplicationJsonPropertyData {
     pub updated_at: String,
     pub deleted_at: Option<String>,
     pub product: CreateProductVariantResponseValue201ApplicationJsonPropertyDataPropertyProduct,
+    /// `true` while the variant is a draft that customers cannot buy. Listing, searching, and retrieving variants leave drafts out unless you send `with_drafts` or `only_drafts`.
+    pub is_draft: bool,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

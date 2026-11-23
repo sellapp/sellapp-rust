@@ -15,6 +15,9 @@ pub struct AffiliateReferralsApi<'a> {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct ListParams {
+    /// Text to look for in the affiliate's email address and the product and variant titles. A number also matches the referral ID or the order ID exactly. `%` and `_` match themselves.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search: Option<String>,
     /// Filter by store affiliate ID.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub affiliate_id: Option<i64>,
@@ -44,6 +47,7 @@ impl Default for ListParams {
     #[allow(deprecated)]
     fn default() -> Self {
         Self {
+            search: Default::default(),
             affiliate_id: Default::default(),
             order_id: Default::default(),
             status: Default::default(),
@@ -89,7 +93,7 @@ impl UpdateParams {
 impl<'a> AffiliateReferralsApi<'a> {
     /// List affiliate referrals
     ///
-    /// List store referrals with their attributed order and purchase line item. Requires the `affiliate` credential ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// List store referrals with their attributed order and purchase line item, newest first, 15 per page by default. Requires the `affiliate` credential ability. Use `search` to find referrals by affiliate email, product or variant title, or an exact referral or order ID. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn list(
         &self,
         params: ListParams,

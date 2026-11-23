@@ -21,12 +21,41 @@ pub struct ListWebhookEventTypesParams {
     pub x_store: Option<String>,
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct ListWebhookDeliveriesParams {
+    /// Page number, starting at 1.
+    ///
+    /// Defaults to `1`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page: Option<i64>,
+    /// Deliveries per page. Values below 1 are read as 1 and values above 100 as 100.
+    ///
+    /// Defaults to `25`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// Keep deliveries of this event type, as listed by `GET /v2/webhook-event-types`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_type: Option<String>,
+    /// Keep deliveries in this state: `pending`, `retrying`, `succeeded`, `failed`, or `disabled`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<WebhookPlatformStatus>,
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
     pub x_store: Option<String>,
+}
+
+impl Default for ListWebhookDeliveriesParams {
+    #[allow(deprecated)]
+    fn default() -> Self {
+        Self {
+            page: Some(1),
+            limit: Some(25),
+            event_type: Default::default(),
+            status: Default::default(),
+            x_store: Default::default(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Default, Serialize)]
@@ -110,7 +139,7 @@ impl<'a> WebhookPlatformApi<'a> {
 
     /// List webhook deliveries
     ///
-    /// Destination origin only; response bodies are redacted and capped. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// List your store's outbound webhook deliveries, newest first, 25 per page by default. Each delivery shows only the destination origin; response bodies are redacted and capped. Filter by `event_type` or `status`; both must match exactly, and a value that matches nothing returns an empty page rather than an error. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn list_webhook_deliveries(
         &self,
         params: ListWebhookDeliveriesParams,

@@ -1,0 +1,20 @@
+{
+  "source": "store",
+  "code": "test_code",
+  "key": "test_key",
+  "id": 0,
+  "label": "test_label",
+  "description": "test_description",
+  "is_active": false,
+  "product_ids": [
+    0
+  ],
+  "products": [
+    {
+      "id": 0,
+      "title": "test_title",
+      "type": "test_type"
+    }
+  ],
+  "product_scope": "all_products"
+}

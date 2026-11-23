@@ -10,8 +10,7 @@ use serde::{Deserialize, Serialize};
 pub struct V2SearchTicketsResponseValue200ApplicationJsonPropertyDataItemPropertyReference {
     #[serde(rename = "type")]
     pub type_: Option<Type>,
-    pub id:
-        Option<V2ListTicketsResponseValue200ApplicationJsonPropertyDataItemPropertyCustomerIdOneOf>,
+    pub id: Option<ListCheckoutFieldTemplatesResponseValue200ApplicationJsonPropertyDataItemPropertyFieldsItemPropertyDateOptionsStartDayOneOf>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

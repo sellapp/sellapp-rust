@@ -1,0 +1,50 @@
+{
+  "data": {
+    "ticket_id": 0,
+    "resolution": {
+      "outcome": "refunded",
+      "resolved_at": "2023-01-01T00:00:00.000Z",
+      "resolved_by_rule_id": 0
+    },
+    "customer": {
+      "email": "test@example.com",
+      "completed_orders": 0,
+      "lifetime_spend_usd_cents": 0,
+      "first_order_at": "2023-01-01T00:00:00.000Z"
+    },
+    "linked_order": {
+      "id": 0,
+      "product_title": "test_product_title",
+      "created_at": "2023-01-01T00:00:00.000Z"
+    },
+    "refund_options": [
+      {
+        "invoice_id": 0,
+        "order_id": 0,
+        "product_id": 0,
+        "product_title": "test_product_title",
+        "currency": "USD",
+        "paid_cents": 0,
+        "active_support_refunds_cents": 0,
+        "refundable_cents": 0
+      }
+    ],
+    "activity": [
+      {
+        "id": 0,
+        "event": "refund_issued",
+        "actor_type": "test_actor_type",
+        "rule": {
+          "id": 0,
+          "name": "test_name"
+        },
+        "wallet_entry": {
+          "id": 0,
+          "amount_usd_cents": 0,
+          "reversed": false
+        },
+        "created_at": "2023-01-01T00:00:00.000Z"
+      }
+    ]
+  }
+}

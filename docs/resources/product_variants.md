@@ -580,3 +580,178 @@ Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API r
 
 [Response access, transport controls, pagination, and typed errors](../usage.md)
 
+## publish
+
+Publish a product variant
+
+[API reference](https://sell.app/docs/api/product-variants/publish-a-product-variant) · Effect: **consequential**
+
+```rust
+pub async fn publish(
+        &self,
+        product: &str,
+        variant: &str,
+        params: PublishParams,
+    ) -> Result<SdkPublishProductVariantResponseValue200ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| product | `&str` | Yes |
+| variant | `&str` | Yes |
+| params | `PublishParams` | Yes |
+
+Returns: `SdkPublishProductVariantResponseValue200ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::product_variants::PublishParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = PublishParams::default();
+    let result = client.product_variants().publish("11", "12", params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
+## duplicate
+
+Duplicate a product variant
+
+[API reference](https://sell.app/docs/api/product-variants/duplicate-a-product-variant) · Effect: **write**
+
+```rust
+pub async fn duplicate(
+        &self,
+        product: &str,
+        variant: &str,
+        params: DuplicateParams,
+    ) -> Result<SdkDuplicateProductVariantResponseValue201ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| product | `&str` | Yes |
+| variant | `&str` | Yes |
+| params | `DuplicateParams` | Yes |
+
+Returns: `SdkDuplicateProductVariantResponseValue201ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::product_variants::DuplicateParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = DuplicateParams::default();
+    let result = client.product_variants().duplicate("1", "2", params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 201, 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+
+## reorder
+
+Reorder product variants
+
+[API reference](https://sell.app/docs/api/product-variants/reorder-product-variants) · Effect: **consequential**
+
+```rust
+pub async fn reorder(
+        &self,
+        product: &str,
+        params: ReorderParams,
+    ) -> Result<SdkReorderProductVariantsResponseValue200ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| product | `&str` | Yes |
+| params | `ReorderParams` | Yes |
+
+Returns: `SdkReorderProductVariantsResponseValue200ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::product_variants::ReorderParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = ReorderParams::new(serde_json::from_str("{\"variant_ids\":[2,1]}")?);
+    let result = client.product_variants().reorder("1", params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+

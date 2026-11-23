@@ -98,6 +98,14 @@ impl InviteParams {
     }
 }
 
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct ResendParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
 impl<'a> AffiliateProgramApi<'a> {
     /// Retrieve affiliate program configuration
     ///
@@ -148,7 +156,7 @@ impl<'a> AffiliateProgramApi<'a> {
 
     /// Replace affiliate program configuration
     ///
-    /// Replace the complete affiliate-program configuration. The products array is authoritative: enabled entries replace existing store-level product restrictions, and every variant ID must belong to the authenticated store. Requires the `affiliate` token ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Replace the complete affiliate-program configuration. The products array is authoritative: enabled entries replace existing store-level product restrictions, and every variant ID must belong to the authenticated store. Requires the `affiliate` token ability, and the staff member who owns the key also needs the `store` permission, the same permission that changing the program in the dashboard requires. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn replace(
         &self,
         params: ReplaceParams,
@@ -243,7 +251,7 @@ impl<'a> AffiliateProgramApi<'a> {
 
     /// Invite an affiliate
     ///
-    /// Create a pending affiliate invitation and email a single-use onboarding link. Duplicate invitations are rejected and invites are rate limited per store. The affiliate program must be enabled. Requires the `affiliate` token ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Create a pending affiliate invitation and email a single-use onboarding link. Duplicate invitations are rejected and invites are rate limited per store. The affiliate program must be enabled. Requires the `affiliate` token ability, and the staff member who owns the key also needs the `store` permission, the same permission that inviting affiliates in the dashboard requires. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn invite(
         &self,
         params: InviteParams,
@@ -282,6 +290,57 @@ impl<'a> AffiliateProgramApi<'a> {
                 Some(&params.body),
                 options,
                 "POST /v2/affiliate-invitations",
+            )
+            .await
+    }
+
+    /// Resend an affiliate invitation
+    ///
+    /// Email a pending affiliate invitation again, with a new sign-in link that expires after 6 hours, to the address it was created for. The invitation itself does not change: `invited_at` keeps the original date. Send no body. Requires the `affiliate` API-key ability, and the staff member who owns the key needs the affiliate and `store` permissions, the same as inviting an affiliate. Every refusal returns `422` on `invitation` and sends nothing: the invitation was already answered or is no longer pending, the affiliate program is not configured or turned off, the same invitation was sent within the last minute, your store reached its limit of 10 invitation emails per hour (new invitations and resends count together; the message says how many seconds to wait), or the email could not be sent. An invitation from another store returns `404`. Not safe to retry blindly: each successful call sends another email. A repeat within a minute is refused, so a quick retry after a lost response cannot send twice; after that, check with the invitee or wait for them to answer before sending again. If sending failed, wait a minute and try again. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn resend(
+        &self,
+        invitation: &str,
+        params: ResendParams,
+    ) -> Result<SdkResendAffiliateInvitationResponseValue200ApplicationJson, Error> {
+        self.resend_with_options(invitation, params, None).await
+    }
+
+    /// Variant of [`Self::resend`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn resend_with_options(
+        &self,
+        invitation: &str,
+        params: ResendParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkResendAffiliateInvitationResponseValue200ApplicationJson, Error> {
+        self.resend_raw(invitation, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn resend_raw(
+        &self,
+        invitation: &str,
+        params: ResendParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<
+        crate::RawResponse<SdkResendAffiliateInvitationResponseValue200ApplicationJson>,
+        Error,
+    > {
+        let invitation = crate::client::path_segment(invitation);
+        let path = format!("/v2/affiliate-invitations/{invitation}/resend");
+        let method = http::Method::POST;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("resendAffiliateInvitation".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "POST /v2/affiliate-invitations/{invitation}/resend",
             )
             .await
     }

@@ -1,0 +1,17 @@
+{
+  "id": 0,
+  "wallet_id": 0,
+  "customer_id": 0,
+  "customer_email": "test_customer_email",
+  "type": "TOP_UP",
+  "type_label": "test_type_label",
+  "amount_cents": 0,
+  "balance_after_cents": 0,
+  "currency_at_source": "test_currency_at_source",
+  "note": "test_note",
+  "reverses_entry_id": 0,
+  "reversed_by_entry_id": 0,
+  "expires_at": "2023-01-01T00:00:00.000Z",
+  "expired_at": "2023-01-01T00:00:00.000Z",
+  "created_at": "2023-01-01T00:00:00.000Z"
+}

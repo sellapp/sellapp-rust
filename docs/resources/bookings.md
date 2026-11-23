@@ -283,3 +283,58 @@ Documented HTTP responses: 200, 400, 401, 403, 404, 422, 429, 500. See the API r
 
 [Response access, transport controls, pagination, and typed errors](../usage.md)
 
+## create
+
+Create a booking product
+
+[API reference](https://sell.app/docs/api/bookings/create-a-booking-product) · Effect: **consequential**
+
+```rust
+pub async fn create(
+        &self,
+        params: CreateParams,
+    ) -> Result<SdkCreateBookingProductResponseValue201ApplicationJson, Error>
+```
+
+| Argument | Native type | Required |
+| --- | --- | --- |
+| params | `CreateParams` | Yes |
+
+Returns: `SdkCreateBookingProductResponseValue201ApplicationJson`.
+
+```rs
+use sellapp::Client;
+use sellapp::resources::bookings::CreateParams;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new(std::env::var("SELLAPP_API_KEY")?, std::env::var("SELLAPP_STORE")?).with_base_url(std::env::var("SELLAPP_API_BASE_URL")?);
+    let mut params = CreateParams::new(serde_json::from_str("{\"title\":\"Strategy consultation\",\"description\":\"<p>A private strategy session for your next launch.</p>\",\"variant_title\":\"60 minute session\",\"price_cents\":2500,\"currency\":\"USD\",\"payment_methods\":[\"STRIPE\"],\"timezone\":\"Europe/London\",\"duration_minutes\":60,\"availability\":[{\"day\":1,\"enabled\":true,\"start\":\"09:00\",\"end\":\"12:00\"},{\"day\":3,\"enabled\":true,\"start\":\"13:00\",\"end\":\"17:00\"}]}")?);
+    let result = client.bookings().create(params).await?;
+    println!("{result:?}");
+    Ok(())
+}
+```
+
+### Authentication and errors
+
+Supported credential alternatives (each object is one alternative):
+
+```json
+[
+  {
+    "bearerAuth": []
+  },
+  {
+    "oauthAccessToken": [
+      "admin"
+    ],
+    "storeAuth": []
+  }
+]
+```
+
+Documented HTTP responses: 201, 400, 401, 403, 422, 429, 500. See the API reference for field-level validation and consequences.
+
+[Response access, transport controls, pagination, and typed errors](../usage.md)
+

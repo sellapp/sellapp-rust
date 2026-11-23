@@ -1,0 +1,9 @@
+{
+  "type": "TOP_UP",
+  "type_label": "test_type_label",
+  "customer": {
+    "id": 0,
+    "email": "test@example.com"
+  },
+  "wallet_id": 0
+}

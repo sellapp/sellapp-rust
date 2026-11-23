@@ -31,6 +31,22 @@ pub struct ListParams {
     /// Return only draft products.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub only_drafts: Option<bool>,
+    /// Only products whose every priced variant costs at least this much, in integer minor units of that variant's own currency: `999` means $9.99 for a USD variant. Draft variants count. A product without a priced variant never matches a price filter. Must not be greater than `max_price`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_price: Option<i64>,
+    /// Only products whose every priced variant costs at most this much, in integer minor units of that variant's own currency: `2500` means $25.00 for a USD variant. Draft variants count. A product without a priced variant never matches a price filter.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_price: Option<i64>,
+    /// Filter by stock, draft variants included. `in_stock`: at least one variant can be bought (unlimited stock, or at least its minimum purchase quantity left). `sold_out`: no variant can be bought. `any_variant_sold_out`: at least one variant with a stock count is sold out. `limited`: at least one variant has a stock count. `unlimited`: no variant has a stock count.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stock: Option<ProductsStock>,
+    /// Only products with one of these visibilities. Repeat the parameter to select several. A single `visibility=HIDDEN` also works.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "visibility[]")]
+    pub visibility: Option<Vec<ProductsVisibility>>,
+    /// `true` for products with at least one completed sale, `false` for products without one. Only purchase line items with status `COMPLETED` count, so pending or refunded ones do not.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_sales: Option<bool>,
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
@@ -45,6 +61,11 @@ impl Default for ListParams {
             page: Some(1),
             with_drafts: Default::default(),
             only_drafts: Default::default(),
+            min_price: Default::default(),
+            max_price: Default::default(),
+            stock: Default::default(),
+            visibility: Default::default(),
+            has_sales: Default::default(),
             x_store: Default::default(),
         }
     }
@@ -261,6 +282,62 @@ impl BatchDeleteParams {
     /// Construct a new `BatchDeleteParams` with the required fields set.
     #[allow(deprecated)]
     pub fn new(body: SdkBatchDeleteProductsRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct PublishParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkPublishProductRequestApplicationJson,
+}
+
+impl PublishParams {
+    /// Construct a new `PublishParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkPublishProductRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct DuplicateParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct MoveParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkMoveProductRequestApplicationJson,
+}
+
+impl MoveParams {
+    /// Construct a new `MoveParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkMoveProductRequestApplicationJson) -> Self {
         Self {
             x_store: Default::default(),
             body,
@@ -549,7 +626,7 @@ impl<'a> ProductsApi<'a> {
 
     /// Search products
     ///
-    /// Search products using JSON body filters, search terms, includes, and sort instructions. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Search your store's products by title and narrow them by price, stock, visibility, or sales, 15 per page by default. Send the filters in the JSON body. Products support no `filters` or `sort` entries: any entry returns `422`. A filter value that is not valid, such as an unknown `stock` state or a `min_price` above `max_price`, returns `422` on that field. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn search(
         &self,
         params: SearchParams,
@@ -726,6 +803,152 @@ impl<'a> ProductsApi<'a> {
                 Some(&params.body),
                 options,
                 "DELETE /v2/products/batch",
+            )
+            .await
+    }
+
+    /// Publish a product
+    ///
+    /// Publish a draft product so customers can buy it. Works for normal products, bundles, add-ons, credits products, booking products, and courses. Each is checked as saved, the way its dashboard editor checks it before publishing, and nothing else about the product changes. A normal product needs a description and at least one published variant, and every variant that will be on sale needs a title, a description of at least 5 characters, a working delivery (for example an uploaded file for a download), a price, and payment methods enabled for the store that can take that currency. With exactly one variant, that variant is published with the product. With several, send the draft variants to publish with it in `variant_ids`; the others stay drafts. Publishing a subscription variant also creates its billing plans with the payment providers. A booking product publishes its one option with it; with several options, publish at least one with `POST /v2/products/{product}/variants/{variant}/publish` first, and the other options keep their own state. A bundle needs at least one product in it. A course is published with `visibility`, or with its saved visibility when you leave it out; `PUBLIC` also needs a ready promo video and at least one published lesson. A subscription-priced course cannot be published here. Publishing does not change a normal product's `visibility`: a product that is not `PUBLIC` is published but stays off the storefront listing. Requires the `listing` API-key ability and the `listing` permission in your team role. Safe to repeat: once the product is published, another call changes nothing and returns `422` with `The product is already published.` on `product`. Every refusal returns `422`. `visibility` is accepted only for a course and `variant_ids` only for a normal product; each is otherwise refused on that field, and `variant_ids.{i}` names an ID that is not a variant of this product. Everything else is on `product`, with one sentence per thing the product still needs. One `product` refusal comes after the product was published: when a payment provider refuses to create a subscription billing plan, the product and its variants are already published and the message is the provider's reason. Retrieve the product before trying again. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn publish(
+        &self,
+        product: &str,
+        params: PublishParams,
+    ) -> Result<SdkPublishProductResponseValue200ApplicationJson, Error> {
+        self.publish_with_options(product, params, None).await
+    }
+
+    /// Variant of [`Self::publish`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn publish_with_options(
+        &self,
+        product: &str,
+        params: PublishParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkPublishProductResponseValue200ApplicationJson, Error> {
+        self.publish_raw(product, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn publish_raw(
+        &self,
+        product: &str,
+        params: PublishParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkPublishProductResponseValue200ApplicationJson>, Error> {
+        let product = crate::client::path_segment(product);
+        let path = format!("/v2/products/{product}/publish");
+        let method = http::Method::POST;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("publishProduct".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "POST /v2/products/{product}/publish",
+            )
+            .await
+    }
+
+    /// Duplicate a product
+    ///
+    /// Copy a normal product, bundle, add-on, credits product, or booking product within the same store and return the copy. Courses cannot be duplicated. The copy is titled `(Copy)`, `(Copy 2)`, and so on, with a matching `-copy` slug, and keeps every other product setting, including its images, `visibility`, and draft state. A copy of a published product is therefore on sale straight away. It gets no place in the product order or in a section. A normal product's variants are copied with their settings and downloadable files, except subscription variants. A bundle's variant is copied with the products in it, an add-on's with its downloadable files and the products it is offered with, a credits product's with its rate tiers, and a booking product's options, except subscription options, with their schedules. Never copied: sales, reviews, appointments, serial codes, issued licence keys, and group membership. A copied variant that delivers serial codes gets a stock of `0`, so it shows as sold out until you add codes. Requires the `listing` API-key ability and the `listing` permission in your team role. Not safe to retry blindly: every call creates another copy. If a response is lost, list your products and look for the copy before trying again. A course, or a product with nothing to copy (only subscription variants), returns `422` on `product`. A product that changed while the copy was being made also returns `422` on `product`; nothing was copied. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn duplicate(
+        &self,
+        product: &str,
+        params: DuplicateParams,
+    ) -> Result<SdkDuplicateProductResponseValue201ApplicationJson, Error> {
+        self.duplicate_with_options(product, params, None).await
+    }
+
+    /// Variant of [`Self::duplicate`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn duplicate_with_options(
+        &self,
+        product: &str,
+        params: DuplicateParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkDuplicateProductResponseValue201ApplicationJson, Error> {
+        self.duplicate_raw(product, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn duplicate_raw(
+        &self,
+        product: &str,
+        params: DuplicateParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkDuplicateProductResponseValue201ApplicationJson>, Error> {
+        let product = crate::client::path_segment(product);
+        let path = format!("/v2/products/{product}/duplicate");
+        let method = http::Method::POST;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("duplicateProduct".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "POST /v2/products/{product}/duplicate",
+            )
+            .await
+    }
+
+    /// Move a product
+    ///
+    /// Move a normal product to a position in your store's product order, shifting the products in between by one. Positions run from `1` to the number of normal products, drafts included; a product's position is its `order`. Gaps in the stored order are closed first. Requires the `listing` API-key ability and the `listing` permission in your team role. Safe to repeat: moving a product to the position it already has changes nothing. Send `expected_position` with the position you last read to refuse the move when someone else moved the product in the meantime. A position past the end returns `422` on `position` with the allowed range, a product that is no longer at `expected_position` returns `422` on `expected_position` with its current position, and a listing that is not a normal product returns `422` on `product`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn move_(
+        &self,
+        product: &str,
+        params: MoveParams,
+    ) -> Result<SdkMoveProductResponseValue200ApplicationJson, Error> {
+        self.move_with_options(product, params, None).await
+    }
+
+    /// Variant of [`Self::move_`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn move_with_options(
+        &self,
+        product: &str,
+        params: MoveParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkMoveProductResponseValue200ApplicationJson, Error> {
+        self.move_raw(product, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn move_raw(
+        &self,
+        product: &str,
+        params: MoveParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkMoveProductResponseValue200ApplicationJson>, Error> {
+        let product = crate::client::path_segment(product);
+        let path = format!("/v2/products/{product}/position");
+        let method = http::Method::PUT;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("moveProduct".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "PUT /v2/products/{product}/position",
             )
             .await
     }

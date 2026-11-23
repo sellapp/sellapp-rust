@@ -21,6 +21,12 @@ pub struct ListParams {
     /// Filter by payout status.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<AffiliatePayoutsStatus>,
+    /// List only payouts recorded for this payout method. Uppercase, as returned in `payout_method`; `paypal` returns `422`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub payout_method: Option<AffiliatePayoutsPayoutMethod>,
+    /// The start of the affiliate's email address, such as `alex` or `alex.morgan@`. It matches from the first character only, and `%` and `_` match themselves.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search: Option<String>,
     /// Number of items to return per page.
     ///
     /// Defaults to `15`.
@@ -43,6 +49,8 @@ impl Default for ListParams {
         Self {
             affiliate_id: Default::default(),
             status: Default::default(),
+            payout_method: Default::default(),
+            search: Default::default(),
             limit: Some(15),
             page: Some(1),
             x_store: Default::default(),
@@ -90,10 +98,34 @@ impl UpdateParams {
     }
 }
 
+#[derive(Debug, Clone, Serialize)]
+pub struct MarkPaidParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkMarkAffiliatePayoutsPaidRequestApplicationJson,
+}
+
+impl MarkPaidParams {
+    /// Construct a new `MarkPaidParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkMarkAffiliatePayoutsPaidRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
 impl<'a> AffiliatePayoutsApi<'a> {
     /// List affiliate payouts
     ///
-    /// List merchant-managed affiliate payout records. These record commission payments arranged by the merchant; SellApp does not transfer or hold the funds. Requires the `affiliate` credential ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// List merchant-managed affiliate payout records, newest first, 15 per page by default. These record commission payments arranged by the merchant; SellApp does not transfer or hold the funds. Requires the `affiliate` credential ability. A `status` or `payout_method` value the API does not know returns `422`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn list(
         &self,
         params: ListParams,
@@ -282,6 +314,52 @@ impl<'a> AffiliatePayoutsApi<'a> {
                 Some(&params.body),
                 options,
                 "PATCH /v2/affiliate-payouts/{payout}/status",
+            )
+            .await
+    }
+
+    /// Mark affiliate payouts paid
+    ///
+    /// Record up to 20 due affiliate payouts as paid in one request, after you have paid the affiliates yourself. No money moves: SellApp only records the payment. Each payout marked paid also marks its referrals paid and emails that affiliate that the payout was paid. Send the payout IDs and `expected_total_usd_cents`, the sum of their `amount_usd_cents` as you read them, in integer USD cents (`4250` means $42.50). Every payout is checked first, and nothing changes when one of them is unknown in your store, is not `due`, or has referrals that no longer add up to it or can no longer be paid (`422` on `payout_ids`, one message per payout), or when the amounts add up to another total (`422` on `expected_total_usd_cents`). Then each payout is marked in the order sent, and `data` reports one `outcome` per payout: `paid`, `skipped`, or `failed`. A payout that changes between the check and its turn is skipped or fails without affecting the others. Requires the `affiliate` and `affiliate:payout` API-key abilities, and the staff member who owns the key needs the affiliate and affiliate payout permissions. There is no idempotency key, but sending the same batch again is refused with `422` on `payout_ids`, because those payouts are no longer due, so nobody is emailed twice. After a lost response, list the payouts with `GET /v2/affiliate-payouts?status=due` and send only those still due, with their new total. The emails cannot be taken back; to reopen a payout recorded by mistake, set it back to `due` with `PATCH /v2/affiliate-payouts/{payout}/status`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn mark_paid(
+        &self,
+        params: MarkPaidParams,
+    ) -> Result<SdkMarkAffiliatePayoutsPaidResponseValue200ApplicationJson, Error> {
+        self.mark_paid_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::mark_paid`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn mark_paid_with_options(
+        &self,
+        params: MarkPaidParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkMarkAffiliatePayoutsPaidResponseValue200ApplicationJson, Error> {
+        self.mark_paid_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn mark_paid_raw(
+        &self,
+        params: MarkPaidParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkMarkAffiliatePayoutsPaidResponseValue200ApplicationJson>, Error>
+    {
+        let path = "/v2/affiliate-payouts/mark-paid".to_string();
+        let method = http::Method::POST;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("markAffiliatePayoutsPaid".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "POST /v2/affiliate-payouts/mark-paid",
             )
             .await
     }

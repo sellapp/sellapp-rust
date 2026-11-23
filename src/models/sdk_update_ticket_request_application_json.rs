@@ -12,6 +12,9 @@ pub struct SdkUpdateTicketRequestApplicationJson {
     pub status: Option<SdkUpdateTicketRequestApplicationJsonStatus>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub archived: Option<bool>,
+    /// Why the ticket was closed: `refunded`, `refunded_partial` (partly refunded), `delivered`, `no_action`, `duplicate` or `other`. Only with `status` `CLOSED`.
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub outcome: Option<SdkUpdateTicketRequestApplicationJsonOutcome>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

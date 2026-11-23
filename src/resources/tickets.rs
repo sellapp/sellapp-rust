@@ -66,6 +66,15 @@ pub struct V2ListTicketsParams {
     /// Defaults to `1`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page: Option<i64>,
+    /// `store`: the latest message is from the customer, so the ticket waits on you. `customer`: the latest message is yours. A ticket without messages matches neither.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub waiting_on: Option<TicketsWaitingOn>,
+    /// A ticket reason by its label (as tickets show it in `reason`), its key such as `platform:refund_request`, or its code; case does not matter. A reason the store does not have returns `422` on `reason`, listing the store's reasons.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason: Option<String>,
+    /// Part of the customer's email, case-insensitive. `%` and `_` match those characters literally.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customer_email: Option<String>,
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
@@ -78,6 +87,9 @@ impl Default for V2ListTicketsParams {
         Self {
             limit: Some(15),
             page: Some(1),
+            waiting_on: Default::default(),
+            reason: Default::default(),
+            customer_email: Default::default(),
             x_store: Default::default(),
         }
     }
@@ -85,6 +97,16 @@ impl Default for V2ListTicketsParams {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct V2SearchTicketsParams {
+    /// Number of items to return per page.
+    ///
+    /// Defaults to `15`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// Page number to return.
+    ///
+    /// Defaults to `1`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page: Option<i64>,
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
@@ -101,6 +123,8 @@ impl V2SearchTicketsParams {
     #[allow(deprecated)]
     pub fn new(body: SdkV2SearchTicketsRequestApplicationJson) -> Self {
         Self {
+            limit: Some(15),
+            page: Some(1),
             x_store: Default::default(),
             body,
         }
@@ -137,6 +161,38 @@ impl UpdateParams {
             body,
         }
     }
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct BatchUpdateParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkBatchUpdateTicketsRequestApplicationJson,
+}
+
+impl BatchUpdateParams {
+    /// Construct a new `BatchUpdateParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkBatchUpdateTicketsRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct GetContextParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
 }
 
 impl<'a> TicketsApi<'a> {
@@ -270,7 +326,7 @@ impl<'a> TicketsApi<'a> {
 
     /// List all tickets
     ///
-    /// List your store's support tickets, 15 per page by default. This v2 route is store-scoped. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// List your store's support tickets, 15 per page by default. This v2 route is store-scoped. Narrow the results with `waiting_on`, `reason` and `customer_email`; they combine with each other and with any other filters. An unknown `waiting_on` or `reason`, or a `customer_email` longer than 255 characters, returns `422`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn v_2_list_tickets(
         &self,
         params: V2ListTicketsParams,
@@ -308,7 +364,7 @@ impl<'a> TicketsApi<'a> {
 
     /// Search tickets
     ///
-    /// Search tickets using JSON body filters, search terms, includes, and sort instructions. This v2 route is store-scoped. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Search tickets using JSON body filters, search terms, includes, and sort instructions. This v2 route is store-scoped. Narrow the results with `waiting_on`, `reason` and `customer_email`; they combine with each other and with any other filters. An unknown `waiting_on` or `reason`, or a `customer_email` longer than 255 characters, returns `422`. Page through results with `limit` (1 to 100, default 15; a larger value returns `422`) and `page`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn v_2_search_tickets(
         &self,
         params: V2SearchTicketsParams,
@@ -401,7 +457,7 @@ impl<'a> TicketsApi<'a> {
 
     /// Close, reopen, or archive a ticket
     ///
-    /// Change ticket status or archive state in the selected store. Requires the ticket API-key ability and store ticket permission. Send status OPEN to reopen or CLOSED to close; closing sends the existing customer notification only when the status changes. Send archived true to archive or false to restore. You may send both fields together; omitted fields stay unchanged. Use the same optional Idempotency-Key and identical body after a lost response. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Close, reopen, archive or restore a ticket in the selected store. Send `status` `CLOSED` to close or `OPEN` to reopen, and `archived` `true` to archive or `false` to restore; you may send both, and omitted fields stay unchanged. When you close a ticket you can record why with `outcome`, which is accepted only together with `status` `CLOSED`. Closing emails the customer that the ticket was closed, at most once an hour per ticket: reopening and closing again within the hour sends no second email. A closed ticket keeps its outcome. Sending the outcome it already has changes nothing; a different outcome, or an outcome for a ticket that was closed without one, returns `422` on `outcome` and nothing in the request is applied, so reopen the ticket first. Requires the `ticket` API-key ability and the ticket permission in your team role. Use the same optional Idempotency-Key and identical body after a lost response. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn update(
         &self,
         ticket: &str,
@@ -444,6 +500,101 @@ impl<'a> TicketsApi<'a> {
                 Some(&params.body),
                 options,
                 "PATCH /v2/tickets/{ticket}",
+            )
+            .await
+    }
+
+    /// Update several tickets
+    ///
+    /// Close, reopen, archive, restore or mark as unread up to 50 tickets in one request, and get one result per ticket in the order you sent them. Every ID must be a ticket of the selected store: one unknown ID returns `404` and changes nothing. Each ticket is then changed on its own, so one refusal does not undo the others. `close` needs an `outcome`, which is recorded on every ticket it closes, and emails each customer that the ticket was closed, at most once an hour per ticket. `mark_unread` marks the ticket unread for your store (`read_status.store` becomes `false`). Requires the `ticket` API-key ability and the ticket permission in your team role. Repeating the same request is safe: a ticket already in the requested state comes back as `skipped`. Send an optional `Idempotency-Key` with an identical body to get the original response back after a lost connection. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn batch_update(
+        &self,
+        params: BatchUpdateParams,
+    ) -> Result<SdkBatchUpdateTicketsResponseValue200ApplicationJson, Error> {
+        self.batch_update_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::batch_update`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn batch_update_with_options(
+        &self,
+        params: BatchUpdateParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkBatchUpdateTicketsResponseValue200ApplicationJson, Error> {
+        self.batch_update_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn batch_update_raw(
+        &self,
+        params: BatchUpdateParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkBatchUpdateTicketsResponseValue200ApplicationJson>, Error>
+    {
+        let path = "/v2/tickets/batch".to_string();
+        let method = http::Method::PATCH;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = true;
+        merged.operation_id = Some("batchUpdateTickets".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "PATCH /v2/tickets/batch",
+            )
+            .await
+    }
+
+    /// Retrieve a ticket's customer and refund context
+    ///
+    /// Read what you need beside a ticket's conversation in one call: the resolution, the customer's order history in this store, the linked order, what can still be refunded to the customer's wallet, and the latest 20 support activity entries, newest first. `refund_options` has the same items as the ticket's wallet refund options. The customer figures count the store's completed orders whose customer or order email is the ticket's email. Requires the `ticket` API-key ability and the ticket permission in your team role. The response includes the customer's email, order count and lifetime spend, so give a key with this ability only to people and tools that may see them. Amounts are integer USD cents: `1999` means $19.99. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn get_context(
+        &self,
+        ticket: &str,
+        params: GetContextParams,
+    ) -> Result<SdkV2GetTicketContextResponseValue200ApplicationJson, Error> {
+        self.get_context_with_options(ticket, params, None).await
+    }
+
+    /// Variant of [`Self::get_context`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn get_context_with_options(
+        &self,
+        ticket: &str,
+        params: GetContextParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkV2GetTicketContextResponseValue200ApplicationJson, Error> {
+        self.get_context_raw(ticket, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn get_context_raw(
+        &self,
+        ticket: &str,
+        params: GetContextParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkV2GetTicketContextResponseValue200ApplicationJson>, Error>
+    {
+        let ticket = crate::client::path_segment(ticket);
+        let path = format!("/v2/tickets/{ticket}/context");
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("v2GetTicketContext".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/tickets/{ticket}/context",
             )
             .await
     }

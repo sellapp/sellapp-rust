@@ -1,0 +1,6 @@
+{
+  "type": "text",
+  "label": "test_label",
+  "key": "test_key",
+  "required": false
+}

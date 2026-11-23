@@ -13,12 +13,27 @@ pub struct ExportsApi<'a> {
     pub(crate) client: &'a Client,
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct ListExportsParams {
+    /// Page number, starting at 1.
+    ///
+    /// Defaults to `1`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page: Option<i64>,
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
     pub x_store: Option<String>,
+}
+
+impl Default for ListExportsParams {
+    #[allow(deprecated)]
+    fn default() -> Self {
+        Self {
+            page: Some(1),
+            x_store: Default::default(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -84,7 +99,7 @@ impl DownloadExportParams {
 impl<'a> ExportsApi<'a> {
     /// List exports
     ///
-    /// List permitted exports, 50 per page. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request. Sales, tax and customer reports require invoice store permission. Affiliate payout reports require affiliate and affiliate:payout permissions. The category selects the applicable permission checks; listing returns only authorized categories.
+    /// List permitted exports, newest first, 50 per page. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request. Sales, tax and customer reports require invoice store permission. Affiliate payout reports require affiliate and affiliate:payout permissions. The category selects the applicable permission checks; listing returns only authorized categories.
     pub async fn list_exports(
         &self,
         params: ListExportsParams,

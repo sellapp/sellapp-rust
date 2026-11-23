@@ -9,8 +9,8 @@ use serde::{Deserialize, Serialize};
 #[serde(remote = "Self")]
 pub struct SdkSearchProductsResponseValue200ApplicationJson {
     pub data: Vec<SearchProductsResponseValue200ApplicationJsonPropertyDataItem>,
-    pub links: SearchProductsResponseValue200ApplicationJsonPropertyLinks,
-    pub meta: SearchProductsResponseValue200ApplicationJsonPropertyMeta,
+    pub links: PaginationLinks,
+    pub meta: PaginationMeta,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

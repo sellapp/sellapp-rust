@@ -8,8 +8,11 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(remote = "Self")]
 pub struct SearchOrdersRequestApplicationJsonPropertyFiltersItem {
-    pub field: String,
+    /// The order field to compare. `id` and `product_id` take positive integers with `eq` or `in`; `product_id` keeps orders with at least one line item for that product. `status`, `payment_method`, and `currency` take their enum values (`currency` is the order's ISO 4217 code, such as `USD`) with `eq` or `in`. `created_at` takes a date-time with a time zone, such as `2026-11-01T00:00:00Z` or `2026-11-01T01:00:00+01:00`, with `gte` or `lte`; it is compared in UTC to the second and both bounds are inclusive. `total` takes the order total in integer minor units of each order's own currency (`5000` means $50.00 in USD; the same number as `totals.total_cents`) with `eq`, `gte`, or `lte`; add a `currency` filter to compare orders in one currency. `additional_information` takes text with `contains`; the other text fields take text of up to 255 characters with `eq` or `contains`.
+    pub field: SearchOrdersRequestApplicationJsonPropertyFiltersItemField,
+    /// `eq` matches exactly, `contains` matches part of the text, `in` matches any value in an array of up to 100, `gte` keeps values greater than or equal to `value`, and `lte` keeps values less than or equal to `value`. Each field accepts only the operators listed for it in `field`.
     pub operator: SearchOrdersRequestApplicationJsonPropertyFiltersItemOperator,
+    /// A scalar for `eq`, `contains`, `gte`, and `lte`; a non-empty array for `in`.
     pub value: serde_json::Value,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]

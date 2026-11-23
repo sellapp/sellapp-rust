@@ -15,7 +15,7 @@ pub struct SearchProductsResponseValue200ApplicationJsonPropertyDataItem {
     pub images: Vec<SearchProductsResponseValue200ApplicationJsonPropertyDataItemPropertyImagesItem>,
     pub order: Option<i64>,
     pub visibility: String,
-    pub delivery_text: String,
+    pub delivery_text: Option<String>,
     pub additional_information: Vec<SearchProductsResponseValue200ApplicationJsonPropertyDataItemPropertyAdditionalInformationItem>,
     pub other_settings: SearchProductsResponseValue200ApplicationJsonPropertyDataItemPropertyOtherSettings,
     pub deleted_at: Option<String>,
@@ -27,6 +27,14 @@ pub struct SearchProductsResponseValue200ApplicationJsonPropertyDataItem {
     pub is_discoverable: bool,
     pub variants: Vec<SearchProductsResponseValue200ApplicationJsonPropertyDataItemPropertyVariantsItem>,
     pub url: String,
+    /// The lowest and highest price among the product's published variants, formatted for display with the currency symbol: `$19.99`, or `$9.99 - $19.99` when the prices differ. Null when no published variant has a price.
+    pub price_range: Option<String>,
+    /// Units left across the product's published variants, or null when any of them has unlimited stock.
+    pub stock: Option<i64>,
+    /// How many purchase line items of the product have status `COMPLETED`. Pending or refunded ones do not count.
+    pub sales: i64,
+    /// `true` when none of the product's published variants can be bought: none has unlimited stock or at least its minimum purchase quantity left. Also `true` for a product without published variants.
+    pub sold_out: bool,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

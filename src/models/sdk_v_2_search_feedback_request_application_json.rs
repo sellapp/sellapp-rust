@@ -16,6 +16,15 @@ pub struct SdkV2SearchFeedbackRequestApplicationJson {
     pub search: Option<V2SearchFeedbackRequestApplicationJsonPropertySearch>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub includes: Option<Vec<V2SearchFeedbackRequestApplicationJsonPropertyIncludesItem>>,
+    /// `replied`: feedback with a non-empty seller reply. `unreplied`: feedback without one. `all` (default): both. Any other value returns `422`.
+    ///
+    /// Defaults to `all`.
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "crate::runtime_schema::present_nullable"
+    )]
+    pub reply_state: Option<Option<ReplyState>>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

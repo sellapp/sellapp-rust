@@ -73,6 +73,21 @@ pub struct ListParams {
     /// Defaults to `1`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page: Option<i64>,
+    /// Keep keys that contain this text: letters, digits, and hyphens, up to 100 characters. A full key as the customer sees it, including the store's key prefix, also finds its key.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// Keep keys of the store customer with exactly this email address.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customer_email: Option<String>,
+    /// Keep keys issued for this product.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_id: Option<i64>,
+    /// Keep keys issued by this order.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub order_id: Option<i64>,
+    /// Keep keys by whether they validate now, decided the way license validation decides it: `active` keys are switched on and not past their expiry, `inactive` keys are switched off but not expired, and `expired` keys are past `expires_at`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validity: Option<LicensesValidity>,
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
@@ -85,6 +100,11 @@ impl Default for ListParams {
         Self {
             limit: Some(15),
             page: Some(1),
+            key: Default::default(),
+            customer_email: Default::default(),
+            product_id: Default::default(),
+            order_id: Default::default(),
+            validity: Default::default(),
             x_store: Default::default(),
         }
     }
@@ -241,7 +261,7 @@ impl<'a> LicensesApi<'a> {
 
     /// List all license keys
     ///
-    /// List your store's license keys. Use `limit` and `page` to read one page at a time. The response schema describes each license. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// List your store's license keys, one page at a time with `limit` and `page`. Filter by part of the key, the customer's email, the product, the order, or `validity`; several filters combine, and a key must match all of them. A filter value in the wrong shape returns `422` on that parameter. Requires the `license` API-key ability. The response schema describes each license. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn list(
         &self,
         params: ListParams,

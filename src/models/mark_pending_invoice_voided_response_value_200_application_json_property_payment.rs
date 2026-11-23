@@ -14,6 +14,10 @@ pub struct MarkPendingInvoiceVoidedResponseValue200ApplicationJsonPropertyPaymen
     pub expires_at: String,
     pub full_price: MarkPendingInvoiceVoidedResponseValue200ApplicationJsonPropertyPaymentPropertyFullPrice,
     pub original_amount: MarkPendingInvoiceVoidedResponseValue200ApplicationJsonPropertyPaymentPropertyOriginalAmount,
+    /// The currency refunds on this invoice are made and counted in: the currency the payment was charged in, which can differ from the invoice currency. `null` when the payment method cannot be refunded through the API.
+    pub refund_currency: Option<String>,
+    /// The amount already refunded on this invoice, in integer minor units of `refund_currency`: `500` means $5.00 in USD. It is the exact figure a refund request compares `expected_refunded_total_cents` with, so send it back unchanged when you refund. `0` when nothing has been refunded.
+    pub refunded_total_cents: i64,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

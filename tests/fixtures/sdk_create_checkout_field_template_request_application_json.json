@@ -1,0 +1,10 @@
+{
+  "name": "test_name",
+  "fields": [
+    {
+      "type": "text",
+      "label": "test_label",
+      "required": false
+    }
+  ]
+}

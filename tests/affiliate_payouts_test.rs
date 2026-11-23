@@ -667,3 +667,200 @@ async fn affiliate_payouts_update_unprocessable() {
     };
     assert_eq!(api.status, 422);
 }
+
+#[tokio::test]
+async fn affiliate_payouts_mark_paid_round_trip() {
+    let server = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/affiliate-payouts/mark-paid"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(include_str!(
+            "fixtures/sdk_mark_affiliate_payouts_paid_response_value_200_application_json.json"
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let _ = client
+        .affiliate_payouts()
+        .mark_paid(sellapp::resources::affiliate_payouts::MarkPaidParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_mark_affiliate_payouts_paid_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkMarkAffiliatePayoutsPaidRequestApplicationJson"),
+        ))
+        .await
+        .expect("valid generated response");
+}
+
+#[tokio::test]
+async fn affiliate_payouts_mark_paid_unauthorized() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(401).set_body_string("{\"message\":\"Unauthorized\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/affiliate-payouts/mark-paid"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .affiliate_payouts()
+        .mark_paid(sellapp::resources::affiliate_payouts::MarkPaidParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_mark_affiliate_payouts_paid_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkMarkAffiliatePayoutsPaidRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Authentication(api) => api.as_ref(),
+        other => panic!("expected Error::Authentication, got {other:?}"),
+    };
+    assert_eq!(api.status, 401);
+}
+
+#[tokio::test]
+async fn affiliate_payouts_mark_paid_not_found() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(404).set_body_string("{\"message\":\"Not found\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/affiliate-payouts/mark-paid"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .affiliate_payouts()
+        .mark_paid(sellapp::resources::affiliate_payouts::MarkPaidParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_mark_affiliate_payouts_paid_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkMarkAffiliatePayoutsPaidRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 404);
+}
+
+#[tokio::test]
+async fn affiliate_payouts_mark_paid_rate_limited() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(429)
+        .insert_header("retry-after", "1")
+        .set_body_string("{\"message\":\"Slow down\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/affiliate-payouts/mark-paid"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .affiliate_payouts()
+        .mark_paid(sellapp::resources::affiliate_payouts::MarkPaidParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_mark_affiliate_payouts_paid_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkMarkAffiliatePayoutsPaidRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 429);
+    assert_eq!(api.retry_after, Some(std::time::Duration::from_secs(1)));
+}
+
+#[tokio::test]
+async fn affiliate_payouts_mark_paid_server_error() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(500).set_body_string("{\"message\":\"Internal error\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/affiliate-payouts/mark-paid"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .affiliate_payouts()
+        .mark_paid(sellapp::resources::affiliate_payouts::MarkPaidParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_mark_affiliate_payouts_paid_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkMarkAffiliatePayoutsPaidRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 500);
+}
+
+#[tokio::test]
+async fn affiliate_payouts_mark_paid_bad_request() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(400)
+        .set_body_string("{\"code\":\"validation_error\",\"message\":\"Bad request\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/affiliate-payouts/mark-paid"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .affiliate_payouts()
+        .mark_paid(sellapp::resources::affiliate_payouts::MarkPaidParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_mark_affiliate_payouts_paid_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkMarkAffiliatePayoutsPaidRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 400);
+    assert_eq!(api.code.as_deref(), Some("validation_error"));
+}
+
+#[tokio::test]
+async fn affiliate_payouts_mark_paid_unprocessable() {
+    let server = MockServer::start().await;
+    let template = ResponseTemplate::new(422).set_body_string("{\"message\":\"Unprocessable\"}");
+    Mock::given(method("POST"))
+        .and(path_matcher("/v2/affiliate-payouts/mark-paid"))
+        .respond_with(template)
+        .expect(1)
+        .mount(&server)
+        .await;
+    let client = common::test_client(&server).await;
+    let err = client
+        .affiliate_payouts()
+        .mark_paid(sellapp::resources::affiliate_payouts::MarkPaidParams::new(
+            serde_json::from_str(include_str!(
+                "fixtures/sdk_mark_affiliate_payouts_paid_request_application_json.json"
+            ))
+            .expect("parse fixture for SdkMarkAffiliatePayoutsPaidRequestApplicationJson"),
+        ))
+        .await
+        .expect_err("expected error");
+    let api = match &err {
+        Error::Api(api) => api.as_ref(),
+        other => panic!("expected Error::Api, got {other:?}"),
+    };
+    assert_eq!(api.status, 422);
+}

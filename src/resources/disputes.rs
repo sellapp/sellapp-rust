@@ -13,12 +13,43 @@ pub struct DisputesApi<'a> {
     pub(crate) client: &'a Client,
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct ListDisputesParams {
+    /// Page number, starting at 1.
+    ///
+    /// Defaults to `1`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page: Option<i64>,
+    /// Keep disputes in this state: `open`, `under_review`, `won`, `lost`, or `closed`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<DisputesStatus>,
+    /// Keep disputes raised through this payment provider, such as `stripe`. Any letter case works.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider: Option<String>,
+    /// Keep disputes opened on or after this moment. A date such as `2026-08-01` starts at midnight of that day in the store's time zone; a date-time without an offset is also read in the store's time zone. Inclusive.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub opened_after: Option<String>,
+    /// Keep disputes opened on or before this moment. A date such as `2026-08-31` runs to the last second of that day in the store's time zone; a date-time without an offset is also read in the store's time zone. Inclusive.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub opened_before: Option<String>,
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
     pub x_store: Option<String>,
+}
+
+impl Default for ListDisputesParams {
+    #[allow(deprecated)]
+    fn default() -> Self {
+        Self {
+            page: Some(1),
+            status: Default::default(),
+            provider: Default::default(),
+            opened_after: Default::default(),
+            opened_before: Default::default(),
+            x_store: Default::default(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Default, Serialize)]
@@ -32,7 +63,7 @@ pub struct GetDisputeParams {
 impl<'a> DisputesApi<'a> {
     /// List disputes
     ///
-    /// Read-only, redacted, store-scoped disputes that may reference an Order or Charge. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// List your store's payment disputes, most recently opened first, 50 per page. Each dispute is read-only and redacted, and may reference an order or a standalone charge. Filter by `status`, `provider`, or the day a dispute was opened; filters combine, and the date filters read whole days in the store's time zone and include both ends. An unknown `status`, a date that cannot be read, or an `opened_before` earlier than `opened_after` returns `422` on that parameter. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn list_disputes(
         &self,
         params: ListDisputesParams,

@@ -11,7 +11,7 @@ pub struct GetVariantDeliverableConfigurationResponseValue200ApplicationJsonProp
     pub types:
         Vec<GetVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataTypes>,
     pub data:
-        GetVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataPropertyData,
+        GetVariantDeliverableConfigurationResponseValue200ApplicationJsonPropertyDataDataOneOf,
     /// Whether a dynamic delivery endpoint is configured. The endpoint itself is never returned.
     pub webhook_configured: bool,
     /// The current variant snapshot token. Pass this value as expected_updated_at when replacing the configuration to reject stale updates.

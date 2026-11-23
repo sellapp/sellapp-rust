@@ -58,6 +58,30 @@ pub struct ListSubscriptionsParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "status[]")]
     pub status: Option<Vec<SubscriptionsStatus>>,
+    /// Keep subscriptions sold by this order.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub order_id: Option<i64>,
+    /// Keep subscriptions whose plan is a variant of this product, including subscriptions moved to that plan after signup.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_id: Option<i64>,
+    /// Keep subscriptions that renew on or after this moment. Only `ACTIVE` and `TRIALING` subscriptions with a renewal date that are neither paused nor scheduled to cancel match a renewal filter. A date such as `2026-11-01` starts at midnight of that day in the store's time zone; a date-time without an offset is also read in the store's time zone. Inclusive.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub renews_after: Option<String>,
+    /// Keep subscriptions that renew on or before this moment, with the same rules as `renews_after`. A date runs to the last second of that day in the store's time zone. Inclusive. Must not be earlier than `renews_after`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub renews_before: Option<String>,
+    /// Keep `CANCELED` subscriptions cancelled on or after this moment. The cancellation time is when an immediate cancellation happened; for a subscription that ran out at its period end it is approximate, the last time the subscription record changed. Dates are read like `renews_after`. Inclusive.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cancelled_after: Option<String>,
+    /// Keep `CANCELED` subscriptions cancelled on or before this moment, with the same rules as `cancelled_after`. A date runs to the last second of that day in the store's time zone. Inclusive. Must not be earlier than `cancelled_after`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cancelled_before: Option<String>,
+    /// `true` keeps `ACTIVE` and `TRIALING` subscriptions set to cancel at the end of their period; `false` keeps subscriptions that are not set to.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_to_cancel: Option<bool>,
+    /// `true` keeps paused subscriptions; `false` keeps subscriptions that are not paused.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub paused: Option<bool>,
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
@@ -72,6 +96,14 @@ impl Default for ListSubscriptionsParams {
             page: Some(1),
             pagination: Some(true),
             status: Default::default(),
+            order_id: Default::default(),
+            product_id: Default::default(),
+            renews_after: Default::default(),
+            renews_before: Default::default(),
+            cancelled_after: Default::default(),
+            cancelled_before: Default::default(),
+            scheduled_to_cancel: Default::default(),
+            paused: Default::default(),
             x_store: Default::default(),
         }
     }
@@ -433,7 +465,7 @@ impl<'a> SubscriptionsApi<'a> {
 
     /// List subscriptions
     ///
-    /// List the subscriptions belonging to the authenticated store, ordered by identifier ascending. Requires the `invoice` Sanctum ability. Use `status[]` to keep only the states you care about. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// List the subscriptions belonging to the authenticated store, ordered by identifier ascending. Requires the `invoice` Sanctum ability. Use `status[]` to keep only the states you care about, and the other filters to find subscriptions by order, product, renewal date, cancellation date, or whether they are paused or set to cancel. Filters combine: a subscription must match all of them. Date filters read whole days in the store's time zone and include both ends. A filter value in the wrong shape, or a `*_before` date earlier than its `*_after` date, returns `422` on that parameter. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn list_subscriptions(
         &self,
         params: ListSubscriptionsParams,
@@ -478,7 +510,7 @@ impl<'a> SubscriptionsApi<'a> {
 
     /// Search subscriptions
     ///
-    /// Search the store's subscriptions, ordered by identifier ascending unless `sort` says otherwise. `search.value` matches the provider subscription ID, the provider customer ID, and the customer email. Filter on `id`, `customer_id` (the SellApp customer ID, as in `customer.id`), `provider`, `status`, or `product_variant_id`, and sort on `id`, `status`, `current_period_start`, `current_period_end`, `created_at`, or `updated_at`. Requires the `invoice` Sanctum ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Search the store's subscriptions, ordered by identifier ascending unless `sort` says otherwise. `search.value` matches the provider subscription ID, the provider customer ID, and the customer email. Filter on `id`, `customer_id` (the SellApp customer ID, as in `customer.id`), `provider`, `status`, or `product_variant_id`, and sort on `id`, `status`, `current_period_start`, `current_period_end`, `created_at`, or `updated_at`. The body also takes the list endpoint's filters as top-level fields: `order_id`, `product_id`, `renews_after`, `renews_before`, `cancelled_after`, `cancelled_before`, `scheduled_to_cancel`, and `paused`, with the same rules; date filters read whole days in the store's time zone and include both ends. Requires the `invoice` Sanctum ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn search_subscriptions(
         &self,
         params: SearchSubscriptionsParams,

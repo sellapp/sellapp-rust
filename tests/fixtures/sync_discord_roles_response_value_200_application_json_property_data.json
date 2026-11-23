@@ -1,0 +1,11 @@
+{
+  "platform": "discord",
+  "synced_servers": [
+    {
+      "id": "test_id",
+      "name": "test_name",
+      "synced": false
+    }
+  ],
+  "failed_count": 0
+}

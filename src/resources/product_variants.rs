@@ -162,6 +162,22 @@ impl DeleteParams {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SearchParams {
+    /// Number of items to return per page.
+    ///
+    /// Defaults to `15`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// Page number to return.
+    ///
+    /// Defaults to `1`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page: Option<i64>,
+    /// Include draft variants alongside published variants.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub with_drafts: Option<bool>,
+    /// Return only draft variants.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub only_drafts: Option<bool>,
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
@@ -178,6 +194,10 @@ impl SearchParams {
     #[allow(deprecated)]
     pub fn new(body: SdkSearchProductVariantsRequestApplicationJson) -> Self {
         Self {
+            limit: Some(15),
+            page: Some(1),
+            with_drafts: Default::default(),
+            only_drafts: Default::default(),
             x_store: Default::default(),
             body,
         }
@@ -249,6 +269,46 @@ impl BatchDeleteParams {
     /// Construct a new `BatchDeleteParams` with the required fields set.
     #[allow(deprecated)]
     pub fn new(body: SdkBatchDeleteCouponsRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct PublishParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct DuplicateParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct ReorderParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkReorderProductVariantsRequestApplicationJson,
+}
+
+impl ReorderParams {
+    /// Construct a new `ReorderParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkReorderProductVariantsRequestApplicationJson) -> Self {
         Self {
             x_store: Default::default(),
             body,
@@ -578,7 +638,7 @@ impl<'a> ProductVariantsApi<'a> {
 
     /// Search product variants
     ///
-    /// Search a product's variants using JSON body filters, search terms, includes, and sort instructions. Requires a token with the listing ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Search a product's variants using JSON body filters, search terms, includes, and sort instructions, 15 per page by default. Draft variants are left out unless you send `with_drafts` or `only_drafts`. Requires a token with the listing ability. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn search(
         &self,
         product: &str,
@@ -778,6 +838,164 @@ impl<'a> ProductVariantsApi<'a> {
                 Some(&params.body),
                 options,
                 "DELETE /v2/products/{product}/variants/batch",
+            )
+            .await
+    }
+
+    /// Publish a product variant
+    ///
+    /// Publish one draft option of a booking product so customers can book it. It is checked the way the booking editor checks it: a title, a description of at least 5 characters, finished booking settings, a price, and payment methods enabled for the store that can take its currency. On a published booking product the option can be booked straight away; a draft booking product still needs `POST /v2/products/{product}/publish`, which needs at least one published option when the product has several. Only booking options are published one at a time. A variant of any other kind of product returns `422` on `variant`: its variants are published with the product through `POST /v2/products/{product}/publish`. Requires the `listing` API-key ability and the `listing` permission in your team role. Safe to repeat: once the option is published, another call changes nothing and returns `422` with `This booking option is already published.` on `variant`. Every other refusal is also `422` on `variant`, with one sentence per thing the option still needs. A variant of another product, or a product of another store, returns `404`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn publish(
+        &self,
+        product: &str,
+        variant: &str,
+        params: PublishParams,
+    ) -> Result<SdkPublishProductVariantResponseValue200ApplicationJson, Error> {
+        self.publish_with_options(product, variant, params, None)
+            .await
+    }
+
+    /// Variant of [`Self::publish`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn publish_with_options(
+        &self,
+        product: &str,
+        variant: &str,
+        params: PublishParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkPublishProductVariantResponseValue200ApplicationJson, Error> {
+        self.publish_raw(product, variant, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn publish_raw(
+        &self,
+        product: &str,
+        variant: &str,
+        params: PublishParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkPublishProductVariantResponseValue200ApplicationJson>, Error>
+    {
+        let product = crate::client::path_segment(product);
+        let variant = crate::client::path_segment(variant);
+        let path = format!("/v2/products/{product}/variants/{variant}/publish");
+        let method = http::Method::POST;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("publishProductVariant".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "POST /v2/products/{product}/variants/{variant}/publish",
+            )
+            .await
+    }
+
+    /// Duplicate a product variant
+    ///
+    /// Copy a variant of a normal product onto the same product and return the copy. The copy keeps every setting, the title, and the draft state, so a copy of a published variant is on sale straight away. Downloadable files and their folders are copied too. Serial codes and issued licence keys are not copied: a copy that delivers serial codes gets a stock of `0`, so it shows as sold out until you add codes. Subscription variants cannot be duplicated. Requires the `listing` API-key ability and the `listing` permission in your team role. Not safe to retry blindly: every call creates another variant. If a response is lost, list the product's variants, with `with_drafts=true` for a draft, before trying again. A variant of a bundle, add-on, credits product, booking product, or course returns `422` on `product`. A subscription variant returns `422` on `variant`. A variant of another product returns `404`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn duplicate(
+        &self,
+        product: &str,
+        variant: &str,
+        params: DuplicateParams,
+    ) -> Result<SdkDuplicateProductVariantResponseValue201ApplicationJson, Error> {
+        self.duplicate_with_options(product, variant, params, None)
+            .await
+    }
+
+    /// Variant of [`Self::duplicate`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn duplicate_with_options(
+        &self,
+        product: &str,
+        variant: &str,
+        params: DuplicateParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkDuplicateProductVariantResponseValue201ApplicationJson, Error> {
+        self.duplicate_raw(product, variant, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn duplicate_raw(
+        &self,
+        product: &str,
+        variant: &str,
+        params: DuplicateParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkDuplicateProductVariantResponseValue201ApplicationJson>, Error>
+    {
+        let product = crate::client::path_segment(product);
+        let variant = crate::client::path_segment(variant);
+        let path = format!("/v2/products/{product}/variants/{variant}/duplicate");
+        let method = http::Method::POST;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("duplicateProductVariant".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "POST /v2/products/{product}/variants/{variant}/duplicate",
+            )
+            .await
+    }
+
+    /// Reorder product variants
+    ///
+    /// Set the order buyers see a normal product's published variants in, first to last. Send every published variant ID exactly once; draft variants are not part of the order and are refused. The response lists the product's published variants in their new order, without pagination. Requires the `listing` API-key ability and the `listing` permission in your team role. Safe to repeat: the same list gives the same order. A list that leaves out a published variant, or names a draft or a variant of another product, returns `422` on `variant_ids`; read the variants again and send the full list. An ID sent twice returns `422` on `variant_ids.{i}`. A listing that is not a normal product returns `422` on `product`. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn reorder(
+        &self,
+        product: &str,
+        params: ReorderParams,
+    ) -> Result<SdkReorderProductVariantsResponseValue200ApplicationJson, Error> {
+        self.reorder_with_options(product, params, None).await
+    }
+
+    /// Variant of [`Self::reorder`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn reorder_with_options(
+        &self,
+        product: &str,
+        params: ReorderParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkReorderProductVariantsResponseValue200ApplicationJson, Error> {
+        self.reorder_raw(product, params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn reorder_raw(
+        &self,
+        product: &str,
+        params: ReorderParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkReorderProductVariantsResponseValue200ApplicationJson>, Error>
+    {
+        let product = crate::client::path_segment(product);
+        let path = format!("/v2/products/{product}/variants/order");
+        let method = http::Method::PUT;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("reorderProductVariants".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "PUT /v2/products/{product}/variants/order",
             )
             .await
     }

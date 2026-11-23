@@ -146,6 +146,30 @@ impl CancelParams {
     }
 }
 
+#[derive(Debug, Clone, Serialize)]
+pub struct CreateParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkCreateBookingProductRequestApplicationJson,
+}
+
+impl CreateParams {
+    /// Construct a new `CreateParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkCreateBookingProductRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
 impl<'a> BookingsApi<'a> {
     /// List appointments
     ///
@@ -375,6 +399,52 @@ impl<'a> BookingsApi<'a> {
                 Some(&params.body),
                 options,
                 "PATCH /v2/bookings/{booking}/status",
+            )
+            .await
+    }
+
+    /// Create a booking product
+    ///
+    /// Create a draft booking product with one draft option that customers book as a timed appointment, one per purchase and one customer per time slot. Nothing can be booked until you publish it, whatever `visibility` you send: `visibility`, `PRIVATE` by default, applies once the product is published. Publish it with `POST /v2/products/{product}/publish`. Schedule fields you leave out take their defaults; read the result with `GET /v2/products/{product}/variants/{variant}/booking`. Each successful call creates another product, so do not retry blindly after a lost response: list your products first. Requires the `listing` API-key ability and the `listing` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn create(
+        &self,
+        params: CreateParams,
+    ) -> Result<SdkCreateBookingProductResponseValue201ApplicationJson, Error> {
+        self.create_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::create`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn create_with_options(
+        &self,
+        params: CreateParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkCreateBookingProductResponseValue201ApplicationJson, Error> {
+        self.create_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn create_raw(
+        &self,
+        params: CreateParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkCreateBookingProductResponseValue201ApplicationJson>, Error>
+    {
+        let path = "/v2/booking-products".to_string();
+        let method = http::Method::POST;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("createBookingProduct".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "POST /v2/booking-products",
             )
             .await
     }

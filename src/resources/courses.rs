@@ -49,6 +49,30 @@ impl Default for ListParams {
 }
 
 #[derive(Debug, Clone, Serialize)]
+pub struct CreateParams {
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+    /// Request body sent with this call.
+    ///
+    /// Required.
+    #[serde(skip)]
+    pub body: SdkCreateCourseRequestApplicationJson,
+}
+
+impl CreateParams {
+    /// Construct a new `CreateParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(body: SdkCreateCourseRequestApplicationJson) -> Self {
+        Self {
+            x_store: Default::default(),
+            body,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
 pub struct SearchParams {
     /// Number of items to return per page.
     ///
@@ -146,6 +170,44 @@ impl UpdateParams {
     }
 }
 
+#[derive(Debug, Clone, Serialize)]
+pub struct GetStudentSummaryParams {
+    /// The first day to include, as `YYYY-MM-DD` in the store's timezone.
+    ///
+    /// Required.
+    pub start_date: String,
+    /// The last day to include, as `YYYY-MM-DD` in the store's timezone. It must not be before `start_date`, and the range can cover at most 366 days; otherwise the request returns `422` on `end_date`.
+    ///
+    /// Required.
+    pub end_date: String,
+    /// Count one course only: the course `id` from `/v2/courses`. Another product, a deleted course, or another store's course returns `422` on `course_id`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub course_id: Option<i64>,
+    /// How many rows `students` and `courses` each return: 10 by default, at most 20. A larger value returns `422` on `limit`. The `summary` totals always cover everything.
+    ///
+    /// Defaults to `10`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "X-STORE")]
+    pub x_store: Option<String>,
+}
+
+impl GetStudentSummaryParams {
+    /// Construct a new `GetStudentSummaryParams` with the required fields set.
+    #[allow(deprecated)]
+    pub fn new(start_date: impl Into<String>, end_date: impl Into<String>) -> Self {
+        Self {
+            start_date: start_date.into(),
+            end_date: end_date.into(),
+            course_id: Default::default(),
+            limit: Some(10),
+            x_store: Default::default(),
+        }
+    }
+}
+
 impl<'a> CoursesApi<'a> {
     /// List courses
     ///
@@ -182,6 +244,51 @@ impl<'a> CoursesApi<'a> {
         let options = Some(&merged);
         self.client
             .request_with_query_schema_opts_raw(method, &path, &params, options, "GET /v2/courses")
+            .await
+    }
+
+    /// Create a course
+    ///
+    /// Create a course as a draft that customers cannot buy yet, whatever `visibility` you send: `visibility`, `HIDDEN` by default, applies once the course is published. It starts with no sections and one draft option named `Default`, priced at 0 USD: set the price with the product variant endpoints, add sections and lessons, then publish it with `POST /v2/products/{product}/publish`, where `{product}` is the course `id`. Each successful call creates another course, so do not retry blindly after a lost response: search courses for the title first. Requires the `listing` API-key ability and the `listing` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn create(
+        &self,
+        params: CreateParams,
+    ) -> Result<SdkCreateCourseResponseValue201ApplicationJson, Error> {
+        self.create_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::create`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn create_with_options(
+        &self,
+        params: CreateParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkCreateCourseResponseValue201ApplicationJson, Error> {
+        self.create_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn create_raw(
+        &self,
+        params: CreateParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkCreateCourseResponseValue201ApplicationJson>, Error> {
+        let path = "/v2/courses".to_string();
+        let method = http::Method::POST;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("createCourse".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_body_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                Some(&params.body),
+                options,
+                "POST /v2/courses",
+            )
             .await
     }
 
@@ -280,7 +387,7 @@ impl<'a> CoursesApi<'a> {
 
     /// Update a course
     ///
-    /// Update course metadata, access configuration, delivery copy, or publication visibility. Public visibility requires a ready promotional video and at least one published lesson. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Update a course's title, URL slug, description, details, access rules, delivery message, or visibility. Only the fields you send change, and PUT behaves exactly like PATCH. Sending the course's current `visibility` changes nothing; a different `visibility` also publishes a draft course. `PUBLIC` first checks that the course has a ready promotional video and at least one published lesson, and otherwise returns `422` on `promo_video` or `curriculum` without changing anything. Every successful update moves `updated_at` forward, even one that changes nothing, so retrying with the same `expected_updated_at` after a success returns `422`: retrieve the course again first. Requires the `listing` API-key ability and the `listing` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn replace(
         &self,
         course: &str,
@@ -329,7 +436,7 @@ impl<'a> CoursesApi<'a> {
 
     /// Update a course
     ///
-    /// Update course metadata, access configuration, delivery copy, or publication visibility. Public visibility requires a ready promotional video and at least one published lesson. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// Update a course's title, URL slug, description, details, access rules, delivery message, or visibility. Only the fields you send change, and PUT behaves exactly like PATCH. Sending the course's current `visibility` changes nothing; a different `visibility` also publishes a draft course. `PUBLIC` first checks that the course has a ready promotional video and at least one published lesson, and otherwise returns `422` on `promo_video` or `curriculum` without changing anything. Every successful update moves `updated_at` forward, even one that changes nothing, so retrying with the same `expected_updated_at` after a success returns `422`: retrieve the course again first. Requires the `listing` API-key ability and the `listing` permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn update(
         &self,
         course: &str,
@@ -372,6 +479,51 @@ impl<'a> CoursesApi<'a> {
                 Some(&params.body),
                 options,
                 "PATCH /v2/courses/{course}",
+            )
+            .await
+    }
+
+    /// Retrieve a course student summary
+    ///
+    /// Summarize who bought your courses in a date range: totals for students, purchases, units, and orders, plus the top students and the top courses. A purchase counts when it is paid or completed and was made within the range; refunded and pending purchases do not count. A student is a customer, or the order email when a purchase has no customer record. The response contains customer email addresses, so handle it as personal data. Requires the `invoice` API-key ability and the invoice permission in your team role. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    pub async fn get_student_summary(
+        &self,
+        params: GetStudentSummaryParams,
+    ) -> Result<SdkGetCourseStudentSummaryResponseValue200ApplicationJson, Error> {
+        self.get_student_summary_with_options(params, None).await
+    }
+
+    /// Variant of [`Self::get_student_summary`] that accepts per-request [`crate::RequestOptions`].
+    pub async fn get_student_summary_with_options(
+        &self,
+        params: GetStudentSummaryParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<SdkGetCourseStudentSummaryResponseValue200ApplicationJson, Error> {
+        self.get_student_summary_raw(params, options)
+            .await
+            .map(|response| response.data)
+    }
+
+    /// Returns the typed result together with status, headers, and request ID.
+    pub async fn get_student_summary_raw(
+        &self,
+        params: GetStudentSummaryParams,
+        options: Option<&crate::RequestOptions>,
+    ) -> Result<crate::RawResponse<SdkGetCourseStudentSummaryResponseValue200ApplicationJson>, Error>
+    {
+        let path = "/v2/course-students".to_string();
+        let method = http::Method::GET;
+        let mut merged = options.cloned().unwrap_or_default();
+        merged.idempotency_supported = false;
+        merged.operation_id = Some("getCourseStudentSummary".to_string());
+        let options = Some(&merged);
+        self.client
+            .request_with_query_schema_opts_raw(
+                method,
+                &path,
+                &params,
+                options,
+                "GET /v2/course-students",
             )
             .await
     }

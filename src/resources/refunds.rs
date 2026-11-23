@@ -13,12 +13,53 @@ pub struct RefundsApi<'a> {
     pub(crate) client: &'a Client,
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct ListRefundsParams {
+    /// Page number, starting at 1.
+    ///
+    /// Defaults to `1`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page: Option<i64>,
+    /// Refunds per page, from 1 to 100.
+    ///
+    /// Defaults to `15`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// Keep refunds in this state: `pending`, `effective`, `failed`, or `cancelled`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<RefundsStatus>,
+    /// Keep refunds made through this payment provider: `manual`, `mercado_pago`, `nmi`, `mollie`, `paypal`, `razorpay`, `square`, or `stripe`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider: Option<RefundsProvider>,
+    /// Keep refunds by how they were recorded: `manual`, `provider_webhook`, `provider_api`, or `system`. For example, `provider_api` is a refund SellApp requested from the provider and `provider_webhook` one the provider reported.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<RefundsSource>,
+    /// Keep refunds of orders (`order`) or of standalone charges (`charge`).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub refundable_type: Option<RefundsRefundableType>,
+    /// Keep refunds of the order or charge with this ID. Send `refundable_type` with it, because an order and a charge can share an ID.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub refundable_id: Option<i64>,
     /// Store slug. Required for OAuth access tokens. API keys may omit it to use their current store, or the first accessible store when no current store is selected.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "X-STORE")]
     pub x_store: Option<String>,
+}
+
+impl Default for ListRefundsParams {
+    #[allow(deprecated)]
+    fn default() -> Self {
+        Self {
+            page: Some(1),
+            limit: Some(15),
+            status: Default::default(),
+            provider: Default::default(),
+            source: Default::default(),
+            refundable_type: Default::default(),
+            refundable_id: Default::default(),
+            x_store: Default::default(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Default, Serialize)]
@@ -32,7 +73,7 @@ pub struct GetRefundParams {
 impl<'a> RefundsApi<'a> {
     /// List refunds
     ///
-    /// List refunds for orders and standalone charges in the selected store, one page at a time. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
+    /// List refunds for orders and standalone charges in the selected store, newest first, 15 per page by default. Filter by `status`, `provider`, `source`, or the order or charge refunded; filters combine. To see every refund of one order, send `refundable_type=order` and `refundable_id` set to the order ID. A value outside a parameter's accepted values, a `limit` above 100, or a query parameter the endpoint does not take returns `422` on that parameter. OAuth callers use the admin grant and select a store with X-STORE. Current membership and role permissions apply to every request.
     pub async fn list_refunds(
         &self,
         params: ListRefundsParams,

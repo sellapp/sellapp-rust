@@ -16,6 +16,11 @@ pub struct SdkUpdateOrderStatusRequestApplicationJson {
         deserialize_with = "crate::runtime_schema::present_nullable"
     )]
     pub expected_status: Option<Option<ExpectedStatus>>,
+    /// Send `true` to confirm that the store received the payment for this order outside SellApp, which can release purchased products to the customer. `true` is accepted only with `status: COMPLETED` (otherwise `422` on `payment_received`) and requires `expected_status` (otherwise `422` on `expected_status`). `false` is accepted with any status and changes nothing.
+    ///
+    /// Defaults to `false`.
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub payment_received: Option<bool>,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

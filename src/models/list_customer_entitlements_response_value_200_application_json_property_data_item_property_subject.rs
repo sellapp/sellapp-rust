@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 pub struct ListCustomerEntitlementsResponseValue200ApplicationJsonPropertyDataItemPropertySubject {
     #[serde(rename = "type")]
     pub type_: String,
-    pub id: V2ListTicketsResponseValue200ApplicationJsonPropertyDataItemPropertyCustomerIdOneOf,
+    pub id: ListCheckoutFieldTemplatesResponseValue200ApplicationJsonPropertyDataItemPropertyFieldsItemPropertyDateOptionsStartDayOneOf,
     pub name: String,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]

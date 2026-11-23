@@ -1,0 +1,10 @@
+{
+  "verified": false,
+  "sender_name": "test_sender_name",
+  "default_from": "test_default_from",
+  "customer_emails_from": "test_customer_emails_from",
+  "pending": {
+    "email": "test@example.com",
+    "verified": false
+  }
+}
