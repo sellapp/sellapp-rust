@@ -27,6 +27,9 @@ pub struct SearchProductsResponseValue200ApplicationJsonPropertyDataItem {
     pub is_discoverable: bool,
     pub variants: Vec<SearchProductsResponseValue200ApplicationJsonPropertyDataItemPropertyVariantsItem>,
     pub url: String,
+    /// What kind of product this is: `product`, `bundle`, `addon`, `credits`, `course`, or `booking`.
+    #[serde(rename = "type")]
+    pub type_: String,
     /// The lowest and highest price among the product's published variants, formatted for display with the currency symbol: `$19.99`, or `$9.99 - $19.99` when the prices differ. Null when no published variant has a price.
     pub price_range: Option<String>,
     /// Units left across the product's published variants, or null when any of them has unlimited stock.

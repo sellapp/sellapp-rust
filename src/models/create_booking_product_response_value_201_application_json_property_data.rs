@@ -28,10 +28,9 @@ pub struct CreateBookingProductResponseValue201ApplicationJsonPropertyData {
     /// The product's options, including the draft booking option this request created.
     pub variants: Vec<CreateBookingProductResponseValue201ApplicationJsonPropertyDataPropertyVariantsItem>,
     pub url: String,
-    /// The kind of product: `booking` for a booking product.
+    /// What kind of product this is: `product`, `bundle`, `addon`, `credits`, `course`, or `booking`.
     #[serde(rename = "type")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub type_: Option<String>,
+    pub type_: String,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,

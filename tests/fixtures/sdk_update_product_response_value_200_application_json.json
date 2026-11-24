@@ -51,6 +51,7 @@
         "title": "test_title"
       }
     ],
-    "url": "test_url"
+    "url": "test_url",
+    "type": "test_type"
   }
 }

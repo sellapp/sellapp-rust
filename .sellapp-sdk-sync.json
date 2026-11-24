@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "language": "rust",
   "repository": "sellapp/sellapp-rust",
-  "sourceSha": "77cf567815f22f4c07cf6b707ab25d4ca74877af",
-  "specSha256": "588138cc0421d9c2f8b7382d2924ce51982635c344b9e57f6f46b68e18ea4d69",
+  "sourceSha": "47e5b156f89777b62ae90a33cac16756b9830558",
+  "specSha256": "2319bc01512943c10a5788a130a1d189fbb2b14d76b0142e62a47b759c391662",
   "runId": "0",
   "runAttempt": "1",
-  "treeDigest": "28d64f6e9d32840d679b46b01e3bf709f9ef12f93eef5156c7f37dfaec6c661e",
-  "contentDigest": "69272d8ca8df56c6938ce52e1d26406cbdfcea3d68ca647933b1d262507386d6",
+  "treeDigest": "37f9012e134c8ee8991a0cee0c697823cb022653424162fb41569594ce7d054b",
+  "contentDigest": "a604e29c94e6525d1426016c89c9d0a8b15645888984b7a5723597c9b87d8652",
   "files": [
     {
       "path": ".github/actions/prepare-rust-cache/action.yml",
@@ -57,7 +57,7 @@
     {
       "path": "Cargo.toml",
       "mode": "100644",
-      "sha256": "9a9952ff5e297aeb4c15c34d2b155d6c61568663d7ac25e0040c709187604c28"
+      "sha256": "93f8ba431d99a567cda6dc08dc01a3adff51c904b4e5be134b0efc9e55397c95"
     },
     {
       "path": "LICENSE.txt",
@@ -72,7 +72,7 @@
     {
       "path": "README.md",
       "mode": "100644",
-      "sha256": "128570b26a9bef4dfb9f99c15ed46ac4f87328a3247ba04c4b5f58d06be82927"
+      "sha256": "81ea197a2a8647adb318096fd0fc82cdfbbf5eaa720048b4d07579c8cd6bd99d"
     },
     {
       "path": "docs/methods.md",
@@ -82,7 +82,7 @@
     {
       "path": "docs/migration.md",
       "mode": "100644",
-      "sha256": "93cb5f3632ba41e91cbef0eca56536cabd6d525e748dc9aac4e736502807b09e"
+      "sha256": "2a2c9726edcf4a78185eac87a67824fed8e50054d5c67c18bd1d44255cb49c8f"
     },
     {
       "path": "docs/operation-examples.json",
@@ -622,12 +622,12 @@
     {
       "path": "generation-manifest.json",
       "mode": "100644",
-      "sha256": "4f9ccbd0d23c371f7c5f456c7de7e1bcdc0e1524d487a658bf1cdb84d67d3871"
+      "sha256": "3eb19d04819c8792962dbb553bd7f76dfc39977ce3b7ce80ad397884cbe07928"
     },
     {
       "path": "src/client.rs",
       "mode": "100644",
-      "sha256": "ef5a2b22f623cbee76d1c0a67a7e0ce9ee2dfb602ccff929a21f1206ed8dc368"
+      "sha256": "980e12c413a5b54a38314513fe812c4f67d142e5228f0cf92201e4a456c69ac5"
     },
     {
       "path": "src/enums/action_close_outcome.rs",
@@ -5067,7 +5067,7 @@
     {
       "path": "src/models/batch_create_products_response_value_200_application_json_property_data_item.rs",
       "mode": "100644",
-      "sha256": "e67f755207385137e55044b5bf220b0ba7cd61d636502390e5a1b101acb75610"
+      "sha256": "4ad2507b856ba4a4baef0a05eb3a7fc3e8eb50fc2687f62e4ae875f8fa78a439"
     },
     {
       "path": "src/models/batch_create_products_response_value_200_application_json_property_data_item_property_additional_information_item.rs",
@@ -5097,7 +5097,7 @@
     {
       "path": "src/models/batch_create_products_response_value_201_application_json_property_data_item.rs",
       "mode": "100644",
-      "sha256": "a5309d67daeb65ef3cfb4d761d1711fe7d6bbd0f7000698c9e340b42c2f9b948"
+      "sha256": "923b418049a50f192df22294af35a371be61574f10136a0807961dda788af5aa"
     },
     {
       "path": "src/models/batch_create_products_response_value_201_application_json_property_data_item_property_additional_information_item.rs",
@@ -5232,7 +5232,7 @@
     {
       "path": "src/models/batch_delete_products_response_value_200_application_json_property_data_item.rs",
       "mode": "100644",
-      "sha256": "22385f0168ba54c2f6b31d963d7e80a62019cdea053f8082b622f611dae5ece7"
+      "sha256": "b737570b29faabfc9b8e33b656b2f1b5e3f9634cdb35d8d53806729e88bf1963"
     },
     {
       "path": "src/models/batch_delete_products_response_value_200_application_json_property_data_item_property_additional_information_item.rs",
@@ -5442,7 +5442,7 @@
     {
       "path": "src/models/batch_update_products_response_value_200_application_json_property_data_item.rs",
       "mode": "100644",
-      "sha256": "c9c8c08ca1304f77bc636c2b43ec097e67d82c21831321e8d663dae0931b094a"
+      "sha256": "d4c0df8eaa9c89aa943b6947800c85f868b52aeaee49a4e07201cb51235584fc"
     },
     {
       "path": "src/models/batch_update_products_response_value_200_application_json_property_data_item_property_additional_information_item.rs",
@@ -5752,7 +5752,7 @@
     {
       "path": "src/models/create_booking_product_response_value_201_application_json_property_data.rs",
       "mode": "100644",
-      "sha256": "534e5bab4ac99959ca569b019dbfd89de19ef45a2c936d6032c02722ff5116e2"
+      "sha256": "a5f7d01692e5c523b1a52caa8f43e62020d6bd4520709807e011c467793d2e8a"
     },
     {
       "path": "src/models/create_booking_product_response_value_201_application_json_property_data_property_additional_information_item.rs",
@@ -6862,7 +6862,7 @@
     {
       "path": "src/models/create_product_response_value_201_application_json_property_data.rs",
       "mode": "100644",
-      "sha256": "2ec923644f6796a776e3431903f78c451314c72b0e7d2b738c288414f1740571"
+      "sha256": "adcac801dc896a48b9ecc6daf1234a60a3a49b58170176968d9288318f0ca679"
     },
     {
       "path": "src/models/create_product_response_value_201_application_json_property_data_property_additional_information_item.rs",
@@ -7417,7 +7417,7 @@
     {
       "path": "src/models/delete_product_response_value_200_application_json_property_data.rs",
       "mode": "100644",
-      "sha256": "30b3f59970b9ff3e9de11dad4e0c8d4fa10e4598e49b888b2e5b3d357da623f6"
+      "sha256": "79bfa3265dc997a761e487795aa1e92e230a26383113a4bc7a8719058683371b"
     },
     {
       "path": "src/models/delete_product_response_value_200_application_json_property_data_property_additional_information_item.rs",
@@ -7692,7 +7692,7 @@
     {
       "path": "src/models/duplicate_product_response_value_201_application_json_property_data.rs",
       "mode": "100644",
-      "sha256": "a6f24ab58c7be063ef94f37537c4e3e469ac7d41b474a7f6bc3957b82be7f1e0"
+      "sha256": "7ea4a8c266e58bc02f734335bc6ecd3a5825c7117c0b480b0053e01a37180431"
     },
     {
       "path": "src/models/duplicate_product_response_value_201_application_json_property_data_property_additional_information_item.rs",
@@ -8692,7 +8692,7 @@
     {
       "path": "src/models/get_product_response_value_200_application_json_property_data.rs",
       "mode": "100644",
-      "sha256": "4770ec857674963e834526ac415db0e88a97554497a36633cd396aa84221a015"
+      "sha256": "b11bfa7932a146ff45a3634238e6691f2e04277e9e00fdcd22d64b87fa0378fd"
     },
     {
       "path": "src/models/get_product_response_value_200_application_json_property_data_property_additional_information_item.rs",
@@ -10292,7 +10292,7 @@
     {
       "path": "src/models/list_products_response_value_200_application_json_property_data_item.rs",
       "mode": "100644",
-      "sha256": "da297b4ee1fd853ae8f418a926e62e4205da2280ccfd24048914999d52df1791"
+      "sha256": "9bd55584ccbbeb2ecbe8f9379ad4a026d9cd9fa45db3f14c8c092c30800110c9"
     },
     {
       "path": "src/models/list_products_response_value_200_application_json_property_data_item_property_additional_information_item.rs",
@@ -10767,7 +10767,7 @@
     {
       "path": "src/models/move_product_response_value_200_application_json_property_data.rs",
       "mode": "100644",
-      "sha256": "13a0c0d1a7e79c24dc3598a7ff2e9c1a9b140a9fb2aa7c5e41d47274c83987d6"
+      "sha256": "5e99f4ea4ae7698c76219c8ff067a5a31ebdae2b456519b7fe8954024f909c4a"
     },
     {
       "path": "src/models/move_product_response_value_200_application_json_property_data_property_additional_information_item.rs",
@@ -10952,7 +10952,7 @@
     {
       "path": "src/models/publish_product_response_value_200_application_json_property_data.rs",
       "mode": "100644",
-      "sha256": "a0a9530280ddd70d1711a0e28ca8b2ff6de93362c99dd34b8e8031feb6a5675c"
+      "sha256": "e2c4e3a9f3ace97150d429a528d2cf28394b10edea49df64cd12729dadafaf34"
     },
     {
       "path": "src/models/publish_product_response_value_200_application_json_property_data_property_additional_information_item.rs",
@@ -11872,7 +11872,7 @@
     {
       "path": "src/models/replace_product_response_value_200_application_json_property_data.rs",
       "mode": "100644",
-      "sha256": "108c493cb16076203b03cd9dd71cc34ecc4ecebd623eb5a4506f461b7caabad1"
+      "sha256": "150d8d627d851c3600b7ce204ab412e99908b3d2b908327332d56da39a21adf4"
     },
     {
       "path": "src/models/replace_product_response_value_200_application_json_property_data_property_additional_information_item.rs",
@@ -17552,7 +17552,7 @@
     {
       "path": "src/models/search_products_response_value_200_application_json_property_data_item.rs",
       "mode": "100644",
-      "sha256": "fd1c0874a9e65d71e7b0d39979b9933dbc745b3ee8a38cbe850a5e49ebe37334"
+      "sha256": "b372ac32a9e5ad8d0a10de69ec89a214f313e239b5ad44b5cc6d003fc0816ecc"
     },
     {
       "path": "src/models/search_products_response_value_200_application_json_property_data_item_property_additional_information_item.rs",
@@ -18727,7 +18727,7 @@
     {
       "path": "src/models/update_product_response_value_200_application_json_property_data.rs",
       "mode": "100644",
-      "sha256": "3c22032c32a946dcf80b590c5c77def3c5c3d72b15afe5f0480660a4fc55cba8"
+      "sha256": "8077d358e77a4df82315c8a66631e9e8498d8ac6f7c299519044629fab87b358"
     },
     {
       "path": "src/models/update_product_response_value_200_application_json_property_data_property_additional_information_item.rs",
@@ -20527,7 +20527,7 @@
     {
       "path": "src/runtime_schema.json",
       "mode": "100644",
-      "sha256": "218d2ee70fd7d3a5e35c2bf10e7917de0383d733d7b8f3dff9bf29fa4232612b"
+      "sha256": "1fb19cfeb190c988a88ec1b26590ffa3a97cc126c535843baa5a0badbdb36386"
     },
     {
       "path": "src/runtime_schema.rs",
@@ -20987,7 +20987,7 @@
     {
       "path": "tests/fixtures/batch_create_products_response_value_200_application_json_property_data_item.json",
       "mode": "100644",
-      "sha256": "59d61cab6d64402349ca531fb848d028629dd42e1b71884d60c540a19cd28460"
+      "sha256": "59d55519f6b66123922f7060fb309bd755ac6c0674af8bc38af89d104b774918"
     },
     {
       "path": "tests/fixtures/batch_create_products_response_value_200_application_json_property_data_item_property_additional_information_item.json",
@@ -21017,7 +21017,7 @@
     {
       "path": "tests/fixtures/batch_create_products_response_value_201_application_json_property_data_item.json",
       "mode": "100644",
-      "sha256": "59d61cab6d64402349ca531fb848d028629dd42e1b71884d60c540a19cd28460"
+      "sha256": "59d55519f6b66123922f7060fb309bd755ac6c0674af8bc38af89d104b774918"
     },
     {
       "path": "tests/fixtures/batch_create_products_response_value_201_application_json_property_data_item_property_additional_information_item.json",
@@ -21152,7 +21152,7 @@
     {
       "path": "tests/fixtures/batch_delete_products_response_value_200_application_json_property_data_item.json",
       "mode": "100644",
-      "sha256": "59d61cab6d64402349ca531fb848d028629dd42e1b71884d60c540a19cd28460"
+      "sha256": "59d55519f6b66123922f7060fb309bd755ac6c0674af8bc38af89d104b774918"
     },
     {
       "path": "tests/fixtures/batch_delete_products_response_value_200_application_json_property_data_item_property_additional_information_item.json",
@@ -21337,7 +21337,7 @@
     {
       "path": "tests/fixtures/batch_update_products_response_value_200_application_json_property_data_item.json",
       "mode": "100644",
-      "sha256": "59d61cab6d64402349ca531fb848d028629dd42e1b71884d60c540a19cd28460"
+      "sha256": "59d55519f6b66123922f7060fb309bd755ac6c0674af8bc38af89d104b774918"
     },
     {
       "path": "tests/fixtures/batch_update_products_response_value_200_application_json_property_data_item_property_additional_information_item.json",
@@ -21602,7 +21602,7 @@
     {
       "path": "tests/fixtures/create_booking_product_response_value_201_application_json_property_data.json",
       "mode": "100644",
-      "sha256": "59d61cab6d64402349ca531fb848d028629dd42e1b71884d60c540a19cd28460"
+      "sha256": "59d55519f6b66123922f7060fb309bd755ac6c0674af8bc38af89d104b774918"
     },
     {
       "path": "tests/fixtures/create_booking_product_response_value_201_application_json_property_data_property_additional_information_item.json",
@@ -22612,7 +22612,7 @@
     {
       "path": "tests/fixtures/create_product_response_value_201_application_json_property_data.json",
       "mode": "100644",
-      "sha256": "59d61cab6d64402349ca531fb848d028629dd42e1b71884d60c540a19cd28460"
+      "sha256": "59d55519f6b66123922f7060fb309bd755ac6c0674af8bc38af89d104b774918"
     },
     {
       "path": "tests/fixtures/create_product_response_value_201_application_json_property_data_property_additional_information_item.json",
@@ -23147,7 +23147,7 @@
     {
       "path": "tests/fixtures/delete_product_response_value_200_application_json_property_data.json",
       "mode": "100644",
-      "sha256": "59d61cab6d64402349ca531fb848d028629dd42e1b71884d60c540a19cd28460"
+      "sha256": "59d55519f6b66123922f7060fb309bd755ac6c0674af8bc38af89d104b774918"
     },
     {
       "path": "tests/fixtures/delete_product_response_value_200_application_json_property_data_property_additional_information_item.json",
@@ -23412,7 +23412,7 @@
     {
       "path": "tests/fixtures/duplicate_product_response_value_201_application_json_property_data.json",
       "mode": "100644",
-      "sha256": "59d61cab6d64402349ca531fb848d028629dd42e1b71884d60c540a19cd28460"
+      "sha256": "59d55519f6b66123922f7060fb309bd755ac6c0674af8bc38af89d104b774918"
     },
     {
       "path": "tests/fixtures/duplicate_product_response_value_201_application_json_property_data_property_additional_information_item.json",
@@ -24362,7 +24362,7 @@
     {
       "path": "tests/fixtures/get_product_response_value_200_application_json_property_data.json",
       "mode": "100644",
-      "sha256": "59d61cab6d64402349ca531fb848d028629dd42e1b71884d60c540a19cd28460"
+      "sha256": "59d55519f6b66123922f7060fb309bd755ac6c0674af8bc38af89d104b774918"
     },
     {
       "path": "tests/fixtures/get_product_response_value_200_application_json_property_data_property_additional_information_item.json",
@@ -25817,7 +25817,7 @@
     {
       "path": "tests/fixtures/list_products_response_value_200_application_json_property_data_item.json",
       "mode": "100644",
-      "sha256": "5b22fb312560340df2846b7687f2629c127716a01ee584e2b3229e7d3e28acb9"
+      "sha256": "61dfbff8ac104646d6a4dad626ca8627822cf13177962bb8144418a7b6f7d2be"
     },
     {
       "path": "tests/fixtures/list_products_response_value_200_application_json_property_data_item_property_additional_information_item.json",
@@ -26227,7 +26227,7 @@
     {
       "path": "tests/fixtures/move_product_response_value_200_application_json_property_data.json",
       "mode": "100644",
-      "sha256": "59d61cab6d64402349ca531fb848d028629dd42e1b71884d60c540a19cd28460"
+      "sha256": "59d55519f6b66123922f7060fb309bd755ac6c0674af8bc38af89d104b774918"
     },
     {
       "path": "tests/fixtures/move_product_response_value_200_application_json_property_data_property_additional_information_item.json",
@@ -26372,7 +26372,7 @@
     {
       "path": "tests/fixtures/publish_product_response_value_200_application_json_property_data.json",
       "mode": "100644",
-      "sha256": "59d61cab6d64402349ca531fb848d028629dd42e1b71884d60c540a19cd28460"
+      "sha256": "59d55519f6b66123922f7060fb309bd755ac6c0674af8bc38af89d104b774918"
     },
     {
       "path": "tests/fixtures/publish_product_response_value_200_application_json_property_data_property_additional_information_item.json",
@@ -27227,7 +27227,7 @@
     {
       "path": "tests/fixtures/replace_product_response_value_200_application_json_property_data.json",
       "mode": "100644",
-      "sha256": "59d61cab6d64402349ca531fb848d028629dd42e1b71884d60c540a19cd28460"
+      "sha256": "59d55519f6b66123922f7060fb309bd755ac6c0674af8bc38af89d104b774918"
     },
     {
       "path": "tests/fixtures/replace_product_response_value_200_application_json_property_data_property_additional_information_item.json",
@@ -28082,12 +28082,12 @@
     {
       "path": "tests/fixtures/sdk_batch_create_products_response_value_200_application_json.json",
       "mode": "100644",
-      "sha256": "1cb9cbe816216ef07d2a9e6ff4d3836a4c4e282c0dcc3f90466cb224c416407d"
+      "sha256": "cf1ede2d152b4659a20cce437a03f5e2996599c30818db5fda14c60fc71c30c1"
     },
     {
       "path": "tests/fixtures/sdk_batch_create_products_response_value_201_application_json.json",
       "mode": "100644",
-      "sha256": "1cb9cbe816216ef07d2a9e6ff4d3836a4c4e282c0dcc3f90466cb224c416407d"
+      "sha256": "cf1ede2d152b4659a20cce437a03f5e2996599c30818db5fda14c60fc71c30c1"
     },
     {
       "path": "tests/fixtures/sdk_batch_create_sections_request_application_json.json",
@@ -28127,7 +28127,7 @@
     {
       "path": "tests/fixtures/sdk_batch_delete_products_response_value_200_application_json.json",
       "mode": "100644",
-      "sha256": "1cb9cbe816216ef07d2a9e6ff4d3836a4c4e282c0dcc3f90466cb224c416407d"
+      "sha256": "cf1ede2d152b4659a20cce437a03f5e2996599c30818db5fda14c60fc71c30c1"
     },
     {
       "path": "tests/fixtures/sdk_batch_delete_sections_response_value_200_application_json.json",
@@ -28162,7 +28162,7 @@
     {
       "path": "tests/fixtures/sdk_batch_update_products_response_value_200_application_json.json",
       "mode": "100644",
-      "sha256": "1cb9cbe816216ef07d2a9e6ff4d3836a4c4e282c0dcc3f90466cb224c416407d"
+      "sha256": "cf1ede2d152b4659a20cce437a03f5e2996599c30818db5fda14c60fc71c30c1"
     },
     {
       "path": "tests/fixtures/sdk_batch_update_sections_request_application_json.json",
@@ -28342,7 +28342,7 @@
     {
       "path": "tests/fixtures/sdk_create_booking_product_response_value_201_application_json.json",
       "mode": "100644",
-      "sha256": "83289066f76e7f433b617c6f3df5104c3ca6d965a9d1615f55d78143dcd5dbe0"
+      "sha256": "00c3be4630b9719966eb57805c2b444a71aafa26171fcf0196c5e4e7ed63ad48"
     },
     {
       "path": "tests/fixtures/sdk_create_cashback_rule_request_application_json.json",
@@ -28607,7 +28607,7 @@
     {
       "path": "tests/fixtures/sdk_create_product_response_value_201_application_json.json",
       "mode": "100644",
-      "sha256": "83289066f76e7f433b617c6f3df5104c3ca6d965a9d1615f55d78143dcd5dbe0"
+      "sha256": "00c3be4630b9719966eb57805c2b444a71aafa26171fcf0196c5e4e7ed63ad48"
     },
     {
       "path": "tests/fixtures/sdk_create_product_variant_request_application_json.json",
@@ -28842,7 +28842,7 @@
     {
       "path": "tests/fixtures/sdk_delete_product_response_value_200_application_json.json",
       "mode": "100644",
-      "sha256": "83289066f76e7f433b617c6f3df5104c3ca6d965a9d1615f55d78143dcd5dbe0"
+      "sha256": "00c3be4630b9719966eb57805c2b444a71aafa26171fcf0196c5e4e7ed63ad48"
     },
     {
       "path": "tests/fixtures/sdk_delete_product_variant_request_application_json.json",
@@ -28967,7 +28967,7 @@
     {
       "path": "tests/fixtures/sdk_duplicate_product_response_value_201_application_json.json",
       "mode": "100644",
-      "sha256": "83289066f76e7f433b617c6f3df5104c3ca6d965a9d1615f55d78143dcd5dbe0"
+      "sha256": "00c3be4630b9719966eb57805c2b444a71aafa26171fcf0196c5e4e7ed63ad48"
     },
     {
       "path": "tests/fixtures/sdk_duplicate_product_variant_response_value_201_application_json.json",
@@ -29252,7 +29252,7 @@
     {
       "path": "tests/fixtures/sdk_get_product_response_value_200_application_json.json",
       "mode": "100644",
-      "sha256": "83289066f76e7f433b617c6f3df5104c3ca6d965a9d1615f55d78143dcd5dbe0"
+      "sha256": "00c3be4630b9719966eb57805c2b444a71aafa26171fcf0196c5e4e7ed63ad48"
     },
     {
       "path": "tests/fixtures/sdk_get_product_variant_response_value_200_application_json.json",
@@ -29697,7 +29697,7 @@
     {
       "path": "tests/fixtures/sdk_list_products_response_value_200_application_json.json",
       "mode": "100644",
-      "sha256": "315db5f35f071330041b4905077aae4f55b59fcf911771ec16c805580b320321"
+      "sha256": "20e1825c11ff5656a4ab4dccc6ac8f9efcbcb242891049e12cce17e956c59085"
     },
     {
       "path": "tests/fixtures/sdk_list_products_within_group_response_value_200_application_json.json",
@@ -29857,7 +29857,7 @@
     {
       "path": "tests/fixtures/sdk_move_product_response_value_200_application_json.json",
       "mode": "100644",
-      "sha256": "83289066f76e7f433b617c6f3df5104c3ca6d965a9d1615f55d78143dcd5dbe0"
+      "sha256": "00c3be4630b9719966eb57805c2b444a71aafa26171fcf0196c5e4e7ed63ad48"
     },
     {
       "path": "tests/fixtures/sdk_notify_variant_buyers_response_value_202_application_json.json",
@@ -29952,7 +29952,7 @@
     {
       "path": "tests/fixtures/sdk_publish_product_response_value_200_application_json.json",
       "mode": "100644",
-      "sha256": "83289066f76e7f433b617c6f3df5104c3ca6d965a9d1615f55d78143dcd5dbe0"
+      "sha256": "00c3be4630b9719966eb57805c2b444a71aafa26171fcf0196c5e4e7ed63ad48"
     },
     {
       "path": "tests/fixtures/sdk_publish_product_variant_response_value_200_application_json.json",
@@ -30367,7 +30367,7 @@
     {
       "path": "tests/fixtures/sdk_replace_product_response_value_200_application_json.json",
       "mode": "100644",
-      "sha256": "83289066f76e7f433b617c6f3df5104c3ca6d965a9d1615f55d78143dcd5dbe0"
+      "sha256": "00c3be4630b9719966eb57805c2b444a71aafa26171fcf0196c5e4e7ed63ad48"
     },
     {
       "path": "tests/fixtures/sdk_replace_product_s_add_ons_request_application_json.json",
@@ -30882,7 +30882,7 @@
     {
       "path": "tests/fixtures/sdk_search_products_response_value_200_application_json.json",
       "mode": "100644",
-      "sha256": "315db5f35f071330041b4905077aae4f55b59fcf911771ec16c805580b320321"
+      "sha256": "20e1825c11ff5656a4ab4dccc6ac8f9efcbcb242891049e12cce17e956c59085"
     },
     {
       "path": "tests/fixtures/sdk_search_products_within_group_request_application_json.json",
@@ -31357,7 +31357,7 @@
     {
       "path": "tests/fixtures/sdk_update_product_response_value_200_application_json.json",
       "mode": "100644",
-      "sha256": "83289066f76e7f433b617c6f3df5104c3ca6d965a9d1615f55d78143dcd5dbe0"
+      "sha256": "00c3be4630b9719966eb57805c2b444a71aafa26171fcf0196c5e4e7ed63ad48"
     },
     {
       "path": "tests/fixtures/sdk_update_product_variant_pricing_request_application_json.json",
@@ -32627,7 +32627,7 @@
     {
       "path": "tests/fixtures/search_products_response_value_200_application_json_property_data_item.json",
       "mode": "100644",
-      "sha256": "5b22fb312560340df2846b7687f2629c127716a01ee584e2b3229e7d3e28acb9"
+      "sha256": "61dfbff8ac104646d6a4dad626ca8627822cf13177962bb8144418a7b6f7d2be"
     },
     {
       "path": "tests/fixtures/search_products_response_value_200_application_json_property_data_item_property_additional_information_item.json",
@@ -33657,7 +33657,7 @@
     {
       "path": "tests/fixtures/update_product_response_value_200_application_json_property_data.json",
       "mode": "100644",
-      "sha256": "59d61cab6d64402349ca531fb848d028629dd42e1b71884d60c540a19cd28460"
+      "sha256": "59d55519f6b66123922f7060fb309bd755ac6c0674af8bc38af89d104b774918"
     },
     {
       "path": "tests/fixtures/update_product_response_value_200_application_json_property_data_property_additional_information_item.json",

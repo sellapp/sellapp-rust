@@ -53,6 +53,7 @@
         }
       ],
       "url": "test_url",
+      "type": "test_type",
       "price_range": "test_price_range",
       "stock": 0,
       "sales": 0,

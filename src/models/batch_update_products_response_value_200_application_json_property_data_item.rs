@@ -27,6 +27,9 @@ pub struct BatchUpdateProductsResponseValue200ApplicationJsonPropertyDataItem {
     pub is_discoverable: bool,
     pub variants: Vec<BatchUpdateProductsResponseValue200ApplicationJsonPropertyDataItemPropertyVariantsItem>,
     pub url: String,
+    /// What kind of product this is: `product`, `bundle`, `addon`, `credits`, `course`, or `booking`.
+    #[serde(rename = "type")]
+    pub type_: String,
     /// Fields returned by a newer API version that are not yet known to this SDK.
     #[serde(default, flatten)]
     pub additional_properties: std::collections::HashMap<String, serde_json::Value>,
